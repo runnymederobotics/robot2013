@@ -9,7 +9,6 @@ import templates.Pneumatic;
 import templates.commands.TeleopDriveCommand;
 
 public class ChassisSubsystem extends Subsystem {
-    
     Victor leftMotor = new Victor(Constants.LEFT_MOTOR_CHANNEL);
     Victor rightMotor = new Victor(Constants.RIGHT_MOTOR_CHANNEL);
     

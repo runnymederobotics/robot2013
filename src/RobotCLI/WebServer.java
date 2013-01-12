@@ -1,4 +1,4 @@
-package embeddedapplication1;
+package RobotCLI;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -26,7 +26,7 @@ public class WebServer extends Thread {
   private final Hashtable handlers = new Hashtable();
   private String FOUR_OH_FOUR = "HTTP/1.1 404 Not Found\r\nConnection: keep-alive\r\nContent-Length: 0\r\n\r\n";
   
-  public  WebServer(int port) throws IOException {
+  public  WebServer(int port) {
     this.port = port;
   }
   
@@ -35,6 +35,7 @@ public class WebServer extends Thread {
       StreamConnectionNotifier server = (StreamConnectionNotifier) Connector.open("socket://:" + port);
       while (true) {
         StreamConnection connection = server.acceptAndOpen();
+        System.out.println("Client Connected");
         new Client(connection).start();
       }
     } catch (Exception ex) {
@@ -52,7 +53,7 @@ public class WebServer extends Thread {
       return "{\"hello\": \"world\"}";
     }
   }
-    
+  
   public void registerHandler(String path, Handler handler) {
     handlers.put(path, handler);
   }
@@ -95,7 +96,7 @@ public class WebServer extends Thread {
             connection.close();
             return;
           }
-          String str = new String(buffer, 0, count, "UTF-8");
+          String str = new String(buffer, 0, count);
           int lineEnd = str.indexOf('\n');
           if (lineEnd < 0) {
             stringBuffer.append(str);
@@ -132,13 +133,12 @@ public class WebServer extends Thread {
             
             Handler handler = (Handler) handlers.get(path);
             if (handler != null) {
-              System.out.println("used a handlre");
               String response = handler.handle(paramTable);
               String http = "HTTP/1.1 200 Ok\r\nConnection: keep-alive\r\nContent-Length: " + response.length() + "\r\n\r\n";
-              outputStream.write(http.getBytes("UTF-8"));
-              outputStream.write(response.getBytes("UTF-8"));
+              outputStream.write(http.getBytes());
+              outputStream.write(response.getBytes());
             } else {
-              outputStream.write(FOUR_OH_FOUR.getBytes("UTF-8"));
+              outputStream.write(FOUR_OH_FOUR.getBytes());
             }
             outputStream.flush();
           }

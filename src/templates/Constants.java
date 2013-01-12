@@ -1,5 +1,9 @@
 package templates;
 
+import RobotCLI.WebServer;
+import java.util.Enumeration;
+import java.util.Hashtable;
+
 /**
  * The RobotMap is a mapping from the ports sensors and actuators are wired into
  * to a variable name. This provides flexibility changing wiring, makes checking
@@ -17,7 +21,34 @@ public class Constants {
     // public static final int rangefinderPort = 1;
     // public static final int rangefinderModule = 1;
 
-    public static final double PRINT_DELAY = 2.0;
+    public static class ConstantHandler implements WebServer.Handler {
+        public String handle(Hashtable params) {
+            Enumeration keys = params.keys();
+            
+            String ret = "";
+            
+            while(keys.hasMoreElements()) {
+                String key = (String)keys.nextElement();
+                double value = Double.parseDouble((String)params.get(key));
+                if(key.equals("PRINT_DELAY")) {
+                    PRINT_DELAY = value;
+                    ret += "PRINT_DELAY = " + PRINT_DELAY;
+                }
+            }
+            return ret;
+        }
+    }
+    
+    class Parsable {
+        String key;
+        double value;
+        
+        public int toInt() {
+            return (int)value;
+        }
+    }
+    
+    public static double PRINT_DELAY = 2.0;
     
     public static final int LEFT_MOTOR_CHANNEL = 1;
     public static final int RIGHT_MOTOR_CHANNEL = 2;
