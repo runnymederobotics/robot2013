@@ -14,12 +14,18 @@ import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import templates.commands.CommandBase;
 
 public class RobotTemplate extends IterativeRobot {
-
+    private WebServer webServer;
+    
     public void robotInit() {
         // instantiate the command used for the autonomous period
 
         // Initialize all subsystems
         CommandBase.init();
+        
+        webServer = new WebServer(8080);
+        webServer.registerHandler("/hello/world", new WebServer.PrintHandler());
+        System.out.println("Server starting at " + ((ServerSocketConnection) Connector.open("socket://:1234")).getLocalAddress());
+        webServer.start();
     }
     
     public void disabledInit() {
