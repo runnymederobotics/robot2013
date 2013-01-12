@@ -1,4 +1,4 @@
-package edu.wpi.first.wpilibj.templates.commands;
+package templates.commands;
 
 public class TeleopDriveCommand extends CommandBase {
 

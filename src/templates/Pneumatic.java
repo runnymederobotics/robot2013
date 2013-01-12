@@ -1,4 +1,4 @@
-package edu.wpi.first.wpilibj.templates;
+package templates;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.Relay;

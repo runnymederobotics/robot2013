@@ -1,12 +1,12 @@
-package edu.wpi.first.wpilibj.templates.subsystems;
+package templates.subsystems;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.RobotDrive;
 import edu.wpi.first.wpilibj.Victor;
 import edu.wpi.first.wpilibj.command.Subsystem;
-import edu.wpi.first.wpilibj.templates.Constants;
-import edu.wpi.first.wpilibj.templates.Pneumatic;
-import edu.wpi.first.wpilibj.templates.commands.TeleopDriveCommand;
+import templates.Constants;
+import templates.Pneumatic;
+import templates.commands.TeleopDriveCommand;
 
 public class ChassisSubsystem extends Subsystem {
     
