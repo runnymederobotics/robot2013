@@ -55,7 +55,7 @@ public class RobotTemplate extends IterativeRobot {
     double lastPrintTime = 0;
     void periodicPrint(String mode) {
         double now = Timer.getFPGATimestamp();
-        if(now - lastPrintTime > Constants.PRINT_DELAY) {
+        if(now - lastPrintTime > Constants.PRINT_DELAY.get()) {
             System.out.println(mode);
             lastPrintTime = now;
         }

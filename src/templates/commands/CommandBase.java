@@ -22,7 +22,7 @@ public abstract class CommandBase extends Command {
         // news. Don't move it.
         oi = new OI();
 
-        webServer.registerHandler("/constants", new Constants.ConstantHandler());
+        webServer.registerHandler("/constants", new Constants.ConstantsHandler());
         webServer.start();
         
         // Show what command your subsystem is running on the SmartDashboard
