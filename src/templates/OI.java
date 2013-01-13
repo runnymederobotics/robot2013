@@ -44,17 +44,17 @@ public class OI {
     Joystick stickOperator = new Joystick(Constants.Operator.PORT);
     
     public double getDriveAxis() {
-        return stickDriver.getRawAxis(Constants.Driver.DRIVE_AXIS);
+        return stickDriver.getRawAxis(Constants.Driver.DRIVE_AXIS.get());
     }
     public double getRotationAxis() {
-        double value = -stickDriver.getRawAxis(Constants.Driver.ROTATION_AXIS);
+        double value = -stickDriver.getRawAxis(Constants.Driver.ROTATION_AXIS.get());
         int sign = value >= 0 ? 1 : -1;
         
         return value * value * sign;
     }
     
     public boolean getShiftButton() {
-        return stickDriver.getRawButton(Constants.Driver.SHIFT_BUTTON);
+        return stickDriver.getRawButton(Constants.Driver.SHIFT_BUTTON.get());
     }
 }
 
