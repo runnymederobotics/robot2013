@@ -40,21 +40,21 @@ public class OI {
     // until it is finished as determined by it's isFinished method.
     // button.whenReleased(new ExampleCommand());
     
-    Joystick stickDriver = new Joystick(Constants.Driver.PORT);
-    Joystick stickOperator = new Joystick(Constants.Operator.PORT);
+    Joystick stickDriver = new Joystick(Constants.DRIVER_PORT);
+    Joystick stickOperator = new Joystick(Constants.OPERATOR_PORT);
     
     public double getDriveAxis() {
-        return stickDriver.getRawAxis(Constants.Driver.DRIVE_AXIS.get());
+        return stickDriver.getRawAxis(Constants.DRIVER_DRIVE_AXIS.get());
     }
     public double getRotationAxis() {
-        double value = -stickDriver.getRawAxis(Constants.Driver.ROTATION_AXIS.get());
+        double value = -stickDriver.getRawAxis(Constants.DRIVER_ROTATION_AXIS.get());
         int sign = value >= 0 ? 1 : -1;
         
         return value * value * sign;
     }
     
     public boolean getShiftButton() {
-        return stickDriver.getRawButton(Constants.Driver.SHIFT_BUTTON.get());
+        return stickDriver.getRawButton(Constants.DRIVER_SHIFT_BUTTON.get());
     }
 }
 

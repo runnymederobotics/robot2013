@@ -56,10 +56,6 @@ public class ParsablePIDController {
     public synchronized double getError() {
         return pidController.getError();
     }
-    
-    public synchronized void setTolerance(double percent) {
-        pidController.setTolerance(percent);
-    }
 
     public synchronized void setAbsoluteTolerance(double absvalue) {
         pidController.setAbsoluteTolerance(absvalue);
