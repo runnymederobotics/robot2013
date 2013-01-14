@@ -3,8 +3,8 @@ package templates.commands;
 import RobotCLI.WebServer;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import templates.Constants;
 import templates.OI;
+import templates.Parsable;
 import templates.subsystems.ChassisSubsystem;
 
 public abstract class CommandBase extends Command {
@@ -22,7 +22,7 @@ public abstract class CommandBase extends Command {
         // news. Don't move it.
         oi = new OI();
 
-        webServer.registerHandler("/constants", new Constants.ConstantsHandler());
+        webServer.registerHandler("/constants", new Parsable.ParsablesHandler());
         webServer.start();
         
         // Show what command your subsystem is running on the SmartDashboard

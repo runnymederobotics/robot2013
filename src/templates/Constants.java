@@ -21,34 +21,6 @@ public class Constants {
     // number and the module. For example you with a rangefinder:
     // public static final int rangefinderPort = 1;
     // public static final int rangefinderModule = 1;
-
-    public static class ConstantsHandler implements WebServer.Handler {
-        public String handle(Hashtable params) {
-            Enumeration keys = params.keys();
-            while(keys.hasMoreElements()) {
-                String key = (String)keys.nextElement();
-                Parsable parsable = Parsable.getParsable(key.toLowerCase());
-                if(parsable != null) {
-                    parsable.parse((String)params.get(key));
-                }
-            }
-            
-            String ret = "{";
-            
-            Enumeration parsables = Parsable.parsables.elements();
-            boolean firstRun = true;
-            while(parsables.hasMoreElements()) {
-                Parsable parsable = (Parsable)parsables.nextElement();
-                if(!firstRun) {
-                    ret += ",";
-                }
-                ret += parsable.toString();
-                firstRun = false;
-            }
-            ret += "}";
-            return ret;
-        }
-    }
     
     public static ParsableDouble PRINT_DELAY = new ParsableDouble("PRINT_DELAY", 2.0);
     
