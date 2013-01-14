@@ -91,7 +91,7 @@ public class ParsablePIDController {
     
     private void makeParsable(String name, double Kp, double Ki, double Kd) {
         if(!name.startsWith("pid")) {
-            name += "pid";
+            name = "pid" + name;
         }
         this.name = name;
         p = new ParsableDouble(name + ".p", Kp);
