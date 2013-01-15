@@ -22,9 +22,11 @@ import javax.microedition.io.StreamConnectionNotifier;
  *  webServer.start();
  */
 public class WebServer extends Thread {
+  private String FOUR_OH_FOUR = "HTTP/1.1 404 Not Found\r\nConnection: keep-alive\r\nAccess-Control-Allow-Origin: *\r\nContent-Length: 0\r\n\r\n";
+  
   private final int port;
   private final Hashtable handlers = new Hashtable();
-  private String FOUR_OH_FOUR = "HTTP/1.1 404 Not Found\r\nConnection: keep-alive\r\nContent-Length: 0\r\n\r\n";
+  private final Hashtable streamers = new Hashtable();
   
   public  WebServer(int port) {
     this.port = port;
@@ -36,7 +38,7 @@ public class WebServer extends Thread {
       while (true) {
         StreamConnection connection = server.acceptAndOpen();
         System.out.println("Client Connected");
-        new Client(connection).start();
+        new WebServer.Client(connection).start();
       }
     } catch (Exception ex) {
       System.out.println("WebServer failure: " + ex);
@@ -48,14 +50,72 @@ public class WebServer extends Thread {
     public String handle(Hashtable params);
   }
   
-  public static class PrintHandler implements Handler {
+  public static class HelloWorldHandler implements WebServer.Handler {
     public String handle(Hashtable params) {
       return "{\"hello\": \"world\"}";
     }
   }
   
-  public void registerHandler(String path, Handler handler) {
+  public static abstract class Streamer {
+    private final String BOUNDARY = "---5eb63bbbe01eeed093cb22bb8f5acdc3\r\n";
+    private String HEADER = "HTTP/1.1 200 Ok\r\n"
+        + "Connection: close\r\n"
+        + "Access-Control-Allow-Origin: *\r\n"
+        + "Content-Type: multipart/x-mixed-replace;boundary=" + BOUNDARY
+        + "\r\n"
+        + BOUNDARY;
+    private final String CONTENT_START = "Content-Type: application/json\r\n\r\n";
+    private final String CONTENT_END = "\r\n" + BOUNDARY;
+          
+    public final void stream(OutputStream outputStream, Hashtable params) throws IOException {
+      int sleepMillis = 500; // 2 Hz by default
+      {
+        String frequency = (String) params.get("frequency");
+        if (frequency != null) {
+          sleepMillis = (int)(1000.0 / Double.parseDouble(frequency));
+        }
+      }
+      outputStream.write(HEADER.getBytes());
+      outputStream.flush();
+      StringBuffer buffer = new StringBuffer();
+      while (true) {
+        buffer.setLength(0);
+        buffer.append(CONTENT_START);
+        buildChunk(buffer, params);
+        buffer.append(CONTENT_END);
+        outputStream.write(buffer.toString().getBytes());
+        outputStream.flush();
+        try {
+          Thread.sleep(sleepMillis);
+        } catch (InterruptedException ex) {
+          ex.printStackTrace();
+        }
+      }
+    }
+    
+    // prints an arbitrary JSON object into 'buffer'
+    protected abstract void buildChunk(StringBuffer buffer, Hashtable params);
+  }
+
+  public static class ExampleStreamer extends WebServer.Streamer {
+    protected void buildChunk(StringBuffer buffer, Hashtable params) {
+      double now = System.currentTimeMillis() * 0.001;
+      double value = now - (int)now;
+      buffer.append("{\"one\":");
+      buffer.append(value);
+      buffer.append(",\"two\":");
+      buffer.append(1 + value * 0.5);
+      buffer.append(",\"three\":");
+      buffer.append(2 + value * 0.25);
+      buffer.append("}");
+    }
+  }
+  public void registerHandler(String path, WebServer.Handler handler) {
     handlers.put(path, handler);
+  }
+  
+  public void registerStreamer(String path, WebServer.Streamer streamer) {
+    streamers.put(path, streamer);
   }
   
   private class Client extends Thread {
@@ -131,14 +191,19 @@ public class WebServer extends Thread {
               }
             }
             
-            Handler handler = (Handler) handlers.get(path);
+            WebServer.Handler handler = (WebServer.Handler) handlers.get(path);
             if (handler != null) {
               String response = handler.handle(paramTable);
-              String http = "HTTP/1.1 200 Ok\r\nConnection: keep-alive\r\nContent-Length: " + response.length() + "\r\n\r\n";
+              String http = "HTTP/1.1 200 Ok\r\nConnection: keep-alive\r\nAccess-Control-Allow-Origin: *\r\nContent-Length: " + response.length() + "\r\n\r\n";
               outputStream.write(http.getBytes());
               outputStream.write(response.getBytes());
             } else {
-              outputStream.write(FOUR_OH_FOUR.getBytes());
+              WebServer.Streamer streamer = (WebServer.Streamer) streamers.get(path);
+              if (streamer != null) {
+                streamer.stream(outputStream, paramTable);
+              } else {
+                outputStream.write(FOUR_OH_FOUR.getBytes());
+              }
             }
             outputStream.flush();
           }

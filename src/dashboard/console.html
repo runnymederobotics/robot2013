@@ -1,0 +1,122 @@
+<html>
+  <head>
+    <title>Console</title>
+    <script src="js/lib/jquery.min.js"></script>
+    <script src="js/lib/smoothie.js"></script>
+    <script type="text/javascript">
+    $(function() {
+      var startStreaming = function(url, onData) {
+        var xhr = new XMLHttpRequest();
+        if (xhr) {
+          if (typeof xhr.multipart == 'undefined') {
+            alert("Streaming not supported - try Firefox.");
+            return;
+          }
+
+          xhr.multipart = true;
+          xhr.open("GET", url, true);
+          xhr.onload = onData;
+          xhr.send(null);
+        }
+      }
+
+      var makeSmoothieChart = function(parent, options) {
+        var newDiv = $("<div><p>" + options.title + "</p><canvas width='"
+            + options.width + "' height='" + options.height + "'/></div>");
+        $(parent).append(newDiv);
+        var chart = new SmoothieChart();
+        chart.streamTo(newDiv.children("canvas").get(0), /* delay */ 1000);
+        var series = {};
+        var l = options.dataFields.length;
+        for (var i = 0; i < l; i++) {
+          series[options.dataFields[i]] = new TimeSeries();
+          chart.addTimeSeries(series[options.dataFields[i]]);
+        }
+        return function(now, data) {
+          var l = options.dataFields.length;
+          for (var i = 0; i < l; i++) {
+            var f = options.dataFields[i];
+            if (series.hasOwnProperty(f)) {
+              series[f].append(now, data[f]);
+            }
+          }
+        }
+      }
+
+      var cameraCharts = [
+          makeSmoothieChart("#camera_charts", {
+            title: "Camera Processing Time (seconds/sec)",
+            dataFields: ["total_time"],
+            width: 200, height: 50
+          }),
+          makeSmoothieChart("#camera_charts", {
+            title: "Camera FPS",
+            dataFields: ["fps"],
+            width: 200, height: 50
+          }),
+          makeSmoothieChart("#camera_charts", {
+            title: "Camera Bandwidth (KB/sec)",
+            dataFields: ["bandwidth"],
+            width: 200, height: 50
+          }),
+      ];
+
+      var dataCharts = [
+        makeSmoothieChart("#data_charts", {
+          title: "Data Charts Example One",
+          dataFields: ["one"],
+          width: 200, height: 50
+        }),
+        makeSmoothieChart("#data_charts", {
+          title: "Data Charts Example Two",
+          dataFields: ["two", "three"],
+          width: 200, height: 50
+        }),
+      ];
+      
+      var lastData = {
+        camera: new Date().getTime(),
+        data: new Date().getTime()
+      };
+      setInterval(function() {
+        var now = new Date().getTime();
+        if (now - lastData.camera > 2000) {
+          // Camera smoothie charts
+          startStreaming("/stream/data", function(event) {
+            var data = JSON.parse(event.target.responseText);
+            var now = new Date().getTime();
+            lastData.camera = now;
+            var l = cameraCharts.length;
+            for (var i = 0; i < l; i++) {
+              cameraCharts[i](now, data);
+            }
+          });
+          
+          // Start the video streams
+          $("#streams").children().remove();
+          $("#streams").append("<img src='/stream/raw?" + now + "'/>");
+          $("#streams").append("<img src='/stream/processed?" + now + "'/>");
+        }
+        
+        if (now - lastData.data > 2000) {
+          // Robot data stream
+          startStreaming("http://192.168.209.1:8079/test/stream?frequency=5", function(event) {
+            var data = JSON.parse(event.target.responseText);
+            var now = new Date().getTime();
+            lastData.data = now;
+            var l = dataCharts.length;
+            for (var i = 0; i < l; i++) {
+              dataCharts[i](now, data);
+            }
+          });
+        }
+      }, 1000);
+    });
+    </script>
+  </head>
+  <body>
+    <div id="streams"></div>
+    <div id="camera_charts"></div>
+    <div id="data_charts"></div>
+  </body>
+</html>
