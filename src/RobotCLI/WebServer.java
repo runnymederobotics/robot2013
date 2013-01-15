@@ -78,10 +78,17 @@ public class WebServer extends Thread {
       outputStream.write(HEADER.getBytes());
       outputStream.flush();
       StringBuffer buffer = new StringBuffer();
+      // Kinda hacky - jsonBuilder will write directly to 'buffer' to avoid
+      // extra calls to StringBuffer.toString(). Be careful. We're safe because
+      // we only reset jsonBuilder when we also want to reset 'buffer'.
+      JSONStringBuilder jsonBuilder = new JSONStringBuilder(buffer);
       while (true) {
         buffer.setLength(0);
+        jsonBuilder.reset();
         buffer.append(CONTENT_START);
-        buildChunk(buffer, params);
+        jsonBuilder.start();
+        buildChunk(jsonBuilder, params);
+        jsonBuilder.finish();
         buffer.append(CONTENT_END);
         outputStream.write(buffer.toString().getBytes());
         outputStream.flush();
@@ -94,20 +101,16 @@ public class WebServer extends Thread {
     }
     
     // prints an arbitrary JSON object into 'buffer'
-    protected abstract void buildChunk(StringBuffer buffer, Hashtable params);
+    protected abstract void buildChunk(JSONStringBuilder response, Hashtable params);
   }
 
   public static class ExampleStreamer extends WebServer.Streamer {
-    protected void buildChunk(StringBuffer buffer, Hashtable params) {
+    protected void buildChunk(JSONStringBuilder response, Hashtable params) {
       double now = System.currentTimeMillis() * 0.001;
       double value = now - (int)now;
-      buffer.append("{\"one\":");
-      buffer.append(value);
-      buffer.append(",\"two\":");
-      buffer.append(1 + value * 0.5);
-      buffer.append(",\"three\":");
-      buffer.append(2 + value * 0.25);
-      buffer.append("}");
+      response.append("one", value);
+      response.append("two", 1 + value * 0.5);
+      response.append("three", 2 + value * 0.25);
     }
   }
   public void registerHandler(String path, WebServer.Handler handler) {
@@ -116,6 +119,86 @@ public class WebServer extends Thread {
   
   public void registerStreamer(String path, WebServer.Streamer streamer) {
     streamers.put(path, streamer);
+  }
+  
+  /**
+   * This should not support 'reset()' and should have checks to make
+   * sure it is being used correctly. We're being lazy (we could argue about
+   * performance, but we haven't tested it).
+   * 
+   * Example:
+   *   JSONStringBuilder json = new JSONStringBuilder();
+   *   json.start();
+   *   json.append("name", "value");
+   *   json.finish();
+   *   String result = json.toString();
+   */
+  public static class JSONStringBuilder {
+    private StringBuffer buffer;
+    private boolean needComma = false;
+    private String stringValue = null;
+    
+    public JSONStringBuilder() {
+      this(new StringBuffer());
+    }
+    public JSONStringBuilder(StringBuffer buffer) {
+      this.buffer = buffer;
+    }
+    
+    public void start() {
+      buffer.append("{");
+    }
+    
+    public void append(String name, String value) {
+      needComma = true;
+    }
+    
+    public void append(String name, int value) {
+      appendName(name);
+      buffer.append(value);
+    }
+    
+    public void append(String name, double value) {
+      appendName(name);
+      buffer.append(value);
+    }
+    
+    public void append(String name, JSONStringBuilder object) {
+      appendName(name);
+      appendString(object.toString());
+    }
+    
+    public void finish() {
+      buffer.append("}");
+    }
+    
+    public String toString() {
+      if (stringValue == null) {
+        stringValue = buffer.toString();
+      }
+      return stringValue;
+    }
+    
+    public void reset() {
+      buffer.setLength(0);
+      needComma = false;
+      stringValue = null;
+    }
+    
+    private void appendName(String name) {
+      if (needComma) {
+        buffer.append(",");
+      }
+      appendString(name);
+      buffer.append(":");
+      needComma = true;
+    }
+    
+    private void appendString(String value) {
+      buffer.append("\"");
+      buffer.append(value);
+      buffer.append("\"");
+    }
   }
   
   private class Client extends Thread {
