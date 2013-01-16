@@ -43,14 +43,22 @@ public class OI {
     Joystick stickDriver = new Joystick(Constants.DRIVER_PORT);
     Joystick stickOperator = new Joystick(Constants.OPERATOR_PORT);
     
-    public double getDriveAxis() {
-        return stickDriver.getRawAxis(Constants.DRIVER_DRIVE_AXIS.get());
+    public double getArcadeDriveDriveAxis() {
+        return stickDriver.getRawAxis(Constants.DRIVER_ARCADEDRIVE_DRIVE_AXIS.get());
     }
-    public double getRotationAxis() {
-        double value = -stickDriver.getRawAxis(Constants.DRIVER_ROTATION_AXIS.get());
+    public double getArcadeDriveRotationAxis() {
+        double value = -stickDriver.getRawAxis(Constants.DRIVER_ARCADEDRIVE_ROTATION_AXIS.get());
         int sign = value >= 0 ? 1 : -1;
         
         return value * value * sign;
+    }
+    
+    public double getTankDriveLeftSpeed() {
+        return stickDriver.getRawAxis(Constants.DRIVER_TANKDRIVE_LEFT_AXIS.get());
+    }
+    
+    public double getTankDriveRightSpeed() {
+        return stickDriver.getRawAxis(Constants.DRIVER_TANKDRIVE_RIGHT_AXIS.get());
     }
     
     public boolean getShiftButton() {

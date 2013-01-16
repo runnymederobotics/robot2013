@@ -13,7 +13,8 @@ public class TeleopDriveCommand extends CommandBase {
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-        chassisSubsystem.drive(oi.getDriveAxis(), oi.getRotationAxis());
+        //chassisSubsystem.arcadeDrive(oi.getDriveAxis(), oi.getRotationAxis());
+        chassisSubsystem.tankDrive(oi.getTankDriveLeftSpeed(), oi.getTankDriveRightSpeed());
         chassisSubsystem.shift(oi.getShiftButton());
     }
 

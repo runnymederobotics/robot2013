@@ -22,8 +22,12 @@ public class ChassisSubsystem extends Subsystem {
         setDefaultCommand(new TeleopDriveCommand());
     }
     
-    public void drive(double speed, double rotation) {
+    public void arcadeDrive(double speed, double rotation) {
         robotDrive.arcadeDrive(speed, -rotation);
+    }
+    
+    public void tankDrive(double leftSpeed, double rightSpeed) {
+        robotDrive.tankDrive(leftSpeed, rightSpeed);
     }
     
     public void shift(boolean value) {
