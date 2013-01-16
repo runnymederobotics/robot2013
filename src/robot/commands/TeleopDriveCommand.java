@@ -1,7 +1,11 @@
 package robot.commands;
 
+import robot.Toggle;
+
 public class TeleopDriveCommand extends CommandBase {
 
+    Toggle toggleTankDrive = new Toggle(false);
+    
     public TeleopDriveCommand() {
         // Use requires() here to declare subsystem dependencies
         requires(chassisSubsystem);
@@ -13,8 +17,12 @@ public class TeleopDriveCommand extends CommandBase {
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-        //chassisSubsystem.arcadeDrive(oi.getDriveAxis(), oi.getRotationAxis());
-        chassisSubsystem.tankDrive(oi.getTankDriveLeftSpeed(), oi.getTankDriveRightSpeed());
+        if(toggleTankDrive.update(oi.getTankDriveToggleButton())) {
+            chassisSubsystem.arcadeDrive(oi.getArcadeDriveDriveAxis(), oi.getArcadeDriveRotationAxis());
+        } else {
+            chassisSubsystem.tankDrive(oi.getTankDriveLeftSpeed(), oi.getTankDriveRightSpeed());
+        }
+        
         chassisSubsystem.shift(oi.getShiftButton());
     }
 

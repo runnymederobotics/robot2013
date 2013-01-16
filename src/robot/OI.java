@@ -8,61 +8,52 @@ import edu.wpi.first.wpilibj.Joystick;
  * interface to the commands and command groups that allow control of the robot.
  */
 public class OI {
-    //// CREATING BUTTONS
-    // One type of button is a joystick button which is any button on a joystick.
-    // You create one by telling it which joystick it's on and which button
-    // number it is.
-    // Joystick stick = new Joystick(port);
-    // Button button = new JoystickButton(stick, buttonNumber);
+    static class Driver {
+        public static final int PORT = 1;
+        //Driver Axes
+        public static ParsableInt ARCADE_DRIVE_DRIVE_AXIS = new ParsableInt("driver.arcade_drive_drive_axis", 2);
+        public static ParsableInt ARCADE_DRIVE_ROTATION_AXIS = new ParsableInt("driver.arcade_drive_rotation_axis", 3);
+
+        public static ParsableInt TANK_DRIVE_LEFT_AXIS = new ParsableInt("driver.tank_drive_left_axis", 2);
+        public static ParsableInt TANK_DRIVE_RIGHT_AXIS = new ParsableInt("driver.tank_drive_right_axis", 4);
+
+        //Driver Buttons
+        public static ParsableInt SHIFT_BUTTON = new ParsableInt("driver.shift_button", 8);
+        public static ParsableInt TOGGLE_TANK_DRIVE_BUTTON = new ParsableInt("driver.toggle_tank_drive_button", 1);
+    }
     
-    // Another type of button you can create is a DigitalIOButton, which is
-    // a button or switch hooked up to the cypress module. These are useful if
-    // you want to build a customized operator interface.
-    // Button button = new DigitalIOButton(1);
+    static class Operator {
+        public static final int PORT = 2;
+    }
     
-    // There are a few additional built in buttons you can use. Additionally,
-    // by subclassing Button you can create custom triggers and bind those to
-    // commands the same as any other Button.
+    Joystick stickDriver = new Joystick(Driver.PORT);
+    Joystick stickOperator = new Joystick(Operator.PORT);
     
-    //// TRIGGERING COMMANDS WITH BUTTONS
-    // Once you have a button, it's trivial to bind it to a button in one of
-    // three ways:
-    
-    // Start the command when the button is pressed and let it run the command
-    // until it is finished as determined by it's isFinished method.
-    // button.whenPressed(new ExampleCommand());
-    
-    // Run the command while the button is being held down and interrupt it once
-    // the button is released.
-    // button.whileHeld(new ExampleCommand());
-    
-    // Start the command when the button is released  and let it run the command
-    // until it is finished as determined by it's isFinished method.
-    // button.whenReleased(new ExampleCommand());
-    
-    Joystick stickDriver = new Joystick(Constants.DRIVER_PORT);
-    Joystick stickOperator = new Joystick(Constants.OPERATOR_PORT);
+    public boolean getTankDriveToggleButton() {
+        return stickDriver.getRawButton(Driver.TOGGLE_TANK_DRIVE_BUTTON.get());
+    }
     
     public double getArcadeDriveDriveAxis() {
-        return stickDriver.getRawAxis(Constants.DRIVER_ARCADEDRIVE_DRIVE_AXIS.get());
+        return stickDriver.getRawAxis(Driver.ARCADE_DRIVE_DRIVE_AXIS.get());
     }
+    
     public double getArcadeDriveRotationAxis() {
-        double value = -stickDriver.getRawAxis(Constants.DRIVER_ARCADEDRIVE_ROTATION_AXIS.get());
+        double value = -stickDriver.getRawAxis(Driver.ARCADE_DRIVE_ROTATION_AXIS.get());
         int sign = value >= 0 ? 1 : -1;
         
         return value * value * sign;
     }
     
     public double getTankDriveLeftSpeed() {
-        return stickDriver.getRawAxis(Constants.DRIVER_TANKDRIVE_LEFT_AXIS.get());
+        return stickDriver.getRawAxis(Driver.TANK_DRIVE_LEFT_AXIS.get());
     }
     
     public double getTankDriveRightSpeed() {
-        return stickDriver.getRawAxis(Constants.DRIVER_TANKDRIVE_RIGHT_AXIS.get());
+        return stickDriver.getRawAxis(Driver.TANK_DRIVE_RIGHT_AXIS.get());
     }
     
     public boolean getShiftButton() {
-        return stickDriver.getRawButton(Constants.DRIVER_SHIFT_BUTTON.get());
+        return stickDriver.getRawButton(Driver.SHIFT_BUTTON.get());
     }
 }
 
