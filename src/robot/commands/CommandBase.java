@@ -1,11 +1,11 @@
-package templates.commands;
+package robot.commands;
 
 import RobotCLI.WebServer;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import templates.OI;
-import templates.Parsable;
-import templates.subsystems.ChassisSubsystem;
+import robot.OI;
+import robot.Parsable;
+import robot.subsystems.ChassisSubsystem;
 
 public abstract class CommandBase extends Command {
 

@@ -1,4 +1,4 @@
-package templates;
+package robot;
 
 import RobotCLI.WebServer;
 import java.util.Enumeration;

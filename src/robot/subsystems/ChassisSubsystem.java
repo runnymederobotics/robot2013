@@ -1,20 +1,21 @@
-package templates.subsystems;
+package robot.subsystems;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.RobotDrive;
 import edu.wpi.first.wpilibj.Victor;
 import edu.wpi.first.wpilibj.command.Subsystem;
-import templates.Constants;
-import templates.Pneumatic;
-import templates.commands.TeleopDriveCommand;
+import robot.Constants;
+import robot.Pneumatic;
+import robot.commands.TeleopDriveCommand;
 
 public class ChassisSubsystem extends Subsystem {
-    Victor leftMotor = new Victor(Constants.LEFT_MOTOR_CHANNEL);
-    Victor rightMotor = new Victor(Constants.RIGHT_MOTOR_CHANNEL);
-    
+    Victor leftMotorOne = new Victor(Constants.LEFT_MOTOR_CHANNEL_ONE);
+    Victor leftMotorTwo = new Victor(Constants.LEFT_MOTOR_CHANNEL_TWO);
+    Victor rightMotorOne = new Victor(Constants.RIGHT_MOTOR_CHANNEL_ONE);
+    Victor rightMotorTwo = new Victor(Constants.RIGHT_MOTOR_CHANNEL_TWO);
     Pneumatic shifterPneumatic = new Pneumatic(new DoubleSolenoid(Constants.SHIFTER_SOLENOID_ONE, Constants.SHIFTER_SOLENOID_TWO));
     
-    RobotDrive robotDrive = new RobotDrive(leftMotor, rightMotor);
+    RobotDrive robotDrive = new RobotDrive(leftMotorOne, leftMotorTwo, rightMotorOne, rightMotorTwo);
     
     public void initDefaultCommand() {
         // Set the default command for a subsystem here.
@@ -22,7 +23,7 @@ public class ChassisSubsystem extends Subsystem {
     }
     
     public void drive(double speed, double rotation) {
-        robotDrive.arcadeDrive(speed, rotation);
+        robotDrive.arcadeDrive(speed, -rotation);
     }
     
     public void shift(boolean value) {

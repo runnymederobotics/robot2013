@@ -1,4 +1,4 @@
-package templates.commands;
+package robot.commands;
 
 public class TeleopDriveCommand extends CommandBase {
 

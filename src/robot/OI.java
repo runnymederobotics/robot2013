@@ -1,5 +1,5 @@
 
-package templates;
+package robot;
 
 import edu.wpi.first.wpilibj.Joystick;
 

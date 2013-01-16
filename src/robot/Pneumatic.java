@@ -1,4 +1,4 @@
-package templates;
+package robot;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.Relay;

@@ -1,19 +1,19 @@
-package templates;
+package robot;
 
-public class ParsableDouble extends Parsable {
-    double value;
+public class ParsableInt extends Parsable {
+    int value;
 
-    public ParsableDouble(String key, double value) {
+    public ParsableInt(String key, int value) {
         super(key);
         this.value = value;
     }
     
-    public double get() {
+    public int get() {
         return value;
     }
 
     public void parse(String str) {
-        this.value = Double.parseDouble(str);
+        this.value = Integer.parseInt(str);
     }
 
     public String toString() {
