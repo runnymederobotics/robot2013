@@ -137,12 +137,26 @@ public class WebServer extends Thread {
     private StringBuffer buffer;
     private boolean needComma = false;
     private String stringValue = null;
+    private JSONStringBuilder subObject = null;
     
     public JSONStringBuilder() {
       this(new StringBuffer());
     }
+    
     public JSONStringBuilder(StringBuffer buffer) {
       this.buffer = buffer;
+    }
+    
+    public JSONStringBuilder startObject(String name) {
+      appendName(name);
+      if (subObject == null) {
+        subObject = new JSONStringBuilder(buffer);
+      }
+      subObject.start();
+    }
+    
+    public void endObject() {
+        subObject.finish();
     }
     
     public void start() {
@@ -161,6 +175,15 @@ public class WebServer extends Thread {
     public void append(String name, double value) {
       appendName(name);
       buffer.append(value);
+    }
+    
+    public void append(String name, boolean value) {
+      appendName(name);
+      if (value) {
+        buffer.append("true");
+      } else {
+        buffer.append("false");
+      }
     }
     
     public void append(String name, JSONStringBuilder object) {
@@ -183,6 +206,9 @@ public class WebServer extends Thread {
       buffer.setLength(0);
       needComma = false;
       stringValue = null;
+      if (subObject != null) {
+        subObject.reset();
+      }
     }
     
     private void appendName(String name) {
