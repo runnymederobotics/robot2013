@@ -37,11 +37,11 @@ public class HopperSubsystem extends Subsystem {
         shooterLoader.set(false);
     }
     
-    public void update(boolean requestRelease) {
+    public void update(boolean requestShot) {
         double now = Timer.getFPGATimestamp();
         
-        if(now - lastReleaseTime > RELEASE_DELAY.get()) {
-            this.requestRelease = !this.requestRelease ? true : this.requestRelease;
+        if(requestShot && now - lastReleaseTime > RELEASE_DELAY.get()) {
+            requestRelease = !requestRelease ? true : requestRelease;
         }
         
         if(requestRelease) {
@@ -61,7 +61,7 @@ public class HopperSubsystem extends Subsystem {
             if(now - stackReleaseTime > STACK_RELEASE_DELAY.get()) {
                 //When we've left enough time for the stack to drop, reset the dropper and load the shooter
                 finishTime = now;
-                stackDropper.set(false);
+                stackDropper.set(true);
                 shooterLoader.set(true);
             }
             
@@ -69,6 +69,7 @@ public class HopperSubsystem extends Subsystem {
                 lastReleaseTime = now;
                 //If we've waited long enough for the dropper and shooterLoader to do their stuff, then finish the release sequence
                 requestRelease = false;
+                reset();
             }
         } else {
             //Reset all pneumatics
