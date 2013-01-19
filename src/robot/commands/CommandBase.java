@@ -3,8 +3,13 @@ package robot.commands;
 import RobotCLI.WebServer;
 import edu.wpi.first.wpilibj.command.Command;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import java.util.Enumeration;
+import java.util.Hashtable;
 import robot.OI;
+import robot.StreamerHandler;
+import robot.parsable.JSONPrintable;
 import robot.parsable.Parsable;
+import robot.parsable.ParsablePIDController;
 import robot.subsystems.ChassisSubsystem;
 import robot.subsystems.HopperSubsystem;
 
@@ -39,14 +44,14 @@ public abstract class CommandBase extends Command {
 
         webServer.registerHandler("/constants", new Parsable.ParsablesHandler());
         webServer.registerStreamer("/stream", streamerHandler);
-        webServer.registerHandler("/stream/list", streamer.getListHandler());
-        webServer.registerHandler("/stream/select", streamer.getSelectHandler());
-        webServer.registerHandler("/stream/deselect", streamer.getDeselectHandler());
-        webServer.registerHandler("/stream/ls", streamer.getListHandler());
-        webServer.registerHandler("/stream/add", streamer.getSelectHandler());
-        webServer.registerHandler("/stream/rm", streamer.getDeselectHandler());
+        webServer.registerHandler("/stream/list", streamerHandler.getListHandler());
+        webServer.registerHandler("/stream/select", streamerHandler.getSelectHandler());
+        webServer.registerHandler("/stream/deselect", streamerHandler.getDeselectHandler());
+        webServer.registerHandler("/stream/ls", streamerHandler.getListHandler());
+        webServer.registerHandler("/stream/add", streamerHandler.getSelectHandler());
+        webServer.registerHandler("/stream/rm", streamerHandler.getDeselectHandler());
 
-        addPrintables(ParsablePIDControllers.parsablePIDControllers);
+        addPrintables(ParsablePIDController.parsablePIDControllers);
         addPrintables(Parsable.parsables);
         
         webServer.start();

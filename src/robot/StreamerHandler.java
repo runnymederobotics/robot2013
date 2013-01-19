@@ -1,22 +1,21 @@
 package robot;
 
-import RobotCLI.WebServer.JSONStringBuilder;
 import RobotCLI.WebServer.Handler;
+import RobotCLI.WebServer.JSONStringBuilder;
 import RobotCLI.WebServer.Streamer;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import robot.parsable.JSONPrintable;
 
 public class StreamerHandler extends Streamer {
-    public static Hashtable allVariables = new HashTable();
+    public static Hashtable allVariables = new Hashtable();
     
-    Hashtable streamVariables = new Hashtable();
+    final Hashtable streamVariables = new Hashtable();
     
     // /stream/list
     // /stream/select?leftPid&rightPid&shooterPid
     // /stream/deselect?shooterPid&rightPid
     // /stream?frequency=2
-    
     
     protected void buildChunk(JSONStringBuilder response, Hashtable params) {  
         synchronized(streamVariables) {
@@ -47,7 +46,7 @@ public class StreamerHandler extends Streamer {
     
     private static String listVariables(Hashtable variables) {
         Enumeration keys = variables.keys();            
-        StringBuilder builder = new StringBuilder();
+        StringBuffer builder = new StringBuffer();
         builder.append("[");
         boolean needComma = false;
         while(keys.hasMoreElements()) {
@@ -76,7 +75,7 @@ public class StreamerHandler extends Streamer {
                 Enumeration keys = params.keys();
                 while(keys.hasMoreElements()) {
                     String key = (String)keys.nextElement();
-                    JSONPrintable printable = (JSONPrintable)allVariables.keys().get(key);
+                    JSONPrintable printable = (JSONPrintable)allVariables.get(key);
                     if(printable != null && (streamVariables.get(key) == null)) {
                         streamVariables.put(key, printable);
                     }
@@ -92,7 +91,7 @@ public class StreamerHandler extends Streamer {
                 Enumeration keys = params.keys();
                 while(keys.hasMoreElements()) {
                     String key = (String)keys.nextElement();
-                    JSONPrintable printable = (JSONPrintable)allVariables.keys().get(key);
+                    JSONPrintable printable = (JSONPrintable)allVariables.get(key);
                     if(printable != null && (streamVariables.get(key) != null)) {
                         streamVariables.remove(key);
                     }

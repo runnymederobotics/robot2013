@@ -52,7 +52,7 @@ public abstract class Parsable {
             }
             
             //This lists all constants
-            StringBuilder builder = new StringBuilder();
+            StringBuffer builder = new StringBuffer();
             builder.append("{");
             Enumeration parsables = Parsable.parsables.elements();
             boolean firstRun = true;
