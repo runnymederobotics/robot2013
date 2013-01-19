@@ -1,15 +1,12 @@
 package robot.parsable;
 
 import RobotCLI.WebServer;
+import RobotCLI.WebServer.JSONStringBuilder;
 import java.util.Enumeration;
 import java.util.Hashtable;
 
 public abstract class Parsable {
-    
-    public interface JSONPrintable {
-        public void jsonPrint(String name, JSONStringBuilder response);
-    }
-    
+
     public static Hashtable parsables = new Hashtable();
     
     String name;

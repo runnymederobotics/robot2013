@@ -5,9 +5,9 @@ import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import robot.Constants;
-import robot.ParsableDouble;
 import robot.Pneumatic;
 import robot.commands.HopperCommand;
+import robot.parsable.ParsableDouble;
 
 public class HopperSubsystem extends Subsystem {
     

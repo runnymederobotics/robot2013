@@ -1,6 +1,8 @@
 package robot.parsable;
 
-public class ParsableInt extends Parsable implements Parsable.JSONPrintable {
+import RobotCLI.WebServer.JSONStringBuilder;
+
+public class ParsableInt extends Parsable implements JSONPrintable {
     int value;
 
     public ParsableInt(String key, int value) {

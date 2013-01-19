@@ -1,11 +1,12 @@
-package robot
+package robot;
 
-import java.util.Hashtable;
 import RobotCLI.WebServer.JSONStringBuilder;
 import RobotCLI.WebServer.Streamer;
-import robot.parsable.Parsable.JSONPrintable;
+import java.util.Enumeration;
+import java.util.Hashtable;
+import robot.parsable.JSONPrintable;
 
-public class StreamerHandler implements Streamer {
+public class StreamerHandler extends Streamer {
 
     Hashtable variables = new Hashtable();
     
@@ -14,7 +15,7 @@ public class StreamerHandler implements Streamer {
         //For each variable specified in the params
         while(keys.hasMoreElements()) {
             String key = (String)keys.nextElement();
-            ((JSONPrintable)variables.get(key)).jsonPrint(key, response));
+            ((JSONPrintable)variables.get(key)).jsonPrint(key, response);
         }
     }
     

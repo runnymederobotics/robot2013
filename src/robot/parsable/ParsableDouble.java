@@ -1,6 +1,8 @@
 package robot.parsable;
 
-public class ParsableDouble extends Parsable implements Parsable.JSONPrintable {
+import RobotCLI.WebServer.JSONStringBuilder;
+
+public class ParsableDouble extends Parsable implements JSONPrintable {
     double value;
 
     public ParsableDouble(String key, double value) {

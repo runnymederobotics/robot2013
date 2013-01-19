@@ -1,12 +1,13 @@
 package robot.parsable;
 
+import RobotCLI.WebServer.JSONStringBuilder;
 import edu.wpi.first.wpilibj.PIDController;
 import edu.wpi.first.wpilibj.PIDOutput;
 import edu.wpi.first.wpilibj.PIDSource;
 import java.util.Hashtable;
 
 //Wrapper class to make a parsable PIDController
-public class ParsablePIDController implements Parsable.JSONPrintable {
+public class ParsablePIDController implements JSONPrintable {
     public static Hashtable parsablePIDControllers = new Hashtable();
     
     String name;
