@@ -18,9 +18,9 @@ public class TeleopDriveCommand extends CommandBase {
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
         if(toggleTankDrive.update(oi.getTankDriveToggleButton())) {
-            chassisSubsystem.arcadeDrive(oi.getArcadeDriveDriveAxis(), oi.getArcadeDriveRotationAxis());
-        } else {
             chassisSubsystem.tankDrive(oi.getTankDriveLeftSpeed(), oi.getTankDriveRightSpeed());
+        } else {
+            chassisSubsystem.arcadeDrive(oi.getArcadeDriveDriveAxis(), oi.getArcadeDriveRotationAxis());
         }
         
         chassisSubsystem.shift(oi.getShiftButton());

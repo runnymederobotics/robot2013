@@ -2,8 +2,10 @@ package robot.subsystems;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.Solenoid;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import robot.Constants;
+import robot.ParsableDouble;
 import robot.Pneumatic;
 import robot.commands.HopperCommand;
 
@@ -13,37 +15,64 @@ public class HopperSubsystem extends Subsystem {
     Pneumatic stackHolder = new Pneumatic(new Solenoid(Constants.SOLENOID_STACK_HOLDER));
     Pneumatic shooterLoader = new Pneumatic(new DoubleSolenoid(Constants.SOLENOID_SHOOTER_LOADER_ONE, Constants.SOLENOID_SHOOTER_LOADER_TWO));
 
+    public static ParsableDouble RELEASE_DELAY = new ParsableDouble("release_delay", 1);
+    public static ParsableDouble STACK_HOLD_DELAY = new ParsableDouble("stack_hold_delay", 0.5);
+    public static ParsableDouble STACK_RELEASE_DELAY = new ParsableDouble("stack_release_delay", 0.5);
+    public static ParsableDouble FINISH_DELAY = new ParsableDouble("finish_delay", 0.5);
+    
+    boolean requestRelease = false;
+    
+    double lastReleaseTime = 0.0;
+    double stackHoldTime = 0.0;
+    double stackReleaseTime = 0.0;
+    double finishTime = 0.0;
+    
     public void initDefaultCommand() {
         setDefaultCommand(new HopperCommand());
     }
     
     public void reset() {
-        setStackDropper(true);
-        setStackHolder(false);
-        setShooterLoader(false);
+        stackDropper.set(true);
+        stackHolder.set(false);
+        shooterLoader.set(false);
     }
     
-    public void setStackHolder(boolean value) {
-        stackHolder.set(value);
-    }
-    
-    public boolean getStackHolder() {
-        return stackHolder.get();
-    }
-    
-    public void setStackDropper(boolean value) {
-        stackHolder.set(value);
-    }
-    
-    public boolean getStackDropper() {
-        return stackDropper.get();
-    }
-    
-    public void setShooterLoader(boolean value) {
-        shooterLoader.set(value);
-    }
-    
-    public boolean getShooterLoader() {
-        return shooterLoader.get();
+    public void update(boolean requestRelease) {
+        double now = Timer.getFPGATimestamp();
+        
+        if(now - lastReleaseTime > RELEASE_DELAY.get()) {
+            this.requestRelease = !this.requestRelease ? true : this.requestRelease;
+        }
+        
+        if(requestRelease) {
+            //Record the time we start holding the stack
+            stackHoldTime = !stackHolder.get() ? now : stackHoldTime;
+
+            //Hold the stack
+            stackHolder.set(true);
+            
+            //If we've waited long enough after we start holding the stack
+            if(now - stackHoldTime > STACK_HOLD_DELAY.get()) {
+                //Drop the stack and record the time
+                stackReleaseTime = now;
+                stackDropper.set(false);
+            }
+            
+            if(now - stackReleaseTime > STACK_RELEASE_DELAY.get()) {
+                //When we've left enough time for the stack to drop, reset the dropper and load the shooter
+                finishTime = now;
+                stackDropper.set(false);
+                shooterLoader.set(true);
+            }
+            
+            if(now - finishTime > FINISH_DELAY.get()) {
+                lastReleaseTime = now;
+                //If we've waited long enough for the dropper and shooterLoader to do their stuff, then finish the release sequence
+                requestRelease = false;
+            }
+        } else {
+            //Reset all pneumatics
+            reset();
+        }
     }
 }
