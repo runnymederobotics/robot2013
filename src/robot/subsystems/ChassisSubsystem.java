@@ -13,7 +13,7 @@ public class ChassisSubsystem extends Subsystem {
     Victor leftMotorTwo = new Victor(Constants.LEFT_MOTOR_CHANNEL_TWO);
     Victor rightMotorOne = new Victor(Constants.RIGHT_MOTOR_CHANNEL_ONE);
     Victor rightMotorTwo = new Victor(Constants.RIGHT_MOTOR_CHANNEL_TWO);
-    Pneumatic shifterPneumatic = new Pneumatic(new DoubleSolenoid(Constants.SHIFTER_SOLENOID_ONE, Constants.SHIFTER_SOLENOID_TWO));
+    Pneumatic shifterPneumatic = new Pneumatic(new DoubleSolenoid(Constants.SOLENOID_SHIFTER_ONE, Constants.SOLENOID_SHIFTER_TWO));
     
     RobotDrive robotDrive = new RobotDrive(leftMotorOne, leftMotorTwo, rightMotorOne, rightMotorTwo);
     

@@ -13,19 +13,12 @@ public class HopperCommand extends CommandBase {
     
     boolean requestRelease = false;
     
-    double autonomousWaitTime = 0.0;
-    double autonomousStartTime = 0.0;
-    
     double lastReleaseTime = 0.0;
     double stackHoldTime = 0.0;
     double stackReleaseTime = 0.0;
     double finishTime = 0.0;
     
     public HopperCommand() {
-    }
-    
-    public HopperCommand(double autonomousWaitTime) {
-        this.autonomousWaitTime = autonomousWaitTime;
     }
     
     protected void initialize() {
@@ -37,15 +30,12 @@ public class HopperCommand extends CommandBase {
         double now = Timer.getFPGATimestamp();
         
         if(DriverStation.getInstance().isOperatorControl()) {
+            //Add check for shooter up to speed
             if(now - lastReleaseTime > RELEASE_DELAY.get()) {
                 requestRelease = oi.getRequestShot() ? true : requestRelease;
             }
         } else {
-            autonomousStartTime = autonomousStartTime == 0.0 ? now : autonomousStartTime;
-            
-            if(now - autonomousStartTime > autonomousWaitTime) {
-                requestRelease = true;
-            }
+            requestRelease = true;
         }
         
         if(requestRelease) {
@@ -76,6 +66,10 @@ public class HopperCommand extends CommandBase {
         } else {
             //Reset all pneumatics
             hopperSubsystem.reset();
+            
+            if(DriverStation.getInstance().isAutonomous()) {
+                end();
+            }
         }
     }
 

@@ -3,13 +3,15 @@ package robot.subsystems;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.command.Subsystem;
+import robot.Constants;
 import robot.Pneumatic;
 import robot.commands.HopperCommand;
 
 public class HopperSubsystem extends Subsystem {
-    Pneumatic stackDropper = new Pneumatic(new DoubleSolenoid(3, 4));
-    Pneumatic stackHolder = new Pneumatic(new Solenoid(5));
-    Pneumatic shooterLoader = new Pneumatic(new DoubleSolenoid(6, 7));
+    
+    Pneumatic stackDropper = new Pneumatic(new DoubleSolenoid(Constants.SOLENOID_STACK_DROPPER_ONE, Constants.SOLENOID_STACK_DROPPER_TWO));
+    Pneumatic stackHolder = new Pneumatic(new Solenoid(Constants.SOLENOID_STACK_HOLDER));
+    Pneumatic shooterLoader = new Pneumatic(new DoubleSolenoid(Constants.SOLENOID_SHOOTER_LOADER_ONE, Constants.SOLENOID_SHOOTER_LOADER_TWO));
 
     public void initDefaultCommand() {
         setDefaultCommand(new HopperCommand());

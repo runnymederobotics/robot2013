@@ -15,6 +15,14 @@ public class Constants {
     public static final int RIGHT_MOTOR_CHANNEL_ONE = 3;
     public static final int RIGHT_MOTOR_CHANNEL_TWO = 4;
     
-    public static final int SHIFTER_SOLENOID_ONE = 1;
-    public static final int SHIFTER_SOLENOID_TWO = 2;
+    public static final int SOLENOID_SHIFTER_ONE = 1;
+    public static final int SOLENOID_SHIFTER_TWO = 2;
+    
+    public static final int SOLENOID_STACK_DROPPER_ONE = 3;
+    public static final int SOLENOID_STACK_DROPPER_TWO = 4;
+    
+    public static final int SOLENOID_STACK_HOLDER = 5;
+    
+    public static final int SOLENOID_SHOOTER_LOADER_ONE = 6;
+    public static final int SOLENOID_SHOOTER_LOADER_TWO = 7;
 }
