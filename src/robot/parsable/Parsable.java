@@ -52,22 +52,22 @@ public abstract class Parsable {
             }
             
             //This lists all constants
-            String ret = "{";
+            StringBuilder builder = new StringBuilder();
+            builder.append("{");
             Enumeration parsables = Parsable.parsables.elements();
             boolean firstRun = true;
             //For each constant ("parsable")
             while(parsables.hasMoreElements()) {
                 Parsable parsable = (Parsable)parsables.nextElement();
                 if(!firstRun) {
-                    ret += ",";
+                    builder.append(",");
                 }
                 //Add the parsable to the list
-                ret += parsable.toString();
+                builder.append(parsable.toString());
                 firstRun = false;
             }
-            ret += "}";
-            //The "{", ",", and "}" are used for easier parsing later on from our GUI
-            return ret;
+            builder.append("}");
+            return builder.toString();
         }
     }
 }

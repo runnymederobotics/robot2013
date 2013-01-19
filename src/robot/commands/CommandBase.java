@@ -16,6 +16,17 @@ public abstract class CommandBase extends Command {
     public static ChassisSubsystem chassisSubsystem = new ChassisSubsystem();
     public static HopperSubsystem hopperSubsystem = new HopperSubsystem();
     
+    private static void addPrintables(Hashtable hashtable) {
+        Enumeration keys = hashtable.keys();
+        while(keys.hasMoreElements()) {
+            String key = (String)keys.nextElement();
+            Object element = hashtable.get(key);
+            if(element instanceof JSONPrintable) {
+                StreamerHandler.addVariable(key, (JSONPrintable)element);
+            }
+        }
+    }
+    
     public static void init() {
         // This MUST be here. If the OI creates Commands (which it very likely
         // will), constructing it during the construction of CommandBase (from
@@ -24,7 +35,20 @@ public abstract class CommandBase extends Command {
         // news. Don't move it.
         oi = new OI();
 
+        StreamerHandler streamerHandler = new StreamerHandler();
+
         webServer.registerHandler("/constants", new Parsable.ParsablesHandler());
+        webServer.registerStreamer("/stream", streamerHandler);
+        webServer.registerHandler("/stream/list", streamer.getListHandler());
+        webServer.registerHandler("/stream/select", streamer.getSelectHandler());
+        webServer.registerHandler("/stream/deselect", streamer.getDeselectHandler());
+        webServer.registerHandler("/stream/ls", streamer.getListHandler());
+        webServer.registerHandler("/stream/add", streamer.getSelectHandler());
+        webServer.registerHandler("/stream/rm", streamer.getDeselectHandler());
+
+        addPrintables(ParsablePIDControllers.parsablePIDControllers);
+        addPrintables(Parsable.parsables);
+        
         webServer.start();
         
         // Show what command your subsystem is running on the SmartDashboard

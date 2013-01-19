@@ -294,8 +294,10 @@ public class WebServer extends Thread {
                 String part = (String) parts.elementAt(i);
                 Vector subParts = split(part, 0, '=');
                 if (subParts.size() > 1) {
+                  // key=value
                   paramTable.put(subParts.elementAt(0), subParts.elementAt(1));
                 } else {
+                  // key=  or key
                   paramTable.put(subParts.elementAt(0), "");
                 }
               }
