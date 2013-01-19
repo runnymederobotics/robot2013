@@ -153,6 +153,7 @@ public class WebServer extends Thread {
         subObject = new JSONStringBuilder(buffer);
       }
       subObject.start();
+      return subObject;
     }
     
     public void endObject() {
