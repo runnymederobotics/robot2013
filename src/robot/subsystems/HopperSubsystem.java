@@ -29,10 +29,9 @@ public class HopperSubsystem extends Subsystem {
     
     class HopperState {
         public static final int RESTING = 0;
-        public static final int STARTING = 1;
-        public static final int HOLDING = 2;
-        public static final int RELEASING = 3;
-        public static final int FINISHING = 4;
+        public static final int HOLDING = 1;
+        public static final int RELEASING = 2;
+        public static final int FINISHING = 3;
     }
     
     public void initDefaultCommand() {
@@ -51,19 +50,13 @@ public class HopperSubsystem extends Subsystem {
         switch(curState) {
             case HopperState.RESTING:
                 if(requestShot && now - lastReleaseTime > RELEASE_DELAY.get()) {
-                    curState = HopperState.STARTING;
-                }
-                break;
-            case HopperState.STARTING:
-                //Record the time we start holding the stack
-                if(!stackHolder.get()) {
                     stackHoldTime = now;
                     curState = HopperState.HOLDING;
                 }
-                //Hold the stack
-                stackHolder.set(true);
                 break;
             case HopperState.HOLDING:
+                //Hold the stack
+                stackHolder.set(true);
                 //If we've waited long enough after we start holding the stack
                 if(now - stackHoldTime > STACK_HOLD_DELAY.get()) {
                     //Drop the stack and record the time
@@ -90,5 +83,8 @@ public class HopperSubsystem extends Subsystem {
                 }
                 break;
         }
+        
+        System.out.println(curState + " - stackHolder: " + stackHolder.get() + " stackDropper: " + stackDropper.get() + " shooterLoader: " + shooterLoader.get());
+
     }
 }
