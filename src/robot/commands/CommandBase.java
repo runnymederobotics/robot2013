@@ -6,13 +6,15 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import robot.OI;
 import robot.Parsable;
 import robot.subsystems.ChassisSubsystem;
+import robot.subsystems.HopperSubsystem;
 
 public abstract class CommandBase extends Command {
 
     public static OI oi;
     // Create a single static instance of all of your subsystems
-    public static ChassisSubsystem chassisSubsystem = new ChassisSubsystem();
     public static WebServer webServer = new WebServer(8080);
+    public static ChassisSubsystem chassisSubsystem = new ChassisSubsystem();
+    public static HopperSubsystem hopperSubsystem = new HopperSubsystem();
     
     public static void init() {
         // This MUST be here. If the OI creates Commands (which it very likely
@@ -27,6 +29,7 @@ public abstract class CommandBase extends Command {
         
         // Show what command your subsystem is running on the SmartDashboard
         SmartDashboard.putData(chassisSubsystem);
+        SmartDashboard.putData(hopperSubsystem);
     }
 
     public CommandBase(String name) {

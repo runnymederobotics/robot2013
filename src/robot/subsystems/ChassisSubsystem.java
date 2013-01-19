@@ -18,7 +18,6 @@ public class ChassisSubsystem extends Subsystem {
     RobotDrive robotDrive = new RobotDrive(leftMotorOne, leftMotorTwo, rightMotorOne, rightMotorTwo);
     
     public void initDefaultCommand() {
-        // Set the default command for a subsystem here.
         setDefaultCommand(new TeleopDriveCommand());
     }
     

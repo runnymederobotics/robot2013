@@ -24,6 +24,8 @@ public class OI {
     
     static class Operator {
         public static final int PORT = 2;
+        
+        public static ParsableInt SHOOT_BUTTON = new ParsableInt("operator.shoot_button", 1);
     }
     
     Joystick stickDriver = new Joystick(Driver.PORT);
@@ -54,6 +56,10 @@ public class OI {
     
     public boolean getShiftButton() {
         return stickDriver.getRawButton(Driver.SHIFT_BUTTON.get());
+    }
+    
+    public boolean getRequestShot() {
+        return stickOperator.getRawButton(Operator.SHOOT_BUTTON.get());
     }
 }
 
