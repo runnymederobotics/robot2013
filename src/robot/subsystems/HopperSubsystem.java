@@ -27,6 +27,15 @@ public class HopperSubsystem extends Subsystem {
     double stackReleaseTime = 0.0;
     double finishTime = 0.0;
     
+    int curState = HopperState.DEFAULT;
+    
+    class HopperState {
+        public static final int DEFAULT = 0;
+        public static final int HOLDING = 1;
+        public static final int RELEASING = 2;
+        public static final int FINISHING = 3;
+    }
+    
     public void initDefaultCommand() {
         setDefaultCommand(new HopperCommand());
     }
@@ -41,35 +50,41 @@ public class HopperSubsystem extends Subsystem {
         double now = Timer.getFPGATimestamp();
         
         if(requestShot && now - lastReleaseTime > RELEASE_DELAY.get()) {
-            requestRelease = !requestRelease ? true : requestRelease;
+            requestRelease = true;
         }
-        
+
         if(requestRelease) {
             //Record the time we start holding the stack
-            stackHoldTime = !stackHolder.get() ? now : stackHoldTime;
-
+            if(curState == HopperState.DEFAULT && !stackHolder.get()) {
+                stackHoldTime = now;
+                curState = HopperState.HOLDING;
+            }
+            
             //Hold the stack
             stackHolder.set(true);
             
             //If we've waited long enough after we start holding the stack
-            if(now - stackHoldTime > STACK_HOLD_DELAY.get()) {
+            if(curState == HopperState.HOLDING && now - stackHoldTime > STACK_HOLD_DELAY.get()) {
                 //Drop the stack and record the time
                 stackReleaseTime = now;
                 stackDropper.set(false);
+                curState = HopperState.RELEASING;
             }
             
-            if(now - stackReleaseTime > STACK_RELEASE_DELAY.get()) {
+            if(curState == HopperState.RELEASING && now - stackReleaseTime > STACK_RELEASE_DELAY.get()) {
                 //When we've left enough time for the stack to drop, reset the dropper and load the shooter
                 finishTime = now;
                 stackDropper.set(true);
                 shooterLoader.set(true);
+                curState = HopperState.FINISHING;
             }
             
-            if(now - finishTime > FINISH_DELAY.get()) {
+            if(curState == HopperState.FINISHING && now - finishTime > FINISH_DELAY.get()) {
                 lastReleaseTime = now;
                 //If we've waited long enough for the dropper and shooterLoader to do their stuff, then finish the release sequence
                 requestRelease = false;
                 reset();
+                curState = HopperState.DEFAULT;
             }
         } else {
             //Reset all pneumatics
