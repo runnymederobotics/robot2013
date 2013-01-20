@@ -8,48 +8,47 @@ import java.util.Hashtable;
 
 //Wrapper class to make a parsable PIDController
 public class ParsablePIDController implements JSONPrintable {
+
     public static Hashtable parsablePIDControllers = new Hashtable();
-    
     String name;
     PIDController pidController;
     PIDSource pidSource;
     ParsableDouble p, i, d;
-    
+
     public void jsonPrint(String name, JSONStringBuilder response) {
         JSONStringBuilder stringBuilder = response.startObject("name");
-        
+
         stringBuilder.append("setpoint", pidController.getSetpoint());
         stringBuilder.append("output", pidController.get());
         stringBuilder.append("input", pidSource.pidGet());
-        
+
         response.endObject();
     }
-    
 
     public ParsablePIDController(String name, double Kp, double Ki, double Kd, double Kf, PIDSource source, PIDOutput output, double period) {
         makeParsable(name, Kp, Ki, Kd, source);
         pidController = new PIDController(Kp, Ki, Kd, Kf, source, output, period);
     }
-    
+
     public ParsablePIDController(String name, double Kp, double Ki, double Kd, PIDSource source, PIDOutput output, double period) {
         makeParsable(name, Kp, Ki, Kd, source);
         pidController = new PIDController(Kp, Ki, Kd, source, output, period);
     }
-    
+
     public ParsablePIDController(String name, double Kp, double Ki, double Kd, PIDSource source, PIDOutput output) {
         makeParsable(name, Kp, Ki, Kd, source);
         pidController = new PIDController(Kp, Ki, Kd, source, output);
     }
-    
+
     public ParsablePIDController(String name, double Kp, double Ki, double Kd, double Kf, PIDSource source, PIDOutput output) {
         makeParsable(name, Kp, Ki, Kd, source);
         pidController = new PIDController(Kp, Ki, Kd, Kf, source, output);
     }
-    
+
     public synchronized double get() {
         return pidController.get();
     }
-    
+
     public synchronized void setInputRange(double minimumInput, double maximumInput) {
         pidController.setInputRange(minimumInput, maximumInput);
     }
@@ -77,7 +76,7 @@ public class ParsablePIDController implements JSONPrintable {
     public synchronized void setPercentTolerance(double percentage) {
         pidController.setPercentTolerance(percentage);
     }
-    
+
     public synchronized boolean onTarget() {
         return pidController.onTarget();
     }
@@ -97,9 +96,9 @@ public class ParsablePIDController implements JSONPrintable {
     public synchronized void reset() {
         pidController.reset();
     }
-    
+
     private void makeParsable(String name, double Kp, double Ki, double Kd, PIDSource pidSource) {
-        if(!name.startsWith("pid")) {
+        if (!name.startsWith("pid")) {
             name = "pid" + name;
         }
         this.name = name;
@@ -109,29 +108,27 @@ public class ParsablePIDController implements JSONPrintable {
         this.pidSource = pidSource;
         parsablePIDControllers.put(name, this);
     }
-    
+
     public void updatePID() {
         pidController.setPID(p.get(), i.get(), d.get());
     }
-    
     //Do i need these?
     /*public void updateP() {
-        pidController.setPID(p.get(), pidController.getI(), pidController.getD());
-    }
+     pidController.setPID(p.get(), pidController.getI(), pidController.getD());
+     }
     
-    public void updateI() {
-        pidController.setPID(pidController.getP(), i.get(), pidController.getD());
-    }
+     public void updateI() {
+     pidController.setPID(pidController.getP(), i.get(), pidController.getD());
+     }
     
-    public void updateD() {
-        pidController.setPID(pidController.getP(), pidController.getI(), d.get());
-    }*/
-    
+     public void updateD() {
+     pidController.setPID(pidController.getP(), pidController.getI(), d.get());
+     }*/
     /*public static class PIDHandler implements WebServer.Handler {
-        public String handle(Hashtable params) {
-            String ret = "";
+     public String handle(Hashtable params) {
+     String ret = "";
             
-            return ret;
-        }
-    }*/
+     return ret;
+     }
+     }*/
 }
