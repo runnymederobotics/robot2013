@@ -9,7 +9,7 @@ import robot.parsable.ParsableInt;
  */
 public class OI {
 
-    static class Driver {
+    public static class Driver {
 
         public static final int PORT = 1;
         //Driver Axes
@@ -22,7 +22,7 @@ public class OI {
         public static ParsableInt TOGGLE_TANK_DRIVE_BUTTON = new ParsableInt("driver.toggle_tank_drive_button", 1);
     }
 
-    static class Operator {
+    public static class Operator {
 
         public static final int PORT = 2;
         public static ParsableInt SHOOT_BUTTON = new ParsableInt("operator.shoot_button", 1);

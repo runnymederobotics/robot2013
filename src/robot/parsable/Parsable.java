@@ -1,7 +1,6 @@
 package robot.parsable;
 
 import RobotCLI.WebServer;
-import RobotCLI.WebServer.JSONStringBuilder;
 import java.util.Enumeration;
 import java.util.Hashtable;
 

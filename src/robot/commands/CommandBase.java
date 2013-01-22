@@ -40,6 +40,10 @@ public abstract class CommandBase extends Command {
         // news. Don't move it.
         oi = new OI();
 
+        //Initialize the ParsableInt and ParsableDouble variables in these classes.
+        OI.Driver driver = new OI.Driver();
+        OI.Operator operator = new OI.Operator();
+        
         StreamerHandler streamerHandler = new StreamerHandler();
 
         webServer.registerHandler("/constants", new Parsable.ParsablesHandler());

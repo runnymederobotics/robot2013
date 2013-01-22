@@ -18,6 +18,6 @@ public class Constants {
     public static final int SOLENOID_STACK_DROPPER_ONE = 3;
     public static final int SOLENOID_STACK_DROPPER_TWO = 4;
     public static final int SOLENOID_STACK_HOLDER = 5;
-    public static final int SOLENOID_SHOOTER_LOADER_ONE = 6;
-    public static final int SOLENOID_SHOOTER_LOADER_TWO = 7;
+    public static final int SOLENOID_SHOOTER_LOADER_ONE = 7;
+    public static final int SOLENOID_SHOOTER_LOADER_TWO = 8;
 }
