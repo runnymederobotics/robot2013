@@ -81,8 +81,13 @@ public class HopperSubsystem extends Subsystem {
                 }
                 break;
         }
-
-        System.out.println(curState + " - stackHolder: " + stackHolder.get() + " stackDropper: " + stackDropper.get() + " shooterLoader: " + shooterLoader.get());
-
+    }
+    
+    public void print() {
+        System.out.println("[" + this.getName() + "]");
+        System.out.println("curState: " + curState);
+        System.out.println("stackHolder: " + stackHolder.get());
+        System.out.println("stackDropper: " + stackDropper.get());
+        System.out.println("shooterLoader: " + shooterLoader.get());
     }
 }

@@ -10,8 +10,11 @@ import robot.StreamerHandler;
 import robot.parsable.JSONPrintable;
 import robot.parsable.Parsable;
 import robot.parsable.ParsablePIDController;
+import robot.parsable.SendableDouble;
+import robot.parsable.SendableInt;
 import robot.subsystems.ChassisSubsystem;
 import robot.subsystems.HopperSubsystem;
+import robot.subsystems.PositioningSubsystem;
 
 public abstract class CommandBase extends Command {
 
@@ -20,7 +23,8 @@ public abstract class CommandBase extends Command {
     public static WebServer webServer = new WebServer(8080);
     public static ChassisSubsystem chassisSubsystem = new ChassisSubsystem();
     public static HopperSubsystem hopperSubsystem = new HopperSubsystem();
-
+    public static PositioningSubsystem positioningSubsystem = new PositioningSubsystem();
+    
     private static void addPrintables(Hashtable hashtable) {
         Enumeration keys = hashtable.keys();
         while (keys.hasMoreElements()) {
@@ -57,6 +61,8 @@ public abstract class CommandBase extends Command {
 
         addPrintables(ParsablePIDController.parsablePIDControllers);
         addPrintables(Parsable.parsables);
+        addPrintables(SendableInt.sendableInts);
+        addPrintables(SendableDouble.sendableDoubles);
 
         webServer.start();
 

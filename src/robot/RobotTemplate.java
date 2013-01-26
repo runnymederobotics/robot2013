@@ -58,6 +58,10 @@ public class RobotTemplate extends IterativeRobot {
         double now = Timer.getFPGATimestamp();
         if (now - lastPrintTime > Constants.PRINT_DELAY.get()) {
             System.out.println(mode);
+            
+            CommandBase.hopperSubsystem.print();
+            CommandBase.positioningSubsystem.print();
+            
             lastPrintTime = now;
         }
     }
