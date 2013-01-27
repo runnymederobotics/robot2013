@@ -31,9 +31,9 @@ public class DirectionVector {
     
     public static DirectionVector addVectors(DirectionVector aVector, DirectionVector bVector) {
         if(aVector == ZERO) {
-            return aVector;
-        } else if(bVector == ZERO) {
             return bVector;
+        } else if(bVector == ZERO) {
+            return aVector;
         }
         
         //c^2 = a^2 + b^2 - 2ab cosC
