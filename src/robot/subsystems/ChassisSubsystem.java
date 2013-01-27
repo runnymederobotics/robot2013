@@ -30,4 +30,11 @@ public class ChassisSubsystem extends Subsystem {
     public void shift(boolean value) {
         shifterPneumatic.set(value);
     }
+    
+    public void print() {
+        System.out.println("[" + this.getName() + "]");
+        System.out.println("leftMotor: " + leftMotor.get());
+        System.out.println("rightMotor: " + rightMotor.get());
+        System.out.println("shifterPneumatic: " + shifterPneumatic.get());
+    }
 }

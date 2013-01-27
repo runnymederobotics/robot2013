@@ -14,18 +14,23 @@ import robot.commands.CommandBase;
 
 public class RobotTemplate extends IterativeRobot {
 
+    double lastPrintTime = 0;
+
     public void robotInit() {
         // Initialize all subsystems
         CommandBase.init();
     }
 
+    //This function is called at the start of disabled
     public void disabledInit() {
     }
 
+    //This function is called periodically during disabled
     public void disabledPeriodic() {
         periodicPrint("[Disabled]");
     }
 
+    //This function is called at the start of autonomous
     public void autonomousInit() {
     }
 
@@ -36,32 +41,31 @@ public class RobotTemplate extends IterativeRobot {
         Scheduler.getInstance().run();
     }
 
-    //This function is called at the start of teleop mode
+    //This function is called at the start of teleop
     public void teleopInit() {
     }
 
-    //This function is called periodically during operator control
+    //This function is called periodically during teleop
     public void teleopPeriodic() {
         periodicPrint("[Teleop]");
 
         Scheduler.getInstance().run();
     }
 
-    //This function is called periodically during test mode
+    //This function is called periodically during test
     public void testPeriodic() {
         LiveWindow.run();
     }
-    
-    double lastPrintTime = 0;
 
     void periodicPrint(String mode) {
         double now = Timer.getFPGATimestamp();
         if (now - lastPrintTime > Constants.PRINT_DELAY.get()) {
             System.out.println(mode);
-            
+
+            CommandBase.chassisSubsystem.print();
             CommandBase.hopperSubsystem.print();
             CommandBase.positioningSubsystem.print();
-            
+
             lastPrintTime = now;
         }
     }

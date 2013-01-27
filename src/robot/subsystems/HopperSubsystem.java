@@ -82,7 +82,7 @@ public class HopperSubsystem extends Subsystem {
                 break;
         }
     }
-    
+
     public void print() {
         System.out.println("[" + this.getName() + "]");
         System.out.println("curState: " + curState);

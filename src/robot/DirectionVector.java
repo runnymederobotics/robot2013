@@ -5,9 +5,8 @@ import com.sun.squawk.util.MathUtils;
 public class DirectionVector {
 
     public static final DirectionVector ZERO = new DirectionVector(0, 0);
-    
-    double angle;
-    double magnitude;
+    private double angle;
+    private double magnitude;
 
     public DirectionVector(double angle, double magnitude) {
         this.angle = angle;
@@ -24,43 +23,103 @@ public class DirectionVector {
 
     public void add(DirectionVector bVector) {
         DirectionVector ret = addVectors(this, bVector);
-        
+
         angle = ret.getAngle();
         magnitude = ret.getMagnitude();
     }
-    
+
     public static DirectionVector addVectors(DirectionVector aVector, DirectionVector bVector) {
-        if(aVector == ZERO) {
-            return bVector;
-        } else if(bVector == ZERO) {
-            return aVector;
-        }
+        //Calculate EndPoint of aVector
+        Point aEndPoint = new Point(aVector);
+        //Calculate the EndPoint of bVector and translate it to the EndPoint of aVector
+        Point bEndPoint = new Point(aEndPoint, bVector);
         
-        //c^2 = a^2 + b^2 - 2ab cosC
+        //Calculate resultant
+        DirectionVector resultant = bEndPoint.toVector();
 
-        //180 - (360-angleA) - angleB
+        return resultant;
+    }
+}
 
-        double C = 180 - (360 - aVector.getAngle()) - bVector.getAngle();
+class Point {
 
-        double a = aVector.getMagnitude();
-        double b = bVector.getMagnitude();
+    public static final Point ZERO = new Point(0, 0);
+    private double x;
+    private double y;
 
-        double c = Math.sqrt(square(a) + square(b) - 2 * a * b * Math.cos(C));
-
-        //sinA/a = sinB/b
-        //A=sin-1(asinC/c)
-
-        double B = MathUtils.asin(a * Math.sin(C) / c);
-
-        double newAngle = B;
-        double newMagnitude = c;
-
-        DirectionVector newVector = new DirectionVector(newAngle, newMagnitude);
-
-        return newVector;
+    public Point(double x, double y) {
+        this.x = x;
+        this.y = y;
     }
 
-    private static double square(double magnitude) {
-        return magnitude * magnitude;
+    public Point(DirectionVector vector) {
+        double angle = vector.getAngle();
+        double magnitude = vector.getMagnitude();
+        //Determine x and y from the vector
+        this.x = magnitude * Math.cos(angle);
+        this.y = magnitude * Math.sin(angle);
+    }
+
+    public Point(Point origin, DirectionVector vector) {
+        //Determine the endpoint of the vector
+        this(vector);
+        //Translate to origin
+        translateToPoint(origin);
+    }
+
+    private void translateToPoint(Point point) {
+        //Java didnt like that add(Point) was overridable when called from a constructor
+        add(point);
+    }
+
+    public void add(Point point) {
+        x += point.getX();
+        y += point.getY();
+    }
+
+    public double getX() {
+        return x;
+    }
+
+    public double getY() {
+        return y;
+    }
+
+    public DirectionVector toVector() {
+        return new DirectionVector(getAngleFromOrigin(), getDistanceFromOrigin());
+    }
+
+    public static double getAngle(Point point1, Point point2) {
+        //Calculate the change in x and y
+        double deltaX = point1.getX() - point2.getX();
+        double deltaY = point1.getY() - point2.getY();
+
+        //Trigonometrically solve for the angle
+        return MathUtils.atan2(deltaY, deltaX);
+    }
+
+    public double getAngleFromOrigin() {
+        return getAngle(this, ZERO);
+    }
+
+    public double getAngleFromPoint(Point point) {
+        return getAngle(this, point);
+    }
+
+    public static double getDistance(Point point1, Point point2) {
+        //Get the absolute value of the change in x and y
+        double deltaX = Math.abs(point1.getX() - point2.getX());
+        double deltaY = Math.abs(point1.getY() - point2.getY());
+
+        //Pythagorean theorem
+        return Math.sqrt(MathUtils.pow(deltaX, 2) + MathUtils.pow(deltaY, 2));
+    }
+
+    public double getDistanceFromOrigin() {
+        return getDistance(this, ZERO);
+    }
+
+    public double getDistanceFromPoint(Point point) {
+        return getDistance(this, point);
     }
 }
