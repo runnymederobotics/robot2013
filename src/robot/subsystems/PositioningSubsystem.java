@@ -41,9 +41,10 @@ public class PositioningSubsystem extends Subsystem {
         //Rate * change in time since last update (update delay)
         double distance = rate * (now - lastUpdateTime);//(1.0 / PositioningCommand.POSITIONING_RESOLUTION.get());
 
-        DirectionVector curVector = new DirectionVector(angle, distance);
-
-        overallVector.add(curVector);
+        //DirectionVector curVector = new DirectionVector(angle, distance);
+        //overallVector.add(curVector);
+        
+        overallVector.add(angle, distance);
 
         double overallAngle = overallVector.getAngle();
         double overallMagnitude = overallVector.getMagnitude();
