@@ -31,6 +31,9 @@ public class HopperSubsystem extends Subsystem {
         public static final int RELEASING = 2;
         public static final int FINISHING = 3;
     }
+    
+    public HopperSubsystem() {
+    }
 
     public void initDefaultCommand() {
         setDefaultCommand(new HopperCommand());

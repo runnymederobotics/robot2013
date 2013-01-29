@@ -1,18 +1,19 @@
 package robot.subsystems;
 
 import edu.wpi.first.wpilibj.Gyro;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import robot.DirectionVector;
+import robot.commands.CommandBase;
 import robot.commands.PositioningCommand;
-import robot.parsable.SendableDouble;
+import robot.parsable.SendableInt;
 
 public class PositioningSubsystem extends Subsystem {
 
-    Gyro positionGyro = new Gyro(1);
+    Gyro positionGyro = new Gyro(2);
     DirectionVector overallVector = DirectionVector.ZERO;
-    SendableDouble x = new SendableDouble("position.x", 0);
-    SendableDouble y = new SendableDouble("position.y", 0);
-    double rate = 1; //Calculate using either accelerometer or encoders, preferably encoders
+    SendableInt x = new SendableInt("position.x", 0);
+    SendableInt y = new SendableInt("position.y", 0);
 
     public PositioningSubsystem() {
     }
@@ -20,18 +21,25 @@ public class PositioningSubsystem extends Subsystem {
     protected void initDefaultCommand() {
         setDefaultCommand(new PositioningCommand());
     }
+    
+    double lastUpdateTime = 0;
 
     public void updateVectors() {
+        double now = Timer.getFPGATimestamp();
+        
+        if(lastUpdateTime == 0) {
+            lastUpdateTime = now;
+        }
+        
         //Get angle and convert to radians
-        double angle = positionGyro.getAngle() * Math.PI / 180;
+        double angle = (int)(positionGyro.getAngle()) * Math.PI / 180;
 
-        //units/second
-        //When we add encoders, use chassisSubsystem.getRate();
-        rate = 1;
+        //Get current rate in inches/unit time
+        double rate = CommandBase.chassisSubsystem.getAverageRate() * ChassisSubsystem.INCHES_PER_ENCODER_COUNT;
         
         //The distance we've travelled since our last update
         //Rate * change in time since last update (update delay)
-        double distance = rate * (1.0 / PositioningCommand.POSITIONING_RESOLUTION.get());
+        double distance = rate * (now - lastUpdateTime);//(1.0 / PositioningCommand.POSITIONING_RESOLUTION.get());
 
         DirectionVector curVector = new DirectionVector(angle, distance);
 
@@ -40,8 +48,10 @@ public class PositioningSubsystem extends Subsystem {
         double overallAngle = overallVector.getAngle();
         double overallMagnitude = overallVector.getMagnitude();
 
-        x.set(overallMagnitude * Math.cos(overallAngle));
-        y.set(overallMagnitude * Math.sin(overallAngle));
+        x.set((int)(overallMagnitude * Math.cos(overallAngle)));
+        y.set((int)(overallMagnitude * Math.sin(overallAngle)));
+        
+        lastUpdateTime = now;
     }
 
     public void print() {
