@@ -20,6 +20,24 @@ public class DirectionVector {
     public double getMagnitude() {
         return magnitude;
     }
+    
+    //Doesn't create new objects in order to save resources
+    public void add(double angle, double magnitude) {
+        double thisX = this.magnitude * Math.cos(this.angle);
+        double thisY = this.magnitude * Math.sin(this.angle);
+        
+        double addX = magnitude * Math.cos(angle);
+        double addY = magnitude * Math.sin(angle);
+        
+        double newX = thisX + addX;
+        double newY = thisY + addY;
+        
+        double newAngle = MathUtils.atan2(newY, newX);
+        double newMagnitude = Math.sqrt(MathUtils.pow(newX, 2) + MathUtils.pow(newY, 2));
+        
+        this.angle = newAngle;
+        this.magnitude = newMagnitude;
+    }
 
     public void add(DirectionVector bVector) {
         DirectionVector ret = addVectors(this, bVector);

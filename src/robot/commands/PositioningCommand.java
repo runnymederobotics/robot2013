@@ -5,7 +5,7 @@ import robot.parsable.ParsableDouble;
 
 public class PositioningCommand extends CommandBase {
 
-    public static ParsableDouble POSITIONING_RESOLUTION = new ParsableDouble("positioning_resolution", 1.0);
+    public static ParsableDouble POSITIONING_RESOLUTION = new ParsableDouble("positioning_resolution", 10.0);
     double lastUpdateTime = 0;
 
     public PositioningCommand() {

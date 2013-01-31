@@ -21,4 +21,6 @@ public class Constants {
     public static final int SOLENOID_STACK_HOLDER_TWO = 6;
     public static final int SOLENOID_SHOOTER_LOADER_ONE = 7;
     public static final int SOLENOID_SHOOTER_LOADER_TWO = 8;
+    
+    public static final int POSITIONING_GYRO = 2;
 }
