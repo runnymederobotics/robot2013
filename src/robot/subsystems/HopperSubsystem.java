@@ -1,7 +1,6 @@
 package robot.subsystems;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
-import edu.wpi.first.wpilibj.Solenoid;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import robot.Constants;
@@ -12,7 +11,7 @@ import robot.parsable.ParsableDouble;
 public class HopperSubsystem extends Subsystem {
 
     Pneumatic stackDropper = new Pneumatic(new DoubleSolenoid(Constants.SOLENOID_STACK_DROPPER_ONE, Constants.SOLENOID_STACK_DROPPER_TWO));
-    Pneumatic stackHolder = new Pneumatic(new Solenoid(Constants.SOLENOID_STACK_HOLDER));
+    Pneumatic stackHolder = new Pneumatic(new DoubleSolenoid(Constants.SOLENOID_STACK_HOLDER_ONE, Constants.SOLENOID_STACK_HOLDER_TWO));
     Pneumatic shooterLoader = new Pneumatic(new DoubleSolenoid(Constants.SOLENOID_SHOOTER_LOADER_ONE, Constants.SOLENOID_SHOOTER_LOADER_TWO));
     public static ParsableDouble RELEASE_DELAY = new ParsableDouble("release_delay", 1);
     public static ParsableDouble STACK_HOLD_DELAY = new ParsableDouble("stack_hold_delay", 0.5);
