@@ -42,6 +42,24 @@
           }
         }
       }
+      
+      var drawRobot = function(x, y, angle) {
+        var canvas = $("#fieldCanvas")[0];
+        var context = canvas.getContext('2d');
+
+        context.save();
+        context.setTransform(1, 0, 0, 1, 0, 0);
+        context.clearRect(0, 0, canvas.width, canvas.height);
+        context.restore();
+
+        var width = 28;
+        var height = 32;
+
+        context.setTransform(1, 0, 0, 1, x, y);
+        context.rotate(angle * Math.PI / 180);
+        context.translate(-width / 2, -height / 2);
+        context.fillRect(0, 0, width, height);
+      }
 
       var cameraCharts = [
           makeSmoothieChart("#camera_charts", {
@@ -78,6 +96,7 @@
         camera: new Date().getTime(),
         data: new Date().getTime()
       };
+      
       setInterval(function() {
         var now = new Date().getTime();
         if (now - lastData.camera > 2000) {
@@ -98,23 +117,32 @@
           $("#streams").append("<img src='/stream/processed?" + now + "'/>");
         }
         
-        if (now - lastData.data > 2000) {
+        //var hasVariables = false;
+        startStreaming("http://10.13.10.2:8080/stream/add?xPosition&yPosition&anglePosition", null );
+        
+        //if (now - lastData.data > 2000) {
           // Robot data stream
-          startStreaming("http://192.168.209.1:8079/test/stream?frequency=5", function(event) {
-            var data = JSON.parse(event.target.responseText);
-            var now = new Date().getTime();
-            lastData.data = now;
-            var l = dataCharts.length;
-            for (var i = 0; i < l; i++) {
-              dataCharts[i](now, data);
-            }
+          startStreaming("http://10.13.10.2:8080/stream?frequency=5", function(event) {
+            var data = JSON.parse(event.target.responseText);//'{"xPosition":50,"yPosition":50,"anglePosition":10}');
+            
+            var x = data.xPosition;
+            var y = data.yPosition;
+            var angle = data.anglePosition;
+            
+            drawRobot(x, y, angle);
           });
-        }
+        //}
       }, 1000);
     });
     </script>
+    <style type="text/css">
+      .field { position: absolute; left: 500px; right: 0px; bottom: 0px; top: 0px }
+    </style>
   </head>
   <body>
+    <img class="field" src="field.png"/>
+    <canvas class="field" id="fieldCanvas" width="324" height="648"></canvas>
+    <div id="output"></div>
     <div id="streams"></div>
     <div id="camera_charts"></div>
     <div id="data_charts"></div>
