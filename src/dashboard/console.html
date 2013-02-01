@@ -122,7 +122,7 @@
         
         //if (now - lastData.data > 2000) {
           // Robot data stream
-          startStreaming("http://10.13.10.2:8080/stream?frequency=5", function(event) {
+          startStreaming("http://10.13.10.2:8080/stream?frequency=30", function(event) {
             var data = JSON.parse(event.target.responseText);//'{"xPosition":50,"yPosition":50,"anglePosition":10}');
             
             var x = data.xPosition;
