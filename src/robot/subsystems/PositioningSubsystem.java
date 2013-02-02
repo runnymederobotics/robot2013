@@ -20,6 +20,7 @@ public class PositioningSubsystem extends Subsystem {
     SendableInt yPosition = new SendableInt("yPosition", yPositionStart.get());
     SendableInt anglePosition = new SendableInt("anglePosition", 0);
     double lastUpdateTime = 0;
+    double lastDistance = 0;
     double lastGyroAngle = 0;
     
     public PositioningSubsystem() {
@@ -30,11 +31,15 @@ public class PositioningSubsystem extends Subsystem {
     }
 
     public void updateVectors() {
-        double now = Timer.getFPGATimestamp();
+        //double now = Timer.getFPGATimestamp();
         double curGyroAngle = positionGyro.getAngle();
+        double curDistance = CommandBase.chassisSubsystem.getAverageDistance();
         
-        if (lastUpdateTime == 0) {
-            lastUpdateTime = now;
+        //if (lastUpdateTime == 0) {
+        //    lastUpdateTime = now;
+        //}
+        if(lastDistance == 0) {
+            lastDistance = curDistance;
         }
         if(lastGyroAngle == 0) {
             lastGyroAngle = curGyroAngle;
@@ -47,12 +52,14 @@ public class PositioningSubsystem extends Subsystem {
         double angle = (int) (averageGyroAngle - 90) * Math.PI / 180;
 
         //Get current rate in inches/unit time
-        double rate = CommandBase.chassisSubsystem.getAverageRate() * ChassisSubsystem.INCHES_PER_ENCODER_COUNT;
+        //double rate = CommandBase.chassisSubsystem.getAverageRate() * ChassisSubsystem.INCHES_PER_ENCODER_COUNT;
         
         //The distance we've travelled since our last update
         //Rate * change in time since last update
         //This will be magnitude of our vector
-        double distance = rate * (now - lastUpdateTime);
+        //double distance = rate * (now - lastUpdateTime);
+        
+        double distance = (curDistance - lastDistance) * ChassisSubsystem.INCHES_PER_ENCODER_COUNT;
         
         if(angle != Double.NaN && distance != Double.NaN) {
             overallVector.add(angle, distance);
@@ -65,7 +72,8 @@ public class PositioningSubsystem extends Subsystem {
         yPosition.set(yPositionStart.get() + (int) (overallMagnitude * Math.sin(overallAngle)));
         anglePosition.set((int) positionGyro.getAngle());
 
-        lastUpdateTime = now;
+        //lastUpdateTime = now;
+        lastDistance = curDistance;
         lastGyroAngle = curGyroAngle;
     }
 
