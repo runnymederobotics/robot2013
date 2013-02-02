@@ -11,7 +11,7 @@ import robot.commands.TeleopDriveCommand;
 
 public class ChassisSubsystem extends Subsystem {
 
-    public static final double INCHES_PER_ENCODER_COUNT = 34.5 / 499;//(8 * Math.PI) / 400;
+    public static final double INCHES_PER_ENCODER_COUNT = 34.5 / 499;
     Victor leftMotor = new Victor(Constants.LEFT_MOTOR_CHANNEL);
     Victor rightMotor = new Victor(Constants.RIGHT_MOTOR_CHANNEL);
     Pneumatic shifterPneumatic = new Pneumatic(new DoubleSolenoid(Constants.SOLENOID_SHIFTER_ONE, Constants.SOLENOID_SHIFTER_TWO));
@@ -41,26 +41,6 @@ public class ChassisSubsystem extends Subsystem {
 
     public void shift(boolean value) {
         shifterPneumatic.set(value);
-    }
-
-    public void updateAverageRate() {
-        averageRateSum += (encRight.getRate() - encLeft.getRate()) / 2;
-        ++numberRatesToAverage;
-    }
-
-    public double getAverageRate() {
-        //Right rate - left rate because left rate is negative
-        averageRate = averageRateSum / numberRatesToAverage; //Average rate
-
-        if(averageRate == Double.NaN) {
-            System.out.println("averageRate: " + averageRate + " = " + averageRateSum + " / " + numberRatesToAverage);
-            averageRate = 0.0;
-        }
-        
-        averageRateSum = 0.0;
-        numberRatesToAverage = 0;
-        
-        return averageRate;
     }
 
     public int getAverageDistance() {

@@ -19,6 +19,14 @@
           xhr.send(null);
         }
       }
+      
+      var setStreamingVariables = function(variables) {
+          var params = {};
+          for (var i = 0; i < variables.length; ++i) {
+              params[variables[i]] = true;
+          }
+          $.ajax({ url : "http://10.13.10.2:8080/stream/add", data : params });
+      }
 
       var makeSmoothieChart = function(parent, options) {
         var newDiv = $("<div><p>" + options.title + "</p><canvas width='"
@@ -99,6 +107,23 @@
       
       setInterval(function() {
         var now = new Date().getTime();
+        if (now - lastData.data > 2000) {
+          setStreamingVariables(["xPosition", "yPosition", "anglePosition"]);
+          
+          // Robot data stream
+          startStreaming("http://10.13.10.2:8080/stream?frequency=30", function(event) {
+            lastData.data = new Date().getTime();
+            
+            var data = JSON.parse(event.target.responseText);//'{"xPosition":50,"yPosition":50,"anglePosition":10}');
+            
+            var x = data.xPosition;
+            var y = data.yPosition;
+            var angle = data.anglePosition;
+            
+            drawRobot(x, y, angle);
+          });
+        }
+        
         if (now - lastData.camera > 2000) {
           // Camera smoothie charts
           startStreaming("/stream/data", function(event) {
@@ -116,22 +141,6 @@
           $("#streams").append("<img src='/stream/raw?" + now + "'/>");
           $("#streams").append("<img src='/stream/processed?" + now + "'/>");
         }
-        
-        //var hasVariables = false;
-        startStreaming("http://10.13.10.2:8080/stream/add?xPosition&yPosition&anglePosition", null );
-        
-        //if (now - lastData.data > 2000) {
-          // Robot data stream
-          startStreaming("http://10.13.10.2:8080/stream?frequency=30", function(event) {
-            var data = JSON.parse(event.target.responseText);//'{"xPosition":50,"yPosition":50,"anglePosition":10}');
-            
-            var x = data.xPosition;
-            var y = data.yPosition;
-            var angle = data.anglePosition;
-            
-            drawRobot(x, y, angle);
-          });
-        //}
       }, 1000);
     });
     </script>

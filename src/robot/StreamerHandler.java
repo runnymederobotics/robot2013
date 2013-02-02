@@ -5,6 +5,7 @@ import RobotCLI.WebServer.JSONStringBuilder;
 import RobotCLI.WebServer.Streamer;
 import java.util.Enumeration;
 import java.util.Hashtable;
+import java.util.Vector;
 import robot.parsable.JSONPrintable;
 
 public class StreamerHandler extends Streamer {
@@ -46,7 +47,7 @@ public class StreamerHandler extends Streamer {
     private static String listVariables(Hashtable variables) {
         Enumeration keys = variables.keys();
         StringBuffer builder = new StringBuffer();
-        builder.append("[");
+        builder.append("{\"vars\":[");
         boolean needComma = false;
         while (keys.hasMoreElements()) {
             if (needComma) {
@@ -58,7 +59,7 @@ public class StreamerHandler extends Streamer {
             builder.append("\"");
             needComma = true;
         }
-        builder.append("]");
+        builder.append("]}");
         return builder.toString();
     }
 

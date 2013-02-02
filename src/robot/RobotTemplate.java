@@ -6,6 +6,7 @@
 /*----------------------------------------------------------------------------*/
 package robot;
 
+import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Scheduler;
@@ -14,11 +15,14 @@ import robot.commands.CommandBase;
 
 public class RobotTemplate extends IterativeRobot {
 
+    Compressor compressor = new Compressor(Constants.COMPRESSOR_DI, Constants.COMPRESSOR_RELAY);
     double lastPrintTime = 0;
 
     public void robotInit() {
         // Initialize all subsystems
         CommandBase.init();
+        
+        compressor.start();
     }
 
     //This function is called at the start of disabled
