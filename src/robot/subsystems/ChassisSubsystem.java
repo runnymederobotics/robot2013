@@ -16,8 +16,8 @@ public class ChassisSubsystem extends Subsystem {
     Victor rightMotor = new Victor(Constants.RIGHT_MOTOR_CHANNEL);
     Pneumatic shifterPneumatic = new Pneumatic(new DoubleSolenoid(Constants.SOLENOID_SHIFTER_ONE, Constants.SOLENOID_SHIFTER_TWO));
     RobotDrive robotDrive = new RobotDrive(leftMotor, rightMotor);
-    Encoder encLeft = new Encoder(5, 6, true);
-    Encoder encRight = new Encoder(3, 4, true);
+    Encoder encLeft = new Encoder(Constants.ENC_LEFT_ONE, Constants.ENC_LEFT_TWO, true);
+    Encoder encRight = new Encoder(Constants.ENC_RIGHT_ONE, Constants.ENC_RIGHT_TWO, true);
     int numberRatesToAverage = 0;
     double averageRateSum = 0;
     double averageRate = 0;

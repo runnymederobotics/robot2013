@@ -29,7 +29,11 @@ public class Constants {
     public static final int SOLENOID_SHOOTER_LOADER_TWO = 8;
     
     //Digital inputs
-    public static final int COMPRESSOR_DI = 1;
+    public static final int ENC_LEFT_ONE = 1;
+    public static final int ENC_LEFT_TWO = 2;
+    public static final int ENC_RIGHT_ONE = 3;
+    public static final int ENC_RIGHT_TWO = 4;
+    public static final int COMPRESSOR_DI = 10;
     
     //Analog inputs
     public static final int POSITIONING_GYRO = 2;

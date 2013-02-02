@@ -35,7 +35,7 @@ public class OI {
     }
 
     public double getArcadeDriveDriveAxis() {
-        return -stickDriver.getRawAxis(Driver.ARCADE_DRIVE_DRIVE_AXIS.get());
+        return stickDriver.getRawAxis(Driver.ARCADE_DRIVE_DRIVE_AXIS.get());
     }
 
     public double getArcadeDriveRotationAxis() {
