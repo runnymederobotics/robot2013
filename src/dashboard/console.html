@@ -1,182 +1,185 @@
 <html>
-  <head>
-    <title>Console</title>
-    <script src="js/lib/jquery.min.js"></script>
-    <script src="js/lib/smoothie.js"></script>
-    <script src="js/lib/dat.gui.min.js"></script>
-    <script type="text/javascript">
-    $(function() {
-      var startStreaming = function(url, onData) {
-        var xhr = new XMLHttpRequest();
-        if (xhr) {
-          if (typeof xhr.multipart == 'undefined') {
-            alert("Streaming not supported - try Firefox.");
-            return;
-          }
+    <head>
+        <title>Console</title>
+        <script src="js/lib/jquery.min.js"></script>
+        <script src="js/lib/smoothie.js"></script>
+        <script src="js/lib/dat.gui.min.js"></script>
+        <script src="js/lib/modernizr-2.0.6-development-only.js"></script>
+        <script type="text/javascript">
+            $(function() {
+                var startStreaming = function(url, onData) {
+                    var xhr = new XMLHttpRequest();
+                    if (xhr) {
+                        if (typeof xhr.multipart == 'undefined') {
+                            alert("Streaming not supported - try Firefox.");
+                            return;
+                        }
 
-          xhr.multipart = true;
-          xhr.open("GET", url, true);
-          xhr.onload = onData;
-          xhr.send(null);
-        }
-      }
+                        xhr.multipart = true;
+                        xhr.open("GET", url, true);
+                        xhr.onload = onData;
+                        xhr.send(null);
+                    }
+                }
       
-      var setStreamingVariables = function(variables) {
-          var params = {};
-          for (var i = 0; i < variables.length; ++i) {
-              params[variables[i]] = true;
-          }
-          $.ajax({ url: "http://10.13.10.2:8080/stream/add", data: params });
-      }
+                var setStreamingVariables = function(variables) {
+                    var params = {};
+                    for (var i = 0; i < variables.length; ++i) {
+                        params[variables[i]] = true;
+                    }
+                    $.ajax({ url: "http://10.13.10.2:8080/stream/add", data: params });
+                }
       
-      var gui;
+                var gui;
       
-      var addToGUI = function(obj, prop) {
-          var controller = gui.add(obj, prop);
-          controller.onFinishChange(function(value) {
-              var params = {prop: value};
-              $.ajax({ url: "http://10.13.10.2:8080/constants", data: params});
-          });
-      };
+                var addToGUI = function(obj, prop) {
+                    var controller = gui.add(obj, prop);
+                    controller.onFinishChange(function(value) {
+                        var params = {prop: value};
+                        $.ajax({ url: "http://10.13.10.2:8080/constants", data: params});
+                    });
+                };
       
-      var updateVariableList = function() {
-          $.ajax({ url: "http://10.13.10.2:8080/constants", dataType: "json"}).done(function(data) {
-              for(var property in data) {
-                  addToGUI(data, property);
-              }
-          });
-      }
+                var updateVariableList = function() {
+                    $.ajax({ url: "http://10.13.10.2:8080/constants", dataType: "json"}).done(function(data) {
+                        for(var property in data) {
+                            addToGUI(data, property);
+                        }
+                    });
+                }
 
-      var makeSmoothieChart = function(parent, options) {
-        var newDiv = $("<div><p>" + options.title + "</p><canvas width='"
-            + options.width + "' height='" + options.height + "'/></div>");
-        $(parent).append(newDiv);
-        var chart = new SmoothieChart();
-        chart.streamTo(newDiv.children("canvas").get(0), /* delay */ 1000);
-        var series = {};
-        var l = options.dataFields.length;
-        for (var i = 0; i < l; i++) {
-          series[options.dataFields[i]] = new TimeSeries();
-          chart.addTimeSeries(series[options.dataFields[i]]);
-        }
-        return function(now, data) {
-          var l = options.dataFields.length;
-          for (var i = 0; i < l; i++) {
-            var f = options.dataFields[i];
-            if (series.hasOwnProperty(f)) {
-              series[f].append(now, data[f]);
-            }
-          }
-        }
-      }
+                var makeSmoothieChart = function(parent, options) {
+                    var newDiv = $("<div><p>" + options.title + "</p><canvas width='"
+                        + options.width + "' height='" + options.height + "'/></div>");
+                    $(parent).append(newDiv);
+                    var chart = new SmoothieChart();
+                    chart.streamTo(newDiv.children("canvas").get(0), /* delay */ 1000);
+                    var series = {};
+                    var l = options.dataFields.length;
+                    for (var i = 0; i < l; i++) {
+                        series[options.dataFields[i]] = new TimeSeries();
+                        chart.addTimeSeries(series[options.dataFields[i]]);
+                    }
+                    return function(now, data) {
+                        var l = options.dataFields.length;
+                        for (var i = 0; i < l; i++) {
+                            var f = options.dataFields[i];
+                            if (series.hasOwnProperty(f)) {
+                                series[f].append(now, data[f]);
+                            }
+                        }
+                    }
+                }
       
-      var drawRobot = function(x, y, angle) {
-        var canvas = $("#fieldCanvas")[0];
-        var context = canvas.getContext('2d');
+                var drawRobot = function(x, y, angle) {
+                    var canvas = $("#fieldCanvas")[0];
+                    var context = canvas.getContext('2d');
 
-        context.save();
-        context.setTransform(1, 0, 0, 1, 0, 0);
-        context.clearRect(0, 0, canvas.width, canvas.height);
-        context.restore();
+                    context.save();
+                    context.setTransform(1, 0, 0, 1, 0, 0);
+                    context.clearRect(0, 0, canvas.width, canvas.height);
+                    context.restore();
 
-        var width = 27;
-        var height = 37;
+                    var width = 27;
+                    var height = 37;
 
-        context.setTransform(1, 0, 0, 1, x, y);
-        context.rotate(angle * Math.PI / 180);
-        context.translate(-width / 2, -height / 2);
-        context.fillRect(0, 0, width, height);
-      }
+                    context.setTransform(1, 0, 0, 1, x, y);
+                    context.rotate(angle * Math.PI / 180);
+                    context.translate(-width / 2, -height / 2);
+                    context.fillRect(0, 0, width, height);
+                }
 
-      var cameraCharts = [
-          makeSmoothieChart("#camera_charts", {
-            title: "Camera Processing Time (seconds/sec)",
-            dataFields: ["total_time"],
-            width: 200, height: 50
-          }),
-          makeSmoothieChart("#camera_charts", {
-            title: "Camera FPS",
-            dataFields: ["fps"],
-            width: 200, height: 50
-          }),
-          makeSmoothieChart("#camera_charts", {
-            title: "Camera Bandwidth (KB/sec)",
-            dataFields: ["bandwidth"],
-            width: 200, height: 50
-          }),
-      ];
+                var cameraCharts = [
+                    makeSmoothieChart("#camera_charts", {
+                        title: "Camera Processing Time (seconds/sec)",
+                        dataFields: ["total_time"],
+                        width: 200, height: 50
+                    }),
+                    makeSmoothieChart("#camera_charts", {
+                        title: "Camera FPS",
+                        dataFields: ["fps"],
+                        width: 200, height: 50
+                    }),
+                    makeSmoothieChart("#camera_charts", {
+                        title: "Camera Bandwidth (KB/sec)",
+                        dataFields: ["bandwidth"],
+                        width: 200, height: 50
+                    }),
+                ];
 
-      var dataCharts = [
-        makeSmoothieChart("#data_charts", {
-          title: "Data Charts Example One",
-          dataFields: ["one"],
-          width: 200, height: 50
-        }),
-        makeSmoothieChart("#data_charts", {
-          title: "Data Charts Example Two",
-          dataFields: ["two", "three"],
-          width: 200, height: 50
-        }),
-      ];
+                var dataCharts = [
+                    makeSmoothieChart("#data_charts", {
+                        title: "Data Charts Example One",
+                        dataFields: ["one"],
+                        width: 200, height: 50
+                    }),
+                    makeSmoothieChart("#data_charts", {
+                        title: "Data Charts Example Two",
+                        dataFields: ["two", "three"],
+                        width: 200, height: 50
+                    }),
+                ];
       
-      var lastData = {
-        camera: new Date().getTime(),
-        data: new Date().getTime()
-      };
+                var lastData = {
+                    camera: new Date().getTime(),
+                    data: new Date().getTime()
+                };
       
-      setInterval(function() {
-        var now = new Date().getTime();
-        if (now - lastData.data > 2000) {
-          gui.destroy();
-          gui = new dat.GUI();
-          updateVariableList();
+                setInterval(function() {
+                    var now = new Date().getTime();
+                    if (now - lastData.data > 2000) {
+                        if(gui) {
+                            gui.destroy();
+                        }
+                        gui = new dat.GUI();
+                        updateVariableList();
           
-          setStreamingVariables(["xPosition", "yPosition", "anglePosition"]);
+                        setStreamingVariables(["xPosition", "yPosition", "anglePosition"]);
           
-          // Robot data stream
-          startStreaming("http://10.13.10.2:8080/stream?frequency=30", function(event) {
-            lastData.data = new Date().getTime();
+                        // Robot data stream
+                        startStreaming("http://10.13.10.2:8080/stream?frequency=30", function(event) {
+                            lastData.data = new Date().getTime();
             
-            var data = JSON.parse(event.target.responseText);
+                            var data = JSON.parse(event.target.responseText);
             
-            var x = data.xPosition;
-            var y = data.yPosition;
-            var angle = data.anglePosition;
+                            var x = data.xPosition;
+                            var y = data.yPosition;
+                            var angle = data.anglePosition;
             
-            drawRobot(x, y, angle);
-          });
-        }
+                            drawRobot(x, y, angle);
+                        });
+                    }
         
-        if (now - lastData.camera > 2000) {
-          // Camera smoothie charts
-          startStreaming("/stream/data", function(event) {
-            var data = JSON.parse(event.target.responseText);
-            var now = new Date().getTime();
-            lastData.camera = now;
-            var l = cameraCharts.length;
-            for (var i = 0; i < l; i++) {
-              cameraCharts[i](now, data);
-            }
-          });
+                    if (false && now - lastData.camera > 2000) {
+                        // Camera smoothie charts
+                        startStreaming("/stream/data", function(event) {
+                            var data = JSON.parse(event.target.responseText);
+                            var now = new Date().getTime();
+                            lastData.camera = now;
+                            var l = cameraCharts.length;
+                            for (var i = 0; i < l; i++) {
+                                cameraCharts[i](now, data);
+                            }
+                        });
           
-          // Start the video streams
-          $("#streams").children().remove();
-          $("#streams").append("<img src='/stream/raw?" + now + "'/>");
-          $("#streams").append("<img src='/stream/processed?" + now + "'/>");
-        }
-      }, 1000);
-    });
-    </script>
-    <style type="text/css">
-      .field { position: absolute; left: 500px; right: 0px; bottom: 0px; top: 0px }
-    </style>
-  </head>
-  <body>
-    <img class="field" src="field.png"/>
-    <canvas class="field" id="fieldCanvas" width="324" height="648"></canvas>
-    <div id="output"></div>
-    <div id="streams"></div>
-    <div id="camera_charts"></div>
-    <div id="data_charts"></div>
-  </body>
+                        // Start the video streams
+                        $("#streams").children().remove();
+                        $("#streams").append("<img src='/stream/raw?" + now + "'/>");
+                        $("#streams").append("<img src='/stream/processed?" + now + "'/>");
+                    }
+                }, 1000);
+            });
+        </script>
+        <style type="text/css">
+            .field { position: absolute; left: 500px; right: 0px; bottom: 0px; top: 0px }
+        </style>
+    </head>
+    <body>
+        <img class="field" src="field.png"/>
+        <canvas class="field" id="fieldCanvas" width="324" height="648"></canvas>
+        <div id="output"></div>
+        <div id="streams"></div>
+        <div id="camera_charts"></div>
+        <div id="data_charts"></div>
+    </body>
 </html>
