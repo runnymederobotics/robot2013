@@ -29,19 +29,20 @@
           $.ajax({ url: "http://10.13.10.2:8080/stream/add", data: params });
       }
       
-      function removeGui(gui, parent) {
-        if(!parent) {
-          parent = dat.GUI.autoPlaceContainer;
-        }
-        parent.removeChild(gui.domElement);
-      }
-      
       var gui;
       
-      var updateVariableList = function(data) {
+      var addToGUI = function(obj, prop) {
+          var controller = gui.add(obj, prop);
+          controller.onFinishChange(function(value) {
+              var params = {prop: value};
+              $.ajax({ url: "http://10.13.10.2:8080/constants", data: params});
+          });
+      };
+      
+      var updateVariableList = function() {
           $.ajax({ url: "http://10.13.10.2:8080/constants", dataType: "json"}).done(function(data) {
               for(var property in data) {
-                  gui.add(data, property);
+                  addToGUI(data, property);
               }
           });
       }
@@ -136,7 +137,7 @@
           startStreaming("http://10.13.10.2:8080/stream?frequency=30", function(event) {
             lastData.data = new Date().getTime();
             
-            var data = JSON.parse(event.target.responseText);//'{"xPosition":50,"yPosition":50,"anglePosition":10}');
+            var data = JSON.parse(event.target.responseText);
             
             var x = data.xPosition;
             var y = data.yPosition;
