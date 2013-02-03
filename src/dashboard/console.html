@@ -3,6 +3,7 @@
     <title>Console</title>
     <script src="js/lib/jquery.min.js"></script>
     <script src="js/lib/smoothie.js"></script>
+    <script src="js/lib/dat.gui.min.js"></script>
     <script type="text/javascript">
     $(function() {
       var startStreaming = function(url, onData) {
@@ -25,7 +26,24 @@
           for (var i = 0; i < variables.length; ++i) {
               params[variables[i]] = true;
           }
-          $.ajax({ url : "http://10.13.10.2:8080/stream/add", data : params });
+          $.ajax({ url: "http://10.13.10.2:8080/stream/add", data: params });
+      }
+      
+      function removeGui(gui, parent) {
+        if(!parent) {
+          parent = dat.GUI.autoPlaceContainer;
+        }
+        parent.removeChild(gui.domElement);
+      }
+      
+      var gui;
+      
+      var updateVariableList = function(data) {
+          $.ajax({ url: "http://10.13.10.2:8080/constants", dataType: "json"}).done(function(data) {
+              for(var property in data) {
+                  gui.add(data, property);
+              }
+          });
       }
 
       var makeSmoothieChart = function(parent, options) {
@@ -108,6 +126,10 @@
       setInterval(function() {
         var now = new Date().getTime();
         if (now - lastData.data > 2000) {
+          gui.destroy();
+          gui = new dat.GUI();
+          updateVariableList();
+          
           setStreamingVariables(["xPosition", "yPosition", "anglePosition"]);
           
           // Robot data stream
