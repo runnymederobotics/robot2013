@@ -13,19 +13,19 @@ public class OI {
 
         public static final int PORT = 1;
         //Driver Axes
-        public static ParsableInt ARCADE_DRIVE_DRIVE_AXIS = new ParsableInt("driver.arcade_drive_drive_axis", 2);
-        public static ParsableInt ARCADE_DRIVE_ROTATION_AXIS = new ParsableInt("driver.arcade_drive_rotation_axis", 3);
-        public static ParsableInt TANK_DRIVE_LEFT_AXIS = new ParsableInt("driver.tank_drive_left_axis", 2);
-        public static ParsableInt TANK_DRIVE_RIGHT_AXIS = new ParsableInt("driver.tank_drive_right_axis", 4);
+        public static ParsableInt ARCADE_DRIVE_DRIVE_AXIS = new ParsableInt("driver_arcade_drive_drive_axis", 2);
+        public static ParsableInt ARCADE_DRIVE_ROTATION_AXIS = new ParsableInt("driver_arcade_drive_rotation_axis", 3);
+        public static ParsableInt TANK_DRIVE_LEFT_AXIS = new ParsableInt("driver_tank_drive_left_axis", 2);
+        public static ParsableInt TANK_DRIVE_RIGHT_AXIS = new ParsableInt("driver_tank_drive_right_axis", 4);
         //Driver Buttons
-        public static ParsableInt SHIFT_BUTTON = new ParsableInt("driver.shift_button", 8);
-        public static ParsableInt TOGGLE_TANK_DRIVE_BUTTON = new ParsableInt("driver.toggle_tank_drive_button", 1);
+        public static ParsableInt SHIFT_BUTTON = new ParsableInt("driver_shift_button", 8);
+        public static ParsableInt TOGGLE_TANK_DRIVE_BUTTON = new ParsableInt("driver_toggle_tank_drive_button", 1);
     }
 
     public static class Operator {
 
         public static final int PORT = 2;
-        public static ParsableInt SHOOT_BUTTON = new ParsableInt("operator.shoot_button", 1);
+        public static ParsableInt SHOOT_BUTTON = new ParsableInt("operator_shoot_button", 1);
     }
     Joystick stickDriver = new Joystick(Driver.PORT);
     Joystick stickOperator = new Joystick(Operator.PORT);

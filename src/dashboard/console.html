@@ -31,15 +31,17 @@
                 }
       
                 var gui;
-      
+                var guiVariables = {};
                 var addToGUI = function(obj, prop) {
                     var controller = gui.add(obj, prop);
+                    guiVariables[prop] = obj[prop];
                     controller.onFinishChange(function(value) {
-                        var params = {prop: value};
+                        var params = {};
+                        params[prop] = value;
                         $.ajax({ url: "http://10.13.10.2:8080/constants", data: params});
                     });
                 };
-      
+                
                 var updateVariableList = function() {
                     $.ajax({ url: "http://10.13.10.2:8080/constants", dataType: "json"}).done(function(data) {
                         for(var property in data) {
@@ -133,8 +135,12 @@
                         }
                         gui = new dat.GUI();
                         updateVariableList();
+                        
+                        var myVar = {name: "hello"};
+                
+                        addToGUI(myVar, "name");
           
-                        setStreamingVariables(["xPosition", "yPosition", "anglePosition"]);
+                        setStreamingVariables(["xPosition", "yPosition", "anglePosition", "shooterEncoder"]);
           
                         // Robot data stream
                         startStreaming("http://10.13.10.2:8080/stream?frequency=30", function(event) {
@@ -142,11 +148,28 @@
             
                             var data = JSON.parse(event.target.responseText);
             
-                            var x = data.xPosition;
-                            var y = data.yPosition;
-                            var angle = data.anglePosition;
+                            if(data.hasOwnProperty("xPosition") && data.hasOwnProperty("yPosition") && data.hasOwnProperty("anglePosition")) {
+                                var x = data.xPosition;
+                                var y = data.yPosition;
+                                var angle = data.anglePosition;
             
-                            drawRobot(x, y, angle);
+                                drawRobot(x, y, angle);
+                            }
+                            if(data.hasOwnProperty("shooterEncoder")) {
+                                var shooter = data.shooterEncoder;
+                                if(guiVariables.hasOwnProperty("shooterEncoder")) {
+                                    guiVariables.shooterEncoder = shooter;
+                                } else {
+                                    var obj = new Object();
+                                    obj.shooterEncoder = shooter;
+                                    addToGUI(obj, "shooterEncoder");
+                                }
+                            }
+                            
+                            // Iterate over all controllers
+                            for (var i in gui.__controllers) {
+                                gui.__controllers[i].updateDisplay();
+                            }
                         });
                     }
         
