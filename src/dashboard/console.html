@@ -42,6 +42,10 @@
                     });
                 };
                 
+                var clearVariableList = function() {
+                    guiVariables = {};
+                }
+                
                 var updateVariableList = function() {
                     $.ajax({ url: "http://10.13.10.2:8080/constants", dataType: "json"}).done(function(data) {
                         for(var property in data) {
@@ -127,13 +131,19 @@
                     data: new Date().getTime()
                 };
       
+                var connected = false;
+                var sentInit = false;
+      
                 setInterval(function() {
                     var now = new Date().getTime();
-                    if (now - lastData.data > 2000) {
+                    //As soon as we connect and we havent sent our init, send the init
+                    if(connected && !sentInit) {
                         if(gui) {
                             gui.destroy();
+                            clearVariableList();
                         }
-                        gui = new dat.GUI();
+                        
+                        gui = new dat.GUI( {width: 400} );
                         updateVariableList();
                         
                         var myVar = {name: "hello"};
@@ -141,9 +151,19 @@
                         addToGUI(myVar, "name");
           
                         setStreamingVariables(["xPosition", "yPosition", "anglePosition", "shooterEncoder"]);
-          
+                        
+                        sentInit = true;
+                    }
+                    if (now - lastData.data > 2000) {
+                        //We've timed out, meaning we're current disconnected and we haven't sent our init
+                        connected = false;
+                        sentInit = false;
+                        
                         // Robot data stream
                         startStreaming("http://10.13.10.2:8080/stream?frequency=30", function(event) {
+                            //Successful connection
+                            connected = true;
+                            
                             lastData.data = new Date().getTime();
             
                             var data = JSON.parse(event.target.responseText);
