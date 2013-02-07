@@ -21,7 +21,7 @@ public class RobotTemplate extends IterativeRobot {
     public void robotInit() {
         // Initialize all subsystems
         CommandBase.init();
-        
+
         compressor.start();
     }
 
@@ -31,7 +31,7 @@ public class RobotTemplate extends IterativeRobot {
 
     //This function is called periodically during disabled
     public void disabledPeriodic() {
-        periodicPrint("[Disabled]");
+        periodicPrint("Disabled");
     }
 
     //This function is called at the start of autonomous
@@ -40,7 +40,7 @@ public class RobotTemplate extends IterativeRobot {
 
     //This function is called periodically during autonomous
     public void autonomousPeriodic() {
-        periodicPrint("[Autonomous]");
+        periodicPrint("Autonomous");
 
         Scheduler.getInstance().run();
     }
@@ -51,7 +51,7 @@ public class RobotTemplate extends IterativeRobot {
 
     //This function is called periodically during teleop
     public void teleopPeriodic() {
-        periodicPrint("[Teleop]");
+        periodicPrint("Teleop");
 
         Scheduler.getInstance().run();
     }
@@ -64,11 +64,13 @@ public class RobotTemplate extends IterativeRobot {
     void periodicPrint(String mode) {
         double now = Timer.getFPGATimestamp();
         if (now - lastPrintTime > Constants.PRINT_DELAY.get()) {
-            System.out.println(mode + " *********************************************************");
+            System.out.println("------------------------- [" + mode + "] -------------------------");
 
             CommandBase.chassisSubsystem.print();
-            //CommandBase.hopperSubsystem.print();
+            CommandBase.hopperSubsystem.print();
             CommandBase.positioningSubsystem.print();
+            CommandBase.shooterSubsystem.print();
+            CommandBase.pickupSubsystem.print();
 
             lastPrintTime = now;
         }

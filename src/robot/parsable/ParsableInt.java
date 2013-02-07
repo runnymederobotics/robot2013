@@ -20,7 +20,10 @@ public class ParsableInt extends Parsable implements JSONPrintable {
     }
 
     public void parse(String str) {
-        this.value = Integer.parseInt(str);
+        try {
+            this.value = Integer.parseInt(str);
+        } catch (Exception ex) {
+        }
     }
 
     public String toString() {

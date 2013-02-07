@@ -27,7 +27,8 @@
                     for (var i = 0; i < variables.length; ++i) {
                         params[variables[i]] = true;
                     }
-                    $.ajax({ url: "http://10.13.10.2:8080/stream/add", data: params });
+                    //$.getJSON("http://10.13.10.2:8080/stream/add", {data: params});
+                    $.ajax({url: "http://10.13.10.2:8080/stream/add", data: params, dataType: "json"});
                 }
       
                 var gui;
@@ -38,7 +39,7 @@
                     controller.onFinishChange(function(value) {
                         var params = {};
                         params[prop] = value;
-                        $.ajax({ url: "http://10.13.10.2:8080/constants", data: params});
+                        $.ajax({url: "http://10.13.10.2:8080/constants", data: params, dataType: "json"})
                     });
                 };
                 
@@ -47,7 +48,7 @@
                 }
                 
                 var updateVariableList = function() {
-                    $.ajax({ url: "http://10.13.10.2:8080/constants", dataType: "json"}).done(function(data) {
+                    $.ajax({url: "http://10.13.10.2:8080/constants", dataType: "json"}).done(function(data) {
                         for(var property in data) {
                             addToGUI(data, property);
                         }
@@ -64,7 +65,7 @@
                     var l = options.dataFields.length;
                     for (var i = 0; i < l; i++) {
                         series[options.dataFields[i]] = new TimeSeries();
-                        chart.addTimeSeries(series[options.dataFields[i]]);
+                        chart.addTimeSeries(series[options.dataFields[i]], { strokeStyle:'rgb(0, 255, 0)', fillStyle:'rgba(0, 0, 0, 0)' });
                     }
                     return function(now, data) {
                         var l = options.dataFields.length;
@@ -115,15 +116,15 @@
 
                 var dataCharts = [
                     makeSmoothieChart("#data_charts", {
-                        title: "Data Charts Example One",
-                        dataFields: ["one"],
-                        width: 200, height: 50
+                        title: "Shooter Encoder",
+                        dataFields: ["shooterEncoder"],
+                        width: 400, height: 50
                     }),
-                    makeSmoothieChart("#data_charts", {
+                    /*makeSmoothieChart("#data_charts", {
                         title: "Data Charts Example Two",
                         dataFields: ["two", "three"],
                         width: 200, height: 50
-                    }),
+                    }),*/
                 ];
       
                 var lastData = {
@@ -136,28 +137,17 @@
       
                 setInterval(function() {
                     var now = new Date().getTime();
-                    //As soon as we connect and we havent sent our init, send the init
-                    if(connected && !sentInit) {
+                    if (now - lastData.data > 2000) {
+                        //We've timed out, meaning we're current disconnected and we haven't sent our init
+                        connected = false;
+                        sentInit = false;
+                        
                         if(gui) {
                             gui.destroy();
                             clearVariableList();
                         }
                         
-                        gui = new dat.GUI( {width: 400} );
-                        updateVariableList();
-                        
-                        var myVar = {name: "hello"};
-                
-                        addToGUI(myVar, "name");
-          
-                        setStreamingVariables(["xPosition", "yPosition", "anglePosition", "shooterEncoder"]);
-                        
-                        sentInit = true;
-                    }
-                    if (now - lastData.data > 2000) {
-                        //We've timed out, meaning we're current disconnected and we haven't sent our init
-                        connected = false;
-                        sentInit = false;
+                        gui = new dat.GUI( {width: 500} );
                         
                         // Robot data stream
                         startStreaming("http://10.13.10.2:8080/stream?frequency=30", function(event) {
@@ -167,7 +157,8 @@
                             lastData.data = new Date().getTime();
             
                             var data = JSON.parse(event.target.responseText);
-            
+                            var now = new Date().getTime();
+                            
                             if(data.hasOwnProperty("xPosition") && data.hasOwnProperty("yPosition") && data.hasOwnProperty("anglePosition")) {
                                 var x = data.xPosition;
                                 var y = data.yPosition;
@@ -175,22 +166,23 @@
             
                                 drawRobot(x, y, angle);
                             }
-                            if(data.hasOwnProperty("shooterEncoder")) {
-                                var shooter = data.shooterEncoder;
-                                if(guiVariables.hasOwnProperty("shooterEncoder")) {
-                                    guiVariables.shooterEncoder = shooter;
-                                } else {
-                                    var obj = new Object();
-                                    obj.shooterEncoder = shooter;
-                                    addToGUI(obj, "shooterEncoder");
-                                }
-                            }
                             
-                            // Iterate over all controllers
-                            for (var i in gui.__controllers) {
-                                gui.__controllers[i].updateDisplay();
+                            if(data.hasOwnProperty("shooterEncoder")) {
+                                //var l = dataCharts.length;
+                                //for (var i = 0; i < l; i++) {
+                                    dataCharts[0](now, data);
+                                //}
                             }
                         });
+                    }
+                    
+                    //As soon as we connect and we havent sent our init, send the init
+                    if(connected && !sentInit) {
+                        updateVariableList();
+          
+                        setStreamingVariables(["xPosition", "yPosition", "anglePosition", "shooterEncoder"]);
+
+                        sentInit = true;
                     }
         
                     if (false && now - lastData.camera > 2000) {

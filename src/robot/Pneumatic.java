@@ -3,6 +3,7 @@ package robot;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.Relay;
 import edu.wpi.first.wpilibj.Solenoid;
+import edu.wpi.first.wpilibj.communication.ModulePresence;
 
 public class Pneumatic {
 
@@ -10,6 +11,22 @@ public class Pneumatic {
     Solenoid singleSolenoid = null;
     Relay relay = null;
     boolean state = false;
+
+    //For double solenoids. Safe constructor, if module is not plugged in then the robot will still function
+    public Pneumatic(int module, int channelOne, int channelTwo) {
+        if (ModulePresence.getModulePresence(ModulePresence.ModuleType.kSolenoid, module)) {
+            doubleSolenoid = new DoubleSolenoid(module, channelOne, channelTwo);
+        }
+    }
+
+    //For single solenoids and relays. Safe constructor, if module is not plugged in then the robot will still function
+    public Pneumatic(boolean solenoid, int module, int channel) {
+        if (ModulePresence.getModulePresence(ModulePresence.ModuleType.kSolenoid, module)) {
+            singleSolenoid = new Solenoid(module, channel);
+        } else if (ModulePresence.getModulePresence(ModulePresence.ModuleType.kDigital, module)) {
+            relay = new Relay(module, channel);
+        }
+    }
 
     public Pneumatic(DoubleSolenoid doubleSolenoid) {
         this.doubleSolenoid = doubleSolenoid;

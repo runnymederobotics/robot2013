@@ -89,12 +89,8 @@ public class WebServer extends Thread {
                 buildChunk(jsonBuilder, params);
                 jsonBuilder.finish();
                 buffer.append(CONTENT_END);
-                try {
-                    outputStream.write(buffer.toString().getBytes());
-                    outputStream.flush();
-                } catch(IOException ex) {
-                    System.out.println("Client Disconnected");
-                }
+                outputStream.write(buffer.toString().getBytes());
+                outputStream.flush();
                 try {
                     Thread.sleep(sleepMillis);
                 } catch (InterruptedException ex) {

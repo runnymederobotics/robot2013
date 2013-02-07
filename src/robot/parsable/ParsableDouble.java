@@ -12,7 +12,7 @@ public class ParsableDouble extends Parsable implements JSONPrintable {
     }
 
     public void jsonPrint(String name, JSONStringBuilder response) {
-        response.append(name, (double)(((int) (value * 100000)) * 0.00001));
+        response.append(name, (double) (((int) (value * 100000)) * 0.00001));
     }
 
     public double get() {
@@ -20,7 +20,10 @@ public class ParsableDouble extends Parsable implements JSONPrintable {
     }
 
     public void parse(String str) {
-        this.value = Double.parseDouble(str);
+        try {
+            this.value = Double.parseDouble(str);
+        } catch (Exception ex) {
+        }
     }
 
     public String toString() {

@@ -19,7 +19,7 @@ public class PositioningSubsystem extends Subsystem {
     SendableInt yPosition = new SendableInt("yPosition", yPositionStart.get());
     SendableInt anglePosition = new SendableInt("anglePosition", 0);
     double lastDistance = 0;
-    
+
     public PositioningSubsystem() {
     }
 
@@ -30,19 +30,19 @@ public class PositioningSubsystem extends Subsystem {
     public void updateVectors() {
         double gyroAngle = positionGyro.getAngle();
         double curDistance = CommandBase.chassisSubsystem.getAverageDistance();
-        
-        if(lastDistance == 0) {
+
+        if (lastDistance == 0) {
             lastDistance = curDistance;
         }
-        
+
         //Get angle and convert to radians
         //Shift by 90 degrees because vectors are calculated with 0 degrees being the x-axis
         //Negative to flip the sign of the y-axis
         double angle = (int) (gyroAngle - 90) * Math.PI / 180;
-        
+
         //The distance we've travelled since our last update
         double distance = (curDistance - lastDistance) * ChassisSubsystem.INCHES_PER_ENCODER_COUNT;
-        
+
         position.add(angle, distance);
 
         xPosition.set(xPositionStart.get() + (int) position.getX());
@@ -57,7 +57,7 @@ public class PositioningSubsystem extends Subsystem {
         xPosition.set(x);
         yPosition.set(y);
     }
-    
+
     public void print() {
         System.out.println("[" + this.getName() + "]");
         System.out.println("Gyro: " + positionGyro.getAngle());

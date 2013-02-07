@@ -20,6 +20,7 @@ public class OI {
         //Driver Buttons
         public static ParsableInt SHIFT_BUTTON = new ParsableInt("driver_shift_button", 8);
         public static ParsableInt TOGGLE_TANK_DRIVE_BUTTON = new ParsableInt("driver_toggle_tank_drive_button", 1);
+        public static ParsableInt PICKUP_LOWER_BUTTON = new ParsableInt("pickup_lower_button", 6);
     }
 
     public static class Operator {
@@ -59,5 +60,9 @@ public class OI {
 
     public boolean getRequestShot() {
         return stickOperator.getRawButton(Operator.SHOOT_BUTTON.get());
+    }
+    
+    public boolean getPickupLowerButton() {
+        return stickOperator.getRawButton(Driver.PICKUP_LOWER_BUTTON.get());
     }
 }

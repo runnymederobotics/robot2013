@@ -47,7 +47,7 @@ public class StreamerHandler extends Streamer {
     private static String listVariables(Hashtable variables) {
         Enumeration keys = variables.keys();
         StringBuffer builder = new StringBuffer();
-        builder.append("{\"vars\":[");
+        builder.append("{");//\"vars\":[");
         boolean needComma = false;
         while (keys.hasMoreElements()) {
             if (needComma) {
@@ -56,10 +56,10 @@ public class StreamerHandler extends Streamer {
             String key = (String) keys.nextElement();
             builder.append("\"");
             builder.append(key);
-            builder.append("\"");
+            builder.append("\":true");
             needComma = true;
         }
-        builder.append("]}");
+        builder.append("}");
         return builder.toString();
     }
 

@@ -2,8 +2,11 @@ package robot.commands;
 
 public class ShooterCommand extends CommandBase {
 
-    protected void initialize() {
+    public ShooterCommand() {
         requires(shooterSubsystem);
+    }
+    
+    protected void initialize() {
     }
 
     protected void execute() {
