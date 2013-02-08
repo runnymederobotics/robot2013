@@ -27,6 +27,7 @@ public class OI {
 
         public static final int PORT = 2;
         public static ParsableInt SHOOT_BUTTON = new ParsableInt("operator_shoot_button", 1);
+        public static ParsableInt SHOOTER_AXIS = new ParsableInt("operator_shooter_axis", 3);
     }
     Joystick stickDriver = new Joystick(Driver.PORT);
     Joystick stickOperator = new Joystick(Operator.PORT);
@@ -64,5 +65,11 @@ public class OI {
     
     public boolean getPickupLowerButton() {
         return stickOperator.getRawButton(Driver.PICKUP_LOWER_BUTTON.get());
+    }
+    
+    final double THROTTLE_DEAD_ZONE = 0.1;
+    public double getManualShooterSpeed() {
+        double axis = -stickOperator.getAxis(Joystick.AxisType.kThrottle) / 2 + 0.5; //Make it between 0.0 and 1.0
+        return axis >= THROTTLE_DEAD_ZONE ? axis : 0.0;
     }
 }

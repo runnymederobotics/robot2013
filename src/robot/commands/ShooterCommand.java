@@ -10,6 +10,7 @@ public class ShooterCommand extends CommandBase {
     }
 
     protected void execute() {
+        shooterSubsystem.runMotor(oi.getManualShooterSpeed());
         shooterSubsystem.sendEncoder();
     }
 

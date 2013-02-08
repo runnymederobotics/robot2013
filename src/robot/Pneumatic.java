@@ -15,6 +15,7 @@ public class Pneumatic {
     //For double solenoids. Safe constructor, if module is not plugged in then the robot will still function
     public Pneumatic(int module, int channelOne, int channelTwo) {
         if (ModulePresence.getModulePresence(ModulePresence.ModuleType.kSolenoid, module)) {
+            System.out.println("new doubleSolenoid " + module + ", " + channelOne + ", " + channelTwo);
             doubleSolenoid = new DoubleSolenoid(module, channelOne, channelTwo);
         }
     }
@@ -22,13 +23,15 @@ public class Pneumatic {
     //For single solenoids and relays. Safe constructor, if module is not plugged in then the robot will still function
     public Pneumatic(boolean solenoid, int module, int channel) {
         if (ModulePresence.getModulePresence(ModulePresence.ModuleType.kSolenoid, module)) {
+            System.out.println("new singleSolenoid " + module + ", " + channel);
             singleSolenoid = new Solenoid(module, channel);
         } else if (ModulePresence.getModulePresence(ModulePresence.ModuleType.kDigital, module)) {
-            relay = new Relay(module, channel);
+            //System.out.println("new relay " + module + ", " + channel);
+            //relay = new Relay(module, channel);
         }
     }
 
-    public Pneumatic(DoubleSolenoid doubleSolenoid) {
+    /*public Pneumatic(DoubleSolenoid doubleSolenoid) {
         this.doubleSolenoid = doubleSolenoid;
     }
 
@@ -38,7 +41,7 @@ public class Pneumatic {
 
     public Pneumatic(Relay relay) {
         this.relay = relay;
-    }
+    }*/
 
     public void set(boolean value) {
         state = value;

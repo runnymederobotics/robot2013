@@ -41,49 +41,7 @@ public abstract class CommandBase extends Command {
         }
     }
 
-    //Dynamic numbering system to handle single/double solenoids
-    private static void initPneumatics() {
-        //Primary module
-        int primaryChannel = 0;
-        if (Constants.SHIFTER_SINGLE_SOLENOID) {
-            chassisSubsystem.shifterPneumatic = new Pneumatic(true, Constants.PRIMARY_MODULE, ++primaryChannel);
-        } else {
-            chassisSubsystem.shifterPneumatic = new Pneumatic(Constants.PRIMARY_MODULE, ++primaryChannel, ++primaryChannel);
-        }
-        if (Constants.SHOOTER_LOADER_SINGLE_SOLENOID) {
-            hopperSubsystem.shooterLoader = new Pneumatic(true, Constants.PRIMARY_MODULE, ++primaryChannel);
-        } else {
-            hopperSubsystem.shooterLoader = new Pneumatic(Constants.PRIMARY_MODULE, ++primaryChannel, ++primaryChannel);
-        }
-        if (Constants.STACK_HOLDER_SINGLE_SOLENOID) {
-            hopperSubsystem.stackHolder = new Pneumatic(true, Constants.PRIMARY_MODULE, ++primaryChannel);
-        } else {
-            hopperSubsystem.stackHolder = new Pneumatic(Constants.PRIMARY_MODULE, ++primaryChannel, ++primaryChannel);
-        }
-        if (Constants.STACK_DROPPER_SINGLE_SOLENOID) {
-            hopperSubsystem.stackDropper = new Pneumatic(true, Constants.PRIMARY_MODULE, ++primaryChannel);
-        } else {
-            hopperSubsystem.stackDropper = new Pneumatic(Constants.PRIMARY_MODULE, ++primaryChannel, ++primaryChannel);
-        }
-
-        //Secondary module
-        int secondaryChannel = 0;
-        if (Constants.PICKUP_SINGLE_SOLENOID) {
-            pickupSubsystem.pickupPneumatic = new Pneumatic(true, Constants.SECONDARY_MODULE, ++secondaryChannel);
-        } else {
-            pickupSubsystem.pickupPneumatic = new Pneumatic(Constants.SECONDARY_MODULE, ++secondaryChannel, ++secondaryChannel);
-        }
-        if (Constants.SHOOTER_A_SINGLE_SOLENOID) {
-            shooterSubsystem.shooterPneumaticA = new Pneumatic(true, Constants.SECONDARY_MODULE, ++secondaryChannel);
-        } else {
-            shooterSubsystem.shooterPneumaticA = new Pneumatic(Constants.SECONDARY_MODULE, ++secondaryChannel, ++secondaryChannel);
-        }
-        if (Constants.SHOOTER_B_SINGLE_SOLENOID) {
-            shooterSubsystem.shooterPneumaticB = new Pneumatic(true, Constants.SECONDARY_MODULE, ++secondaryChannel);
-        } else {
-            shooterSubsystem.shooterPneumaticB = new Pneumatic(Constants.SECONDARY_MODULE, ++secondaryChannel, ++secondaryChannel);
-        }
-    }
+    
 
     public static void init() {
         // This MUST be here. If the OI creates Commands (which it very likely
@@ -96,9 +54,6 @@ public abstract class CommandBase extends Command {
         //Initialize the ParsableInt and ParsableDouble variables in these classes.
         OI.Driver driver = new OI.Driver();
         OI.Operator operator = new OI.Operator();
-
-        //Initialize our pneumatics. They are controlled by a dynamic numbering system based on whether or not they are double or single solenoids
-        initPneumatics();
 
         StreamerHandler streamerHandler = new StreamerHandler();
 

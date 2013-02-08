@@ -23,6 +23,10 @@ public class ShooterSubsystem extends Subsystem {
     protected void initDefaultCommand() {
         setDefaultCommand(new ShooterCommand());
     }
+    
+    public void runMotor(double speed) {
+        vicShooter.set(speed);
+    }
 
     public void sendEncoder() {
         //sendableShooterEncoder.set((int) (Math.sin(Timer.getFPGATimestamp()) * 10 + 10));
@@ -31,6 +35,7 @@ public class ShooterSubsystem extends Subsystem {
 
     public void print() {
         System.out.println("[" + this.getName() + "]");
+        System.out.println("vicShooter: " + vicShooter.get());
         System.out.println("encShooter: " + encShooter.get());
     }
 }

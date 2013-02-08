@@ -19,8 +19,8 @@ public class Constants {
     //Relay outputs
     public static final int COMPRESSOR_RELAY = 1;
     //Solenoid outputs
-    public static final int PRIMARY_MODULE = 3;
-    public static final int SECONDARY_MODULE = 4;
+    public static final int PRIMARY_MODULE = 1;
+    public static final int SECONDARY_MODULE = 2;
     public static final boolean SHIFTER_SINGLE_SOLENOID = false;
     public static final boolean STACK_DROPPER_SINGLE_SOLENOID = false;
     public static final boolean STACK_HOLDER_SINGLE_SOLENOID = false;
