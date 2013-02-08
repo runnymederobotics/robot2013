@@ -44,44 +44,44 @@ public abstract class CommandBase extends Command {
     //Dynamic numbering system to handle single/double solenoids
     private static void initPneumatics() {
         //Primary module
-        int primaryChannel = 1;
-        if (Constants.SOLENOID_SHIFTER_SINGLE) {
-            chassisSubsystem.shifterPneumatic = new Pneumatic(true, Constants.PRIMARY_MODULE, primaryChannel++);
+        int primaryChannel = 0;
+        if (Constants.SHIFTER_SINGLE_SOLENOID) {
+            chassisSubsystem.shifterPneumatic = new Pneumatic(true, Constants.PRIMARY_MODULE, ++primaryChannel);
         } else {
-            chassisSubsystem.shifterPneumatic = new Pneumatic(Constants.PRIMARY_MODULE, primaryChannel++, primaryChannel++);
+            chassisSubsystem.shifterPneumatic = new Pneumatic(Constants.PRIMARY_MODULE, ++primaryChannel, ++primaryChannel);
         }
-        if (Constants.SOLENOID_PICKUP_SINGLE) {
-            pickupSubsystem.pickupPneumatic = new Pneumatic(true, Constants.PRIMARY_MODULE, primaryChannel++);
+        if (Constants.SHOOTER_LOADER_SINGLE_SOLENOID) {
+            hopperSubsystem.shooterLoader = new Pneumatic(true, Constants.PRIMARY_MODULE, ++primaryChannel);
         } else {
-            pickupSubsystem.pickupPneumatic = new Pneumatic(Constants.PRIMARY_MODULE, primaryChannel++, primaryChannel++);
+            hopperSubsystem.shooterLoader = new Pneumatic(Constants.PRIMARY_MODULE, ++primaryChannel, ++primaryChannel);
         }
-        if (Constants.SOLENOID_STACK_HOLDER_SINGLE) {
-            hopperSubsystem.stackHolder = new Pneumatic(true, Constants.PRIMARY_MODULE, primaryChannel++);
+        if (Constants.STACK_HOLDER_SINGLE_SOLENOID) {
+            hopperSubsystem.stackHolder = new Pneumatic(true, Constants.PRIMARY_MODULE, ++primaryChannel);
         } else {
-            hopperSubsystem.stackHolder = new Pneumatic(Constants.PRIMARY_MODULE, primaryChannel++, primaryChannel++);
+            hopperSubsystem.stackHolder = new Pneumatic(Constants.PRIMARY_MODULE, ++primaryChannel, ++primaryChannel);
         }
-        if (Constants.SOLENOID_STACK_DROPPER_SINGLE) {
-            hopperSubsystem.stackDropper = new Pneumatic(true, Constants.PRIMARY_MODULE, primaryChannel++);
+        if (Constants.STACK_DROPPER_SINGLE_SOLENOID) {
+            hopperSubsystem.stackDropper = new Pneumatic(true, Constants.PRIMARY_MODULE, ++primaryChannel);
         } else {
-            hopperSubsystem.stackDropper = new Pneumatic(Constants.PRIMARY_MODULE, primaryChannel++, primaryChannel++);
+            hopperSubsystem.stackDropper = new Pneumatic(Constants.PRIMARY_MODULE, ++primaryChannel, ++primaryChannel);
         }
 
         //Secondary module
-        int secondaryChannel = 1;
-        if (Constants.SOLENOID_SHOOTER_LOADER_SINGLE) {
-            hopperSubsystem.shooterLoader = new Pneumatic(true, Constants.SECONDARY_MODULE, secondaryChannel++);
+        int secondaryChannel = 0;
+        if (Constants.PICKUP_SINGLE_SOLENOID) {
+            pickupSubsystem.pickupPneumatic = new Pneumatic(true, Constants.SECONDARY_MODULE, ++secondaryChannel);
         } else {
-            hopperSubsystem.shooterLoader = new Pneumatic(Constants.SECONDARY_MODULE, secondaryChannel++, secondaryChannel++);
+            pickupSubsystem.pickupPneumatic = new Pneumatic(Constants.SECONDARY_MODULE, ++secondaryChannel, ++secondaryChannel);
         }
-        if (Constants.SOLENOID_SHOOTER_A_SINGLE) {
-            shooterSubsystem.shooterPneumaticA = new Pneumatic(true, Constants.SECONDARY_MODULE, secondaryChannel++);
+        if (Constants.SHOOTER_A_SINGLE_SOLENOID) {
+            shooterSubsystem.shooterPneumaticA = new Pneumatic(true, Constants.SECONDARY_MODULE, ++secondaryChannel);
         } else {
-            shooterSubsystem.shooterPneumaticA = new Pneumatic(Constants.SECONDARY_MODULE, secondaryChannel++, secondaryChannel++);
+            shooterSubsystem.shooterPneumaticA = new Pneumatic(Constants.SECONDARY_MODULE, ++secondaryChannel, ++secondaryChannel);
         }
-        if (Constants.SOLENOID_SHOOTER_B_SINGLE) {
-            shooterSubsystem.shooterPneumaticB = new Pneumatic(true, Constants.SECONDARY_MODULE, secondaryChannel++);
+        if (Constants.SHOOTER_B_SINGLE_SOLENOID) {
+            shooterSubsystem.shooterPneumaticB = new Pneumatic(true, Constants.SECONDARY_MODULE, ++secondaryChannel);
         } else {
-            shooterSubsystem.shooterPneumaticB = new Pneumatic(Constants.SECONDARY_MODULE, secondaryChannel++, secondaryChannel++);
+            shooterSubsystem.shooterPneumaticB = new Pneumatic(Constants.SECONDARY_MODULE, ++secondaryChannel, ++secondaryChannel);
         }
     }
 

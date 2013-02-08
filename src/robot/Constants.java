@@ -21,13 +21,13 @@ public class Constants {
     //Solenoid outputs
     public static final int PRIMARY_MODULE = 3;
     public static final int SECONDARY_MODULE = 4;
-    public static final boolean SOLENOID_SHIFTER_SINGLE = false;
-    public static final boolean SOLENOID_STACK_DROPPER_SINGLE = false;
-    public static final boolean SOLENOID_STACK_HOLDER_SINGLE = false;
-    public static final boolean SOLENOID_SHOOTER_LOADER_SINGLE = false;
-    public static final boolean SOLENOID_PICKUP_SINGLE = false;
-    public static final boolean SOLENOID_SHOOTER_A_SINGLE = false;
-    public static final boolean SOLENOID_SHOOTER_B_SINGLE = false;
+    public static final boolean SHIFTER_SINGLE_SOLENOID = false;
+    public static final boolean STACK_DROPPER_SINGLE_SOLENOID = false;
+    public static final boolean STACK_HOLDER_SINGLE_SOLENOID = false;
+    public static final boolean SHOOTER_LOADER_SINGLE_SOLENOID = false;
+    public static final boolean PICKUP_SINGLE_SOLENOID = false;
+    public static final boolean SHOOTER_A_SINGLE_SOLENOID = false;
+    public static final boolean SHOOTER_B_SINGLE_SOLENOID = false;
     /*public static final int SOLENOID_SHIFTER_ONE = 1;
      public static final int SOLENOID_SHIFTER_TWO = 2;
      public static final int SOLENOID_STACK_DROPPER_ONE = 3;
@@ -43,8 +43,7 @@ public class Constants {
     public static final int ENC_LEFT_TWO = 2;
     public static final int ENC_RIGHT_ONE = 3;
     public static final int ENC_RIGHT_TWO = 4;
-    public static final int ENC_SHOOTER_ONE = 5;
-    public static final int ENC_SHOOTER_TWO = 6;
+    public static final int ENC_SHOOTER = 5;
     public static final int COMPRESSOR_DI = 10;
     //Analog inputs
     public static final int POSITIONING_GYRO = 2;
