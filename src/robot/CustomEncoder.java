@@ -2,7 +2,6 @@ package robot;
 
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Timer;
-import robot.parsable.ParsableDouble;
 import robot.parsable.SendableDouble;
 
 public class CustomEncoder extends Thread {
@@ -22,18 +21,18 @@ public class CustomEncoder extends Thread {
         double deltaT = now - lastStateChange;
 
         //RPS = 1 / (2 * deltaT)
-        if (deltaT > lowestResolution) {
-            RPS.set(0);
-            lastStateChange = now;
-        } else if (newValue != oldValue) {
+        //if (deltaT > lowestResolution) {
+            //RPS.set(0);
+            //lastStateChange = now;
+        if (newValue != oldValue) {
             RPS.set(1 / (2 * deltaT));
 
             lastStateChange = now;
         }
 
         oldValue = newValue;
-    }
 
+    }
     public void run() {
         while (true) {
             doCalculations();

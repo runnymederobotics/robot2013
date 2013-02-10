@@ -6,7 +6,6 @@ import robot.Constants;
 import robot.CustomEncoder;
 import robot.Pneumatic;
 import robot.commands.ShooterCommand;
-import robot.parsable.SendableDouble;
 
 public class ShooterSubsystem extends Subsystem {
 

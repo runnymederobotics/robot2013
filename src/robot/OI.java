@@ -70,6 +70,6 @@ public class OI {
     final double THROTTLE_DEAD_ZONE = 0.1;
     public double getManualShooterSpeed() {
         double axis = -stickOperator.getAxis(Joystick.AxisType.kThrottle) / 2 + 0.5; //Make it between 0.0 and 1.0
-        return axis >= THROTTLE_DEAD_ZONE ? axis : 0.0;
+        return axis >= THROTTLE_DEAD_ZONE ? -axis : 0.0;
     }
 }
