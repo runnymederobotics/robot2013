@@ -19,7 +19,7 @@ public class OI {
         public static ParsableInt TANK_DRIVE_RIGHT_AXIS = new ParsableInt("driver_tank_drive_right_axis", 4);
         //Driver Buttons
         public static ParsableInt SHIFT_BUTTON = new ParsableInt("driver_shift_button", 8);
-        public static ParsableInt TOGGLE_TANK_DRIVE_BUTTON = new ParsableInt("driver_toggle_tank_drive_button", 1);
+        public static ParsableInt TOGGLE_AUTO_SHIFT_BUTTON = new ParsableInt("driver_toggle_auto_shift_button", 1);
         public static ParsableInt PICKUP_LOWER_BUTTON = new ParsableInt("pickup_lower_button", 6);
     }
 
@@ -31,9 +31,11 @@ public class OI {
     }
     Joystick stickDriver = new Joystick(Driver.PORT);
     Joystick stickOperator = new Joystick(Operator.PORT);
+    Toggle autoShift = new Toggle(false);
 
-    public boolean getTankDriveToggleButton() {
-        return stickDriver.getRawButton(Driver.TOGGLE_TANK_DRIVE_BUTTON.get());
+    public boolean getAutoShift() {
+        autoShift.update(stickDriver.getRawButton(Driver.TOGGLE_AUTO_SHIFT_BUTTON.get()));
+        return autoShift.get();
     }
 
     public double getArcadeDriveDriveAxis() {
@@ -62,14 +64,17 @@ public class OI {
     public boolean getRequestShot() {
         return stickOperator.getRawButton(Operator.SHOOT_BUTTON.get());
     }
-    
+
     public boolean getPickupLowerButton() {
         return stickOperator.getRawButton(Driver.PICKUP_LOWER_BUTTON.get());
     }
-    
-    final double THROTTLE_DEAD_ZONE = 0.1;
+    final double THROTTLE_DEAD_ZONE = 0.775;
+
     public double getManualShooterSpeed() {
-        double axis = -stickOperator.getAxis(Joystick.AxisType.kThrottle) / 2 + 0.5; //Make it between 0.0 and 1.0
+        //Bottom is -1.0, top is 1.0
+        double axis = -stickOperator.getAxis(Joystick.AxisType.kThrottle) * 0.125 + 0.875;
+        //It is now between 0.75 and 1.0
+        
         return axis >= THROTTLE_DEAD_ZONE ? -axis : 0.0;
     }
 }

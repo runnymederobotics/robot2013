@@ -7,16 +7,19 @@ import edu.wpi.first.wpilibj.command.Subsystem;
 import robot.Constants;
 import robot.Pneumatic;
 import robot.commands.TeleopDriveCommand;
+import robot.parsable.ParsableDouble;
 
 public class ChassisSubsystem extends Subsystem {
 
     public static final double INCHES_PER_ENCODER_COUNT = 34.5 / 499;
+    public ParsableDouble MAX_LOW_ENCODER_RATE = new ParsableDouble("max_low_encoder_rate", 500);
+    public ParsableDouble MAX_HIGH_ENCODER_RATE = new ParsableDouble("max_high_encoder_rate", 2000);
     Victor leftMotor = new Victor(Constants.LEFT_MOTOR_CHANNEL);
     Victor rightMotor = new Victor(Constants.RIGHT_MOTOR_CHANNEL);
     //Pneumatics are initialized in CommandBase.java
     public Pneumatic shifterPneumatic;
     RobotDrive robotDrive = new RobotDrive(leftMotor, rightMotor);
-    Encoder encLeft = new Encoder(Constants.ENC_LEFT_ONE, Constants.ENC_LEFT_TWO, true);
+    Encoder encLeft = new Encoder(Constants.ENC_LEFT_ONE, Constants.ENC_LEFT_TWO, false);
     Encoder encRight = new Encoder(Constants.ENC_RIGHT_ONE, Constants.ENC_RIGHT_TWO, true);
 
     public ChassisSubsystem() {
@@ -28,21 +31,25 @@ public class ChassisSubsystem extends Subsystem {
         setDefaultCommand(new TeleopDriveCommand());
     }
 
-    public void arcadeDrive(double speed, double rotation) {
+    public void drive(double speed, double rotation) {
         robotDrive.arcadeDrive(speed, -rotation);
-    }
-
-    public void tankDrive(double leftSpeed, double rightSpeed) {
-        robotDrive.tankDrive(leftSpeed, rightSpeed);
     }
 
     public void shift(boolean value) {
         shifterPneumatic.set(value);
     }
+    
+    public boolean getShiftState() {
+        return shifterPneumatic.get();
+    }
+    
+    public double getAverageRate() {
+        return (encRight.getRate() + encLeft.getRate()) / 2;
+    }
 
     public int getAverageDistance() {
         //Right counts - left counts because left counts are negative
-        return (encRight.get() - encLeft.get()) / 2; //Average rate
+        return (encRight.get() + encLeft.get()) / 2; //Average rate
     }
 
     public void resetDistance() {
@@ -52,9 +59,8 @@ public class ChassisSubsystem extends Subsystem {
 
     public void print() {
         System.out.println("[" + this.getName() + "]");
-        //System.out.println("leftMotor: " + leftMotor.get());
-        //System.out.println("rightMotor: " + rightMotor.get());
-        //System.out.println("shifterPneumatic: " + shifterPneumatic.get());
+        System.out.println("encLeft: " + encLeft.getRate() + " encRight: " + encRight.getRate());
+        System.out.println("averageEncoderRate: " + getAverageRate());
         System.out.println("averageEncoderDistance: " + getAverageDistance());
     }
 }
