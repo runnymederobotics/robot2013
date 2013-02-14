@@ -1,7 +1,10 @@
 package robot.subsystems;
 
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.Victor;
 import edu.wpi.first.wpilibj.command.Subsystem;
+import robot.Constants;
 import robot.Pneumatic;
 import robot.commands.HopperCommand;
 import robot.parsable.ParsableDouble;
@@ -12,6 +15,9 @@ public class HopperSubsystem extends Subsystem {
     public Pneumatic stackDropper;
     public Pneumatic stackHolder;
     public Pneumatic shooterLoader;
+    Victor vicRelease = new Victor(Constants.HOPPER_RELEASE_MOTOR_CHANNEL);
+    DigitalInput releaseSensor = new DigitalInput(Constants.HOPPER_RELEASE_SENSOR);
+    public static ParsableDouble RELEASE_MOTOR_SPEED = new ParsableDouble("release_motor_speed", 1.0);
     public static ParsableDouble RELEASE_DELAY = new ParsableDouble("release_delay", 1);
     public static ParsableDouble STACK_HOLD_DELAY = new ParsableDouble("stack_hold_delay", 0.5);
     public static ParsableDouble STACK_RELEASE_DELAY = new ParsableDouble("stack_release_delay", 0.5);
@@ -21,15 +27,15 @@ public class HopperSubsystem extends Subsystem {
     double stackReleaseTime = 0.0;
     double finishTime = 0.0;
     int curState = HopperState.RESTING;
+    boolean lastSensorState = false;
 
     class HopperState {
-
         public static final int RESTING = 0;
         public static final int HOLDING = 1;
         public static final int RELEASING = 2;
         public static final int FINISHING = 3;
     }
-    
+
     public HopperSubsystem() {
     }
 
@@ -44,6 +50,16 @@ public class HopperSubsystem extends Subsystem {
     }
 
     public void update(boolean requestShot) {
+        boolean curSensorState = releaseSensor.get();
+        if (!lastSensorState && curSensorState) {
+            //We weren't seeing the motor before, now we're seeing the target
+            vicRelease.set(0.0);
+        } else if (requestShot && lastSensorState && curSensorState) {
+            //We want to shoot and we are and have been seeing the target
+            vicRelease.set(RELEASE_MOTOR_SPEED.get());
+        }
+        lastSensorState = curSensorState;
+
         double now = Timer.getFPGATimestamp();
 
         switch (curState) {
