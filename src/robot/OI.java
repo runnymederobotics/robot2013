@@ -1,6 +1,7 @@
 package robot;
 
 import edu.wpi.first.wpilibj.Joystick;
+import robot.parsable.ParsableDouble;
 import robot.parsable.ParsableInt;
 
 /**
@@ -26,9 +27,16 @@ public class OI {
     public static class Operator {
 
         public static final int PORT = 2;
-        public static ParsableInt SHOOT_BUTTON = new ParsableInt("operator_shoot_button", 1);
+        //Operator Axes
         public static ParsableInt SHOOTER_AXIS = new ParsableInt("operator_shooter_axis", 3);
+        //Operator Buttons
+        public static ParsableInt SHOOT_BUTTON = new ParsableInt("operator_shoot_button", 1);
+        public static ParsableInt LOAD_STATE_BUTTON = new ParsableInt("operator_load_state_button", 7);
+        public static ParsableInt LOW_STATE_BUTTON = new ParsableInt("operator_low_state_button", 8);
+        public static ParsableInt MEDIUM_STATE_BUTTON = new ParsableInt("operator_medium_state_button", 9);
+        public static ParsableInt HIGH_STATE_BUTTON = new ParsableInt("operator_high_state_button", 10);
     }
+    public static final ParsableDouble SHOOTER_MINIMUM_SPEED = new ParsableDouble("shooter_minimum_speed", 0.75);
     Joystick stickDriver = new Joystick(Driver.PORT);
     Joystick stickOperator = new Joystick(Operator.PORT);
     Toggle autoShift = new Toggle(false);
@@ -60,21 +68,40 @@ public class OI {
     public boolean getShiftButton() {
         return stickDriver.getRawButton(Driver.SHIFT_BUTTON.get());
     }
-
+    
+    public boolean getPickupLowerButton() {
+        return stickDriver.getRawButton(Driver.PICKUP_LOWER_BUTTON.get());
+    }
+    
     public boolean getRequestShot() {
         return stickOperator.getRawButton(Operator.SHOOT_BUTTON.get());
     }
-
-    public boolean getPickupLowerButton() {
-        return stickOperator.getRawButton(Driver.PICKUP_LOWER_BUTTON.get());
-    }
-    final double THROTTLE_DEAD_ZONE = 0.775;
+    //Only allow greater than -0.8
+    final double THROTTLE_DEAD_ZONE = -0.8;
 
     public double getManualShooterSpeed() {
         //Bottom is -1.0, top is 1.0
-        double axis = -stickOperator.getAxis(Joystick.AxisType.kThrottle) * 0.125 + 0.875;
+        final double complement = (1 - SHOOTER_MINIMUM_SPEED.get()) / 2;
+        final double complementsComplement = 1 - complement;
+        double axis = -stickOperator.getAxis(Joystick.AxisType.kThrottle);
+        double ret = -(axis * complement + complementsComplement);
         //It is now between 0.75 and 1.0
-        
-        return axis >= THROTTLE_DEAD_ZONE ? -axis : 0.0;
+        return axis >= THROTTLE_DEAD_ZONE ? ret : 0.0;
+    }
+    
+    public boolean getShooterLoadButton() {
+        return stickOperator.getRawButton(Operator.LOAD_STATE_BUTTON.get());
+    }
+    
+    public boolean getShooterLowButton() {
+        return stickOperator.getRawButton(Operator.LOW_STATE_BUTTON.get());
+    }
+    
+    public boolean getShooterMediumButton() {
+        return stickOperator.getRawButton(Operator.MEDIUM_STATE_BUTTON.get());
+    }
+    
+    public boolean getShooterHighButton() {
+        return stickOperator.getRawButton(Operator.HIGH_STATE_BUTTON.get());
     }
 }

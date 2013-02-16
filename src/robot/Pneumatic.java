@@ -16,7 +16,7 @@ public class Pneumatic {
     }
 
     //For single solenoids
-    public Pneumatic(boolean solenoid, int module, int channel) {
+    public Pneumatic(int module, int channel) {
         System.out.println("new singleSolenoid " + module + ", " + channel);
         singleSolenoid = new Solenoid(module, channel);
     }

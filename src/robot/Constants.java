@@ -27,8 +27,8 @@ public class Constants {
     public static final boolean STACK_HOLDER_SINGLE_SOLENOID = true;
     public static final boolean STACK_DROPPER_SINGLE_SOLENOID = false;
     public static final boolean PICKUP_SINGLE_SOLENOID = false;
-    public static final boolean SHOOTER_A_SINGLE_SOLENOID = false;
-    public static final boolean SHOOTER_B_SINGLE_SOLENOID = false;
+    public static final boolean SHOOTER_LOW_SINGLE_SOLENOID = false;
+    public static final boolean SHOOTER_HIGH_SINGLE_SOLENOID = false;
     //Digital inputs
     public static final int ENC_LEFT_ONE = 1;
     public static final int ENC_LEFT_TWO = 2;

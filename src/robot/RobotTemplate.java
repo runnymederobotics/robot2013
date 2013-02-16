@@ -23,22 +23,22 @@ public class RobotTemplate extends IterativeRobot {
         //Primary module
         int primaryChannel = 0;
         if (Constants.SHIFTER_SINGLE_SOLENOID) {
-            CommandBase.chassisSubsystem.shifterPneumatic = new Pneumatic(true, Constants.PRIMARY_MODULE, ++primaryChannel);
+            CommandBase.chassisSubsystem.shifterPneumatic = new Pneumatic(Constants.PRIMARY_MODULE, ++primaryChannel);
         } else {
             CommandBase.chassisSubsystem.shifterPneumatic = new Pneumatic(Constants.PRIMARY_MODULE, ++primaryChannel, ++primaryChannel);
         }
         if (Constants.SHOOTER_LOADER_SINGLE_SOLENOID) {
-            CommandBase.hopperSubsystem.shooterLoader = new Pneumatic(true, Constants.PRIMARY_MODULE, ++primaryChannel);
+            CommandBase.hopperSubsystem.shooterLoader = new Pneumatic(Constants.PRIMARY_MODULE, ++primaryChannel);
         } else {
             CommandBase.hopperSubsystem.shooterLoader = new Pneumatic(Constants.PRIMARY_MODULE, ++primaryChannel, ++primaryChannel);
         }
         if (Constants.STACK_HOLDER_SINGLE_SOLENOID) {
-            CommandBase.hopperSubsystem.stackHolder = new Pneumatic(true, Constants.PRIMARY_MODULE, ++primaryChannel);
+            CommandBase.hopperSubsystem.stackHolder = new Pneumatic(Constants.PRIMARY_MODULE, ++primaryChannel);
         } else {
             CommandBase.hopperSubsystem.stackHolder = new Pneumatic(Constants.PRIMARY_MODULE, ++primaryChannel, ++primaryChannel);
         }
         if (Constants.STACK_DROPPER_SINGLE_SOLENOID) {
-            CommandBase.hopperSubsystem.stackDropper = new Pneumatic(true, Constants.PRIMARY_MODULE, ++primaryChannel);
+            CommandBase.hopperSubsystem.stackDropper = new Pneumatic(Constants.PRIMARY_MODULE, ++primaryChannel);
         } else {
             CommandBase.hopperSubsystem.stackDropper = new Pneumatic(Constants.PRIMARY_MODULE, ++primaryChannel, ++primaryChannel);
         }
@@ -46,19 +46,19 @@ public class RobotTemplate extends IterativeRobot {
         //Secondary module
         int secondaryChannel = 0;
         if (Constants.PICKUP_SINGLE_SOLENOID) {
-            CommandBase.pickupSubsystem.pickupPneumatic = new Pneumatic(true, Constants.SECONDARY_MODULE, ++secondaryChannel);
+            CommandBase.pickupSubsystem.pickupPneumatic = new Pneumatic(Constants.SECONDARY_MODULE, ++secondaryChannel);
         } else {
             CommandBase.pickupSubsystem.pickupPneumatic = new Pneumatic(Constants.SECONDARY_MODULE, ++secondaryChannel, ++secondaryChannel);
         }
-        if (Constants.SHOOTER_A_SINGLE_SOLENOID) {
-            CommandBase.shooterSubsystem.shooterPneumaticA = new Pneumatic(true, Constants.SECONDARY_MODULE, ++secondaryChannel);
+        if (Constants.SHOOTER_LOW_SINGLE_SOLENOID) {
+            CommandBase.shooterSubsystem.shooterPneumaticLow = new Pneumatic(Constants.SECONDARY_MODULE, ++secondaryChannel);
         } else {
-            CommandBase.shooterSubsystem.shooterPneumaticA = new Pneumatic(Constants.SECONDARY_MODULE, ++secondaryChannel, ++secondaryChannel);
+            CommandBase.shooterSubsystem.shooterPneumaticLow = new Pneumatic(Constants.SECONDARY_MODULE, ++secondaryChannel, ++secondaryChannel);
         }
-        if (Constants.SHOOTER_B_SINGLE_SOLENOID) {
-            CommandBase.shooterSubsystem.shooterPneumaticB = new Pneumatic(true, Constants.SECONDARY_MODULE, ++secondaryChannel);
+        if (Constants.SHOOTER_HIGH_SINGLE_SOLENOID) {
+            CommandBase.shooterSubsystem.shooterPneumaticHigh = new Pneumatic(Constants.SECONDARY_MODULE, ++secondaryChannel);
         } else {
-            CommandBase.shooterSubsystem.shooterPneumaticB = new Pneumatic(Constants.SECONDARY_MODULE, ++secondaryChannel, ++secondaryChannel);
+            CommandBase.shooterSubsystem.shooterPneumaticHigh = new Pneumatic(Constants.SECONDARY_MODULE, ++secondaryChannel, ++secondaryChannel);
         }
     }
 

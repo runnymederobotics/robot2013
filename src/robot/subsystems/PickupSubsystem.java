@@ -12,7 +12,7 @@ public class PickupSubsystem extends Subsystem {
     Victor pickupRoller = new Victor(Constants.PICKUP_ROLLER_MOTOR_CHANNEL);
     //Pneumatics are initialized in CommandBase.java
     public Pneumatic pickupPneumatic;
-    ParsableDouble pickupRollerSpeed = new ParsableDouble("pickup_roller_speed", 0.5);
+    ParsableDouble pickupRollerSpeed = new ParsableDouble("pickup_roller_speed", -1.0);
 
     public PickupSubsystem() {
     }
@@ -31,5 +31,6 @@ public class PickupSubsystem extends Subsystem {
 
     public void print() {
         System.out.println("[" + this.getName() + "]");
+        System.out.println("pickupRoller: " + pickupRoller.get() + " pickupPneumatic: " + pickupPneumatic.get());
     }
 }
