@@ -59,7 +59,8 @@ public class ChassisSubsystem extends Subsystem {
 
     public void print() {
         System.out.println("[" + this.getName() + "]");
-        System.out.println("encLeft: " + encLeft.getRate() + " encRight: " + encRight.getRate());
+        System.out.println("encLeftRate: " + encLeft.getRate() + " encRightRate: " + encRight.getRate());
+        System.out.println("encLeft: " + encLeft.get() + " encRight: " + encRight.get());
         System.out.println("averageEncoderRate: " + getAverageRate());
         System.out.println("averageEncoderDistance: " + getAverageDistance());
     }

@@ -38,5 +38,5 @@ public class Constants {
     public static final int HOPPER_RELEASE_SENSOR = 6;
     public static final int COMPRESSOR_DI = 10;
     //Analog inputs
-    public static final int POSITIONING_GYRO = 2;
+    public static final int POSITIONING_GYRO = 1;
 }
