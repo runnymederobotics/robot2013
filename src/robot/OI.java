@@ -1,5 +1,6 @@
 package robot;
 
+import com.sun.squawk.util.MathUtils;
 import edu.wpi.first.wpilibj.Joystick;
 import robot.parsable.ParsableDouble;
 import robot.parsable.ParsableInt;
@@ -13,11 +14,10 @@ public class OI {
     public static class Driver {
 
         public static final int PORT = 1;
+        public static ParsableDouble DEAD_ZONE = new ParsableDouble("driver_dead_zone", 0.1);
         //Driver Axes
-        public static ParsableInt ARCADE_DRIVE_DRIVE_AXIS = new ParsableInt("driver_arcade_drive_drive_axis", 2);
-        public static ParsableInt ARCADE_DRIVE_ROTATION_AXIS = new ParsableInt("driver_arcade_drive_rotation_axis", 3);
-        public static ParsableInt TANK_DRIVE_LEFT_AXIS = new ParsableInt("driver_tank_drive_left_axis", 2);
-        public static ParsableInt TANK_DRIVE_RIGHT_AXIS = new ParsableInt("driver_tank_drive_right_axis", 4);
+        public static ParsableInt DRIVE_AXIS = new ParsableInt("driver_drive_axis", 2);
+        public static ParsableInt ROTATION_AXIS = new ParsableInt("driver_rotation_axis", 3);
         //Driver Buttons
         public static ParsableInt SHIFT_BUTTON = new ParsableInt("driver_shift_button", 8);
         public static ParsableInt TOGGLE_AUTO_SHIFT_BUTTON = new ParsableInt("driver_toggle_auto_shift_button", 1);
@@ -46,33 +46,35 @@ public class OI {
         return autoShift.get();
     }
 
-    public double getArcadeDriveDriveAxis() {
-        return stickDriver.getRawAxis(Driver.ARCADE_DRIVE_DRIVE_AXIS.get());
+    public double getDrive() {
+        double axis = stickDriver.getRawAxis(Driver.DRIVE_AXIS.get());
+        if (Math.abs(axis) < Driver.DEAD_ZONE.get()) {
+            axis = 0.0;
+        }
+        return axis;
     }
 
-    public double getArcadeDriveRotationAxis() {
-        double value = -stickDriver.getRawAxis(Driver.ARCADE_DRIVE_ROTATION_AXIS.get());
-        int sign = value >= 0 ? 1 : -1;
+    public double getRotation() {
+        double axis = -stickDriver.getRawAxis(Driver.ROTATION_AXIS.get());
+        
+        if(Math.abs(axis) < Driver.DEAD_ZONE.get()) {
+            axis = 0.0;
+        }
+        
+        int sign = axis >= 0 ? 1 : -1;
 
-        return value * value * sign;
+        //Square the axis for less sensitive output
+        return MathUtils.pow(axis, 2) * sign;
     }
 
-    public double getTankDriveLeftSpeed() {
-        return stickDriver.getRawAxis(Driver.TANK_DRIVE_LEFT_AXIS.get());
-    }
-
-    public double getTankDriveRightSpeed() {
-        return stickDriver.getRawAxis(Driver.TANK_DRIVE_RIGHT_AXIS.get());
-    }
-
-    public boolean getShiftButton() {
+    public boolean getShift() {
         return stickDriver.getRawButton(Driver.SHIFT_BUTTON.get());
     }
-    
-    public boolean getPickupLowerButton() {
+
+    public boolean getPickupLower() {
         return stickDriver.getRawButton(Driver.PICKUP_LOWER_BUTTON.get());
     }
-    
+
     public boolean getRequestShot() {
         return stickOperator.getRawButton(Operator.SHOOT_BUTTON.get());
     }
@@ -88,20 +90,20 @@ public class OI {
         //It is now between 0.75 and 1.0
         return axis >= THROTTLE_DEAD_ZONE ? ret : 0.0;
     }
-    
-    public boolean getShooterLoadButton() {
+
+    public boolean getShooterLoad() {
         return stickOperator.getRawButton(Operator.LOAD_STATE_BUTTON.get());
     }
-    
-    public boolean getShooterLowButton() {
+
+    public boolean getShooterLow() {
         return stickOperator.getRawButton(Operator.LOW_STATE_BUTTON.get());
     }
-    
-    public boolean getShooterMediumButton() {
+
+    public boolean getShooterMedium() {
         return stickOperator.getRawButton(Operator.MEDIUM_STATE_BUTTON.get());
     }
-    
-    public boolean getShooterHighButton() {
+
+    public boolean getShooterHigh() {
         return stickOperator.getRawButton(Operator.HIGH_STATE_BUTTON.get());
     }
 }

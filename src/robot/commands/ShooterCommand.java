@@ -14,13 +14,13 @@ public class ShooterCommand extends CommandBase {
     protected void execute() {
         shooterSubsystem.runMotor(oi.getManualShooterSpeed());
         
-        if (oi.getShooterLoadButton()) {
+        if (oi.getShooterLoad()) {
             shooterSubsystem.setShooterState(ShooterSubsystem.ShooterState.LOAD);
-        } else if (oi.getShooterLowButton()) {
+        } else if (oi.getShooterLow()) {
             shooterSubsystem.setShooterState(ShooterSubsystem.ShooterState.LOW);
-        } else if (oi.getShooterMediumButton()) {
+        } else if (oi.getShooterMedium()) {
             shooterSubsystem.setShooterState(ShooterSubsystem.ShooterState.MEDIUM);
-        } else if (oi.getShooterHighButton()) {
+        } else if (oi.getShooterHigh()) {
             shooterSubsystem.setShooterState(ShooterSubsystem.ShooterState.HIGH);
         }
         

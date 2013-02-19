@@ -31,10 +31,10 @@ public class TeleopDriveCommand extends CommandBase {
                 chassisSubsystem.shift(false);
             }
         } else {
-            chassisSubsystem.shift(oi.getShiftButton());
+            chassisSubsystem.shift(oi.getShift());
         }
 
-        chassisSubsystem.drive(oi.getArcadeDriveDriveAxis(), oi.getArcadeDriveRotationAxis());
+        chassisSubsystem.drive(oi.getDrive(), oi.getRotation());
     }
 
     // Make this return true when this Command no longer needs to run execute()

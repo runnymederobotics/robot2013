@@ -10,7 +10,7 @@ public class TeleopPickupCommand extends CommandBase {
     }
 
     protected void execute() {
-        boolean lowerButton = oi.getPickupLowerButton();
+        boolean lowerButton = oi.getPickupLower();
 
         //False is down, true is up
         if(shooterSubsystem.inLoadState()) {
