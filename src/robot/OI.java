@@ -56,11 +56,11 @@ public class OI {
 
     public double getRotation() {
         double axis = -stickDriver.getRawAxis(Driver.ROTATION_AXIS.get());
-        
-        if(Math.abs(axis) < Driver.DEAD_ZONE.get()) {
+
+        if (Math.abs(axis) < Driver.DEAD_ZONE.get()) {
             axis = 0.0;
         }
-        
+
         int sign = axis >= 0 ? 1 : -1;
 
         //Square the axis for less sensitive output

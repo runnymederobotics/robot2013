@@ -38,11 +38,11 @@ public class ChassisSubsystem extends Subsystem {
     public void shift(boolean value) {
         shifterPneumatic.set(value);
     }
-    
+
     public boolean getShiftState() {
         return shifterPneumatic.get();
     }
-    
+
     public double getAverageRate() {
         return (encRight.getRate() + encLeft.getRate()) / 2;
     }

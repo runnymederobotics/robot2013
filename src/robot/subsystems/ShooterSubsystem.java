@@ -16,35 +16,36 @@ public class ShooterSubsystem extends Subsystem {
     public Pneumatic shooterPneumaticLow;
     public Pneumatic shooterPneumaticHigh;
     int shooterState = ShooterState.LOAD;
-    
+
     public class ShooterState {
+
         public static final int LOAD = 0;
         public static final int LOW = 1;
         public static final int MEDIUM = 2;
         public static final int HIGH = 3;
     }
-    
+
     public ShooterSubsystem() {
     }
 
     protected void initDefaultCommand() {
         setDefaultCommand(new ShooterCommand());
     }
-    
+
     public void runMotor(double speed) {
         vicShooter.set(speed);
     }
-    
+
     public void setShooterState(int state) {
         shooterState = state;
     }
-    
+
     public boolean inLoadState() {
         return shooterState == ShooterState.LOAD;
     }
-    
-    public void runShooterStateMachine() {        
-        switch(shooterState) {
+
+    public void runShooterStateMachine() {
+        switch (shooterState) {
             case ShooterState.LOAD:
                 shooterPneumaticLow.set(false);
                 shooterPneumaticHigh.set(false);
@@ -62,6 +63,10 @@ public class ShooterSubsystem extends Subsystem {
                 shooterPneumaticHigh.set(true);
                 break;
         }
+    }
+
+    public boolean shooterOnTarget() {
+        return true;
     }
 
     public void print() {

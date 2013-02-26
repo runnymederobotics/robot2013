@@ -7,13 +7,13 @@ public class ShooterCommand extends CommandBase {
     public ShooterCommand() {
         requires(shooterSubsystem);
     }
-    
+
     protected void initialize() {
     }
 
     protected void execute() {
         shooterSubsystem.runMotor(oi.getManualShooterSpeed());
-        
+
         if (oi.getShooterLoad()) {
             shooterSubsystem.setShooterState(ShooterSubsystem.ShooterState.LOAD);
         } else if (oi.getShooterLow()) {
@@ -23,7 +23,7 @@ public class ShooterCommand extends CommandBase {
         } else if (oi.getShooterHigh()) {
             shooterSubsystem.setShooterState(ShooterSubsystem.ShooterState.HIGH);
         }
-        
+
         shooterSubsystem.runShooterStateMachine();
     }
 
@@ -36,5 +36,4 @@ public class ShooterCommand extends CommandBase {
 
     protected void interrupted() {
     }
-    
 }

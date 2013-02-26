@@ -1,10 +1,8 @@
 package robot.commands;
 
-import edu.wpi.first.wpilibj.DriverStation;
+public class TeleopHopperCommand extends CommandBase {
 
-public class HopperCommand extends CommandBase {
-
-    public HopperCommand() {
+    public TeleopHopperCommand() {
         requires(hopperSubsystem);
     }
 
@@ -13,10 +11,8 @@ public class HopperCommand extends CommandBase {
     }
 
     protected void execute() {
-        if (DriverStation.getInstance().isOperatorControl()) {
+        if (shooterSubsystem.shooterOnTarget()) {
             hopperSubsystem.update(oi.getRequestShot());
-        } else {
-            hopperSubsystem.update(true);
         }
     }
 

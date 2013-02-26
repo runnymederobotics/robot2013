@@ -6,7 +6,7 @@ import edu.wpi.first.wpilibj.Victor;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import robot.Constants;
 import robot.Pneumatic;
-import robot.commands.HopperCommand;
+import robot.commands.TeleopHopperCommand;
 import robot.parsable.ParsableDouble;
 
 public class HopperSubsystem extends Subsystem {
@@ -36,7 +36,7 @@ public class HopperSubsystem extends Subsystem {
     }
 
     public void initDefaultCommand() {
-        setDefaultCommand(new HopperCommand());
+        setDefaultCommand(new TeleopHopperCommand());
     }
 
     public void reset() {
