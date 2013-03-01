@@ -33,7 +33,7 @@ public class TeleopDriveCommand extends CommandBase {
                 //Currently set to chassisSubsystem.getShiftState() = false when in low gear
                 if (!chassisSubsystem.getShiftState() && Math.abs(rate) > SHIFT_UP_THRESHOLD.get() * chassisSubsystem.MAX_LOW_ENCODER_RATE.get()) {
                     chassisSubsystem.shift(true);
-                } else if (chassisSubsystem.getShiftState() && Math.abs(rate) < SHIFT_DOWN_THRESHOLD.get() * chassisSubsystem.MAX_HIGH_ENCODER_RATE.get()) {
+                } else if (chassisSubsystem.getShiftState() && Math.abs(rate) < SHIFT_DOWN_THRESHOLD.get() * chassisSubsystem.MAX_LOW_ENCODER_RATE.get()) {
                     chassisSubsystem.shift(false);
                 }
             }
