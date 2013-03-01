@@ -5,34 +5,99 @@ import edu.wpi.first.wpilibj.RobotDrive;
 import edu.wpi.first.wpilibj.Victor;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import robot.Constants;
+import robot.OutputStorage;
 import robot.Pneumatic;
 import robot.commands.TeleopDriveCommand;
 import robot.parsable.ParsableDouble;
+import robot.parsable.ParsablePIDController;
 
 public class ChassisSubsystem extends Subsystem {
 
     public static final double INCHES_PER_ENCODER_COUNT = 34.5 / 499;
     public ParsableDouble MAX_LOW_ENCODER_RATE = new ParsableDouble("max_low_encoder_rate", 500);
-    public ParsableDouble MAX_HIGH_ENCODER_RATE = new ParsableDouble("max_high_encoder_rate", 2000);
+    public ParsableDouble MAX_HIGH_ENCODER_RATE = new ParsableDouble("max_high_encoder_rate", 2800);
     Victor leftMotor = new Victor(Constants.LEFT_MOTOR_CHANNEL);
     Victor rightMotor = new Victor(Constants.RIGHT_MOTOR_CHANNEL);
-    //Pneumatics are initialized in CommandBase.java
-    public Pneumatic shifterPneumatic;
-    RobotDrive robotDrive = new RobotDrive(leftMotor, rightMotor);
-    Encoder encLeft = new Encoder(Constants.ENC_LEFT_ONE, Constants.ENC_LEFT_TWO, false);
+    Encoder encLeft = new Encoder(Constants.ENC_LEFT_ONE, Constants.ENC_LEFT_TWO, true);
     Encoder encRight = new Encoder(Constants.ENC_RIGHT_ONE, Constants.ENC_RIGHT_TWO, true);
-
+    public Pneumatic shifterPneumatic; //Pneumatics are initialized in CommandBase.java
+    OutputStorage leftOutputStorage = new OutputStorage();
+    OutputStorage rightOutputStorage = new OutputStorage();
+    RobotDrive robotDrive = new RobotDrive(leftOutputStorage, rightOutputStorage);
+    ParsablePIDController pidLeft = new ParsablePIDController("pidleft", 0.0, 0.00025, 0.0, encLeft, leftMotor);
+    ParsablePIDController pidRight = new ParsablePIDController("pidright", 0.0, 0.00025, 0.0, encRight, rightMotor);
+    
     public ChassisSubsystem() {
+        encLeft.setPIDSourceParameter(Encoder.PIDSourceParameter.kRate);
+        encRight.setPIDSourceParameter(Encoder.PIDSourceParameter.kRate);
+        
         encLeft.start();
         encRight.start();
+        
+        pidLeft.setOutputRange(-1.0, 1.0);
+        pidRight.setOutputRange(-1.0, 1.0);
+        
+        updateInputRange();
     }
 
     public void initDefaultCommand() {
         setDefaultCommand(new TeleopDriveCommand());
     }
+    
+    public boolean isEnabledPID() {
+        return pidLeft.isEnable() && pidRight.isEnable();
+    }
+    
+    public void disablePID() {
+        pidLeft.disable();
+        pidRight.disable();
+    }
+    
+    public void enablePID() {
+        pidLeft.enable();
+        pidRight.enable();
+    }
+    
+    public void disable() {
+        disablePID();
+    }
+    
+    public void enable() {
+        encLeft.reset();
+        encRight.reset();
+        enablePID();
+    }
+    
+    private void updateInputRange() {
+        if(isEnabledPID()) {
+            pidLeft.setInputRange(-MAX_HIGH_ENCODER_RATE.get(), MAX_HIGH_ENCODER_RATE.get());
+            pidRight.setInputRange(-MAX_HIGH_ENCODER_RATE.get(), MAX_HIGH_ENCODER_RATE.get());
+        } else {
+            pidLeft.setInputRange(-MAX_LOW_ENCODER_RATE.get(), MAX_LOW_ENCODER_RATE.get());
+            pidRight.setInputRange(-MAX_LOW_ENCODER_RATE.get(), MAX_LOW_ENCODER_RATE.get());
+        }
+    }
 
     public void drive(double speed, double rotation) {
         robotDrive.arcadeDrive(speed, -rotation);
+        if(isEnabledPID()) {
+            if(getShiftState()) {
+                updateInputRange();
+                
+                //High gear
+                pidLeft.setSetpoint(leftOutputStorage.get() * MAX_HIGH_ENCODER_RATE.get());
+                pidRight.setSetpoint(rightOutputStorage.get() * MAX_HIGH_ENCODER_RATE.get());
+            } else {
+                updateInputRange();
+                
+                //Low gear
+                pidLeft.setSetpoint(leftOutputStorage.get() * MAX_LOW_ENCODER_RATE.get());
+                pidRight.setSetpoint(rightOutputStorage.get() * MAX_LOW_ENCODER_RATE.get());
+            }
+        } else {
+            leftMotor.set(leftOutputStorage.get());
+            rightMotor.set(rightOutputStorage.get());
+        }
     }
 
     public void shift(boolean value) {
@@ -63,5 +128,9 @@ public class ChassisSubsystem extends Subsystem {
         System.out.println("encLeft: " + encLeft.get() + " encRight: " + encRight.get());
         System.out.println("averageEncoderRate: " + getAverageRate());
         System.out.println("averageEncoderDistance: " + getAverageDistance());
+        System.out.println("PIDEnabled: " + isEnabledPID());
+        System.out.println("LeftOutputStorage: " + leftOutputStorage.get() + " RightOutputStorage: " + rightOutputStorage.get());
+        System.out.println("PIDLeft output: " + pidLeft.get() + " PIDRight output: " + pidRight.get());
+        System.out.println("PIDLeft setpoint: " + pidLeft.getSetpoint() + " PIDRight setpoint: " + pidRight.getSetpoint());
     }
 }

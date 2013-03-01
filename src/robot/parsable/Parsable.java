@@ -44,8 +44,19 @@ public abstract class Parsable {
                     //Change the value of the constant
                     parsable.parse((String) params.get(key));
                     if (key.startsWith("pid")) {
-                        ParsablePIDController parsablePIDController = (ParsablePIDController) ParsablePIDController.parsablePIDControllers.get(key);
-                        parsablePIDController.updatePID();
+                        String PIDControllerName = "";
+                        //Works as split('_')[0];
+                        for(int i = 0; i < key.length(); ++i) {
+                            char c = key.charAt(i);
+                            if (c == '_') {
+                                break;
+                            }
+                            PIDControllerName += c;
+                        }
+                        ParsablePIDController parsablePIDController = (ParsablePIDController) ParsablePIDController.parsablePIDControllers.get(PIDControllerName);
+                        if (parsablePIDController != null) {
+                            parsablePIDController.updatePID();
+                        }
                     }
                 }
             }

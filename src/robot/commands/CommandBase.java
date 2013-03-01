@@ -4,9 +4,7 @@ import RobotCLI.WebServer;
 import edu.wpi.first.wpilibj.command.Command;
 import java.util.Enumeration;
 import java.util.Hashtable;
-import robot.Constants;
 import robot.OI;
-import robot.Pneumatic;
 import robot.StreamerHandler;
 import robot.parsable.JSONPrintable;
 import robot.parsable.Parsable;
@@ -14,6 +12,7 @@ import robot.parsable.ParsablePIDController;
 import robot.parsable.SendableDouble;
 import robot.parsable.SendableInt;
 import robot.subsystems.ChassisSubsystem;
+import robot.subsystems.HangerSubsystem;
 import robot.subsystems.HopperSubsystem;
 import robot.subsystems.PickupSubsystem;
 import robot.subsystems.PositioningSubsystem;
@@ -29,6 +28,7 @@ public abstract class CommandBase extends Command {
     public static PositioningSubsystem positioningSubsystem = new PositioningSubsystem();
     public static ShooterSubsystem shooterSubsystem = new ShooterSubsystem();
     public static PickupSubsystem pickupSubsystem = new PickupSubsystem();
+    public static HangerSubsystem hangerSubsystem = new HangerSubsystem();
 
     private static void addPrintables(Hashtable hashtable) {
         Enumeration keys = hashtable.keys();
@@ -40,8 +40,6 @@ public abstract class CommandBase extends Command {
             }
         }
     }
-
-    
 
     public static void init() {
         // This MUST be here. If the OI creates Commands (which it very likely

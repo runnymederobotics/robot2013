@@ -17,6 +17,7 @@ public class Constants {
     public static final int PICKUP_ROLLER_MOTOR_CHANNEL = 3;
     public static final int SHOOTER_MOTOR_CHANNEL = 4;
     public static final int HOPPER_RELEASE_MOTOR_CHANNEL = 5;
+    public static final int HANGER_SERVO = 6;
     //Relay outputs
     public static final int COMPRESSOR_RELAY = 1;
     //Solenoid outputs
@@ -35,7 +36,8 @@ public class Constants {
     public static final int ENC_RIGHT_ONE = 3;
     public static final int ENC_RIGHT_TWO = 4;
     public static final int ENC_SHOOTER = 5;
-    public static final int HOPPER_RELEASE_SENSOR = 6;
+    public static final int HOPPER_FRISBEE_SENSOR = 6;
+    public static final int PICKUP_FRISBEE_SENSOR = 7;
     public static final int COMPRESSOR_DI = 10;
     //Analog inputs
     public static final int POSITIONING_GYRO = 1;

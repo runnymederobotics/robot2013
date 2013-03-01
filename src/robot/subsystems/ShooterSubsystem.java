@@ -6,9 +6,11 @@ import robot.Constants;
 import robot.CustomEncoder;
 import robot.Pneumatic;
 import robot.commands.ShooterCommand;
+import robot.parsable.ParsableDouble;
 
 public class ShooterSubsystem extends Subsystem {
 
+    public static ParsableDouble MIN_SHOOT_THRESHOLD = new ParsableDouble("shooter_min_shoot_threshold", 0.5);
     Victor vicShooter = new Victor(Constants.SHOOTER_MOTOR_CHANNEL);
     //Thread must be started from elsewhere, therefore encShooter must be public
     public CustomEncoder encShooter = new CustomEncoder("shooterEncoder", Constants.ENC_SHOOTER);
@@ -26,6 +28,14 @@ public class ShooterSubsystem extends Subsystem {
     }
 
     public ShooterSubsystem() {
+    }
+    
+    public void disable() {
+        
+    }
+    
+    public void enable() {
+        
     }
 
     protected void initDefaultCommand() {
@@ -65,7 +75,9 @@ public class ShooterSubsystem extends Subsystem {
         }
     }
 
-    public boolean shooterOnTarget() {
+    public boolean onTargetAndAboveThreshold() {
+        //boolean aboveThreshold = encShooter.get() > MAX_SHOOTER_ENCODER_RATE.get() * MIN_SHOOT_THRESHOLD.get();
+        //boolean onTarget = pidShooter.onTarget();
         return true;
     }
 

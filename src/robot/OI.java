@@ -19,9 +19,11 @@ public class OI {
         public static ParsableInt DRIVE_AXIS = new ParsableInt("driver_drive_axis", 2);
         public static ParsableInt ROTATION_AXIS = new ParsableInt("driver_rotation_axis", 3);
         //Driver Buttons
-        public static ParsableInt SHIFT_BUTTON = new ParsableInt("driver_shift_button", 8);
+        public static ParsableInt SHIFT_LOW_GEAR_BUTTON = new ParsableInt("driver_shift_low_gear_button", 7);
+        public static ParsableInt SHIFT_HIGH_GEAR_BUTTON = new ParsableInt("driver_shift_high_gear_button", 8);
         public static ParsableInt TOGGLE_AUTO_SHIFT_BUTTON = new ParsableInt("driver_toggle_auto_shift_button", 1);
-        public static ParsableInt PICKUP_LOWER_BUTTON = new ParsableInt("pickup_lower_button", 6);
+        public static ParsableInt TOGGLE_ENABLE_CHASSIS_PID_BUTTON = new ParsableInt("driver_toggle_enable_chassis_pid_button", 2);
+        public static ParsableInt PICKUP_LOWER_BUTTON = new ParsableInt("driver_pickup_lower_button", 6);
     }
 
     public static class Operator {
@@ -31,19 +33,26 @@ public class OI {
         public static ParsableInt SHOOTER_AXIS = new ParsableInt("operator_shooter_axis", 3);
         //Operator Buttons
         public static ParsableInt SHOOT_BUTTON = new ParsableInt("operator_shoot_button", 1);
+        public static ParsableInt SHOOT_OVERRIDE_BUTTON = new ParsableInt("operator_shoot_override_button", 2);
         public static ParsableInt LOAD_STATE_BUTTON = new ParsableInt("operator_load_state_button", 7);
         public static ParsableInt LOW_STATE_BUTTON = new ParsableInt("operator_low_state_button", 8);
         public static ParsableInt MEDIUM_STATE_BUTTON = new ParsableInt("operator_medium_state_button", 9);
         public static ParsableInt HIGH_STATE_BUTTON = new ParsableInt("operator_high_state_button", 10);
+        public static ParsableInt RELEASE_HANGER_BUTTON_ONE = new ParsableInt("operator_release_hanger_button_one", 5);
+        public static ParsableInt RELEASE_HANGER_BUTTON_TWO = new ParsableInt("operator_release_hanger_button_two", 6);
     }
     public static final ParsableDouble SHOOTER_MINIMUM_SPEED = new ParsableDouble("shooter_minimum_speed", 0.75);
     Joystick stickDriver = new Joystick(Driver.PORT);
     Joystick stickOperator = new Joystick(Operator.PORT);
     Toggle autoShift = new Toggle(false);
+    Toggle enableChassisPID = new Toggle(false);
 
     public boolean getAutoShift() {
-        autoShift.update(stickDriver.getRawButton(Driver.TOGGLE_AUTO_SHIFT_BUTTON.get()));
-        return autoShift.get();
+        return autoShift.update(stickDriver.getRawButton(Driver.TOGGLE_AUTO_SHIFT_BUTTON.get()));
+    }
+
+    public boolean getEnableChassisPID() {
+        return enableChassisPID.update(stickDriver.getRawButton(Driver.TOGGLE_ENABLE_CHASSIS_PID_BUTTON.get()));
     }
 
     public double getDrive() {
@@ -67,8 +76,12 @@ public class OI {
         return MathUtils.pow(axis, 2) * sign;
     }
 
-    public boolean getShift() {
-        return stickDriver.getRawButton(Driver.SHIFT_BUTTON.get());
+    public boolean getShiftLowGear() {
+        return stickDriver.getRawButton(Driver.SHIFT_LOW_GEAR_BUTTON.get());
+    }
+
+    public boolean getShiftHighGear() {
+        return stickDriver.getRawButton(Driver.SHIFT_HIGH_GEAR_BUTTON.get());
     }
 
     public boolean getPickupLower() {
@@ -77,6 +90,10 @@ public class OI {
 
     public boolean getRequestShot() {
         return stickOperator.getRawButton(Operator.SHOOT_BUTTON.get());
+    }
+
+    public boolean getShootOverride() {
+        return stickOperator.getRawButton(Operator.SHOOT_OVERRIDE_BUTTON.get());
     }
     //Only allow greater than -0.8
     final double THROTTLE_DEAD_ZONE = -0.8;
@@ -105,5 +122,9 @@ public class OI {
 
     public boolean getShooterHigh() {
         return stickOperator.getRawButton(Operator.HIGH_STATE_BUTTON.get());
+    }
+    
+    public boolean getReleaseHanger() {
+        return (stickOperator.getRawButton(Operator.RELEASE_HANGER_BUTTON_ONE.get()) && stickOperator.getRawButton(Operator.RELEASE_HANGER_BUTTON_TWO.get()));
     }
 }

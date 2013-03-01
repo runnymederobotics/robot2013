@@ -71,9 +71,28 @@ public class RobotTemplate extends IterativeRobot {
 
         compressor.start();
     }
+    
+    private void disableSubsystems() {
+        CommandBase.chassisSubsystem.disable();
+        CommandBase.hopperSubsystem.disable();
+        CommandBase.positioningSubsystem.disable();
+        CommandBase.shooterSubsystem.disable();
+        CommandBase.pickupSubsystem.disable();
+        CommandBase.hangerSubsystem.disable();
+    }
+    
+    private void enableSubsystems() {
+        CommandBase.chassisSubsystem.enable();
+        CommandBase.hopperSubsystem.enable();
+        CommandBase.positioningSubsystem.enable();
+        CommandBase.shooterSubsystem.enable();
+        CommandBase.pickupSubsystem.enable();
+        CommandBase.hangerSubsystem.enable();
+    }
 
     //This function is called at the start of disabled
     public void disabledInit() {
+        disableSubsystems();
     }
 
     //This function is called periodically during disabled
@@ -83,6 +102,7 @@ public class RobotTemplate extends IterativeRobot {
 
     //This function is called at the start of autonomous
     public void autonomousInit() {
+        enableSubsystems();
     }
 
     //This function is called periodically during autonomous
@@ -94,6 +114,7 @@ public class RobotTemplate extends IterativeRobot {
 
     //This function is called at the start of teleop
     public void teleopInit() {
+        enableSubsystems();
     }
 
     //This function is called periodically during teleop
@@ -118,6 +139,7 @@ public class RobotTemplate extends IterativeRobot {
             CommandBase.positioningSubsystem.print();
             CommandBase.shooterSubsystem.print();
             CommandBase.pickupSubsystem.print();
+            CommandBase.hangerSubsystem.print();
 
             lastPrintTime = now;
         }

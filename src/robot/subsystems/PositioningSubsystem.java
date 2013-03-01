@@ -11,13 +11,13 @@ import robot.parsable.SendableInt;
 
 public class PositioningSubsystem extends Subsystem {
 
-    Gyro positionGyro = new Gyro(Constants.POSITIONING_GYRO);
-    Vector position = Vector.ZERO;
     ParsableInt xPositionStart = new ParsableInt("x_position_start", 162);
     ParsableInt yPositionStart = new ParsableInt("y_position_start", 216);
     SendableInt xPosition = new SendableInt("xPosition", xPositionStart.get());
     SendableInt yPosition = new SendableInt("yPosition", yPositionStart.get());
     SendableInt anglePosition = new SendableInt("anglePosition", 0);
+    Gyro positionGyro = new Gyro(Constants.POSITIONING_GYRO);
+    Vector position = Vector.ZERO;
     double lastDistance = 0;
 
     public PositioningSubsystem() {
@@ -25,6 +25,13 @@ public class PositioningSubsystem extends Subsystem {
 
     protected void initDefaultCommand() {
         setDefaultCommand(new PositioningCommand());
+    }
+    
+    public void disable() {
+    }
+    
+    public void enable() {
+        positionGyro.reset();
     }
 
     public void updateVectors() {

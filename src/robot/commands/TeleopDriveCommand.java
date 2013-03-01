@@ -22,16 +22,35 @@ public class TeleopDriveCommand extends CommandBase {
             //Do autoshift
             double rate = chassisSubsystem.getAverageRate();
 
-            //If lowGear && above threshold { shiftUp; }
-            //If highGear && below threshold { shiftDown; }
-            //Currently set to chassisSubsystem.getShiftState() = false when in low gear
-            if (!chassisSubsystem.getShiftState() && Math.abs(rate) > SHIFT_UP_THRESHOLD.get() * chassisSubsystem.MAX_LOW_ENCODER_RATE.get()) {
-                chassisSubsystem.shift(true);
-            } else if (chassisSubsystem.getShiftState() && Math.abs(rate) < SHIFT_DOWN_THRESHOLD.get() * chassisSubsystem.MAX_HIGH_ENCODER_RATE.get()) {
+            //Allow manual overrides for holding low gear and holding high gear
+            if (oi.getShiftLowGear()) {
                 chassisSubsystem.shift(false);
+            } else if (oi.getShiftHighGear()) {
+                chassisSubsystem.shift(true);
+            } else {
+                //If lowGear && above threshold { shiftUp; }
+                //If highGear && below threshold { shiftDown; }
+                //Currently set to chassisSubsystem.getShiftState() = false when in low gear
+                if (!chassisSubsystem.getShiftState() && Math.abs(rate) > SHIFT_UP_THRESHOLD.get() * chassisSubsystem.MAX_LOW_ENCODER_RATE.get()) {
+                    chassisSubsystem.shift(true);
+                } else if (chassisSubsystem.getShiftState() && Math.abs(rate) < SHIFT_DOWN_THRESHOLD.get() * chassisSubsystem.MAX_HIGH_ENCODER_RATE.get()) {
+                    chassisSubsystem.shift(false);
+                }
             }
         } else {
-            chassisSubsystem.shift(oi.getShift());
+            chassisSubsystem.shift(oi.getShiftHighGear());
+        }
+
+        if (oi.getEnableChassisPID()) {
+            if (!chassisSubsystem.isEnabledPID()) {
+                //We want to enable PID but its currently disabled
+                chassisSubsystem.enablePID();
+            }
+        } else {
+            if (chassisSubsystem.isEnabledPID()) {
+                //We dont want PID enabled, but its currently enabled
+                chassisSubsystem.disablePID();
+            }
         }
 
         chassisSubsystem.drive(oi.getDrive(), oi.getRotation());

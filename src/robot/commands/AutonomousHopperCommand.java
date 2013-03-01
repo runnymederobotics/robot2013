@@ -13,7 +13,8 @@ public class AutonomousHopperCommand extends CommandBase {
     }
 
     protected void execute() {
-        if (shooterSubsystem.shooterOnTarget()) {
+        boolean otherSubsystemsReady = shooterSubsystem.onTargetAndAboveThreshold() && hopperSubsystem.hasFrisbee();
+        if (otherSubsystemsReady) {
             hopperSubsystem.update(true);
         }
     }

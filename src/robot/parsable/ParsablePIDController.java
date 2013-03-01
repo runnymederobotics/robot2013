@@ -16,7 +16,7 @@ public class ParsablePIDController implements JSONPrintable {
     ParsableDouble p, i, d;
 
     public void jsonPrint(String name, JSONStringBuilder response) {
-        JSONStringBuilder stringBuilder = response.startObject("name");
+        JSONStringBuilder stringBuilder = response.startObject(name);
 
         stringBuilder.append("setpoint", pidController.getSetpoint());
         stringBuilder.append("output", pidController.get());
@@ -101,12 +101,13 @@ public class ParsablePIDController implements JSONPrintable {
         if (!name.startsWith("pid")) {
             name = "pid" + name;
         }
-        this.name = name;
-        p = new ParsableDouble(name + ".p", Kp);
-        i = new ParsableDouble(name + ".i", Ki);
-        d = new ParsableDouble(name + ".d", Kd);
+        this.name = name.toLowerCase();
+        p = new ParsableDouble(this.name + "_p", Kp);
+        i = new ParsableDouble(this.name + "_i", Ki);
+        d = new ParsableDouble(this.name + "_d", Kd);
+        
         this.pidSource = pidSource;
-        parsablePIDControllers.put(name, this);
+        parsablePIDControllers.put(this.name, this);
     }
 
     public void updatePID() {
