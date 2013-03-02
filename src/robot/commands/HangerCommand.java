@@ -3,9 +3,12 @@ package robot.commands;
 import edu.wpi.first.wpilibj.DriverStation;
 
 public class HangerCommand extends CommandBase {
+    
+    public HangerCommand() {
+        requires(hangerSubsystem);
+    }
 
     protected void initialize() {
-        requires(hangerSubsystem);
     }
 
     protected void execute() {

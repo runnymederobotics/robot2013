@@ -23,9 +23,9 @@ public abstract class CommandBase extends Command {
     public static OI oi;
     // Create a single static instance of all of your subsystems
     public static WebServer webServer = new WebServer(8080);
+    public static PositioningSubsystem positioningSubsystem = new PositioningSubsystem();
     public static ChassisSubsystem chassisSubsystem = new ChassisSubsystem();
     public static HopperSubsystem hopperSubsystem = new HopperSubsystem();
-    public static PositioningSubsystem positioningSubsystem = new PositioningSubsystem();
     public static ShooterSubsystem shooterSubsystem = new ShooterSubsystem();
     public static PickupSubsystem pickupSubsystem = new PickupSubsystem();
     public static HangerSubsystem hangerSubsystem = new HangerSubsystem();

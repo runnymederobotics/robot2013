@@ -16,7 +16,7 @@ public class PositioningSubsystem extends Subsystem {
     SendableInt xPosition = new SendableInt("xPosition", xPositionStart.get());
     SendableInt yPosition = new SendableInt("yPosition", yPositionStart.get());
     SendableInt anglePosition = new SendableInt("anglePosition", 0);
-    Gyro positionGyro = new Gyro(Constants.POSITIONING_GYRO);
+    public Gyro positionGyro = new Gyro(Constants.POSITIONING_GYRO);
     Vector position = Vector.ZERO;
     double lastDistance = 0;
 

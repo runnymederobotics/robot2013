@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
+import robot.commands.AutonomousRotateCommand;
 import robot.commands.CommandBase;
 
 public class RobotTemplate extends IterativeRobot {
@@ -102,6 +103,8 @@ public class RobotTemplate extends IterativeRobot {
 
     //This function is called at the start of autonomous
     public void autonomousInit() {
+        (new AutonomousRotateCommand(90)).start();
+        
         enableSubsystems();
     }
 

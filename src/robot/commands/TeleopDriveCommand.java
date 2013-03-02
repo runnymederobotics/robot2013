@@ -42,15 +42,9 @@ public class TeleopDriveCommand extends CommandBase {
         }
 
         if (oi.getEnableChassisPID()) {
-            if (!chassisSubsystem.isEnabledPID()) {
-                //We want to enable PID but its currently disabled
-                chassisSubsystem.enablePID();
-            }
+            chassisSubsystem.enablePID();
         } else {
-            if (chassisSubsystem.isEnabledPID()) {
-                //We dont want PID enabled, but its currently enabled
-                chassisSubsystem.disablePID();
-            }
+            chassisSubsystem.disablePID();
         }
 
         chassisSubsystem.drive(oi.getDrive(), oi.getRotation());

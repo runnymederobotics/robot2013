@@ -1,12 +1,14 @@
 package robot.subsystems;
 
 import edu.wpi.first.wpilibj.Encoder;
+import edu.wpi.first.wpilibj.Gyro;
 import edu.wpi.first.wpilibj.RobotDrive;
 import edu.wpi.first.wpilibj.Victor;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import robot.Constants;
 import robot.OutputStorage;
 import robot.Pneumatic;
+import robot.commands.CommandBase;
 import robot.commands.TeleopDriveCommand;
 import robot.parsable.ParsableDouble;
 import robot.parsable.ParsablePIDController;
@@ -26,6 +28,8 @@ public class ChassisSubsystem extends Subsystem {
     RobotDrive robotDrive = new RobotDrive(leftOutputStorage, rightOutputStorage);
     ParsablePIDController pidLeft = new ParsablePIDController("pidleft", 0.0, 0.00025, 0.0, encLeft, leftMotor);
     ParsablePIDController pidRight = new ParsablePIDController("pidright", 0.0, 0.00025, 0.0, encRight, rightMotor);
+    OutputStorage pidGyroStorage = new OutputStorage();
+    public ParsablePIDController pidGyro = new ParsablePIDController("pidgyro", 0.02, 0.0, 0.0, CommandBase.positioningSubsystem.positionGyro, pidGyroStorage);
     
     public ChassisSubsystem() {
         encLeft.setPIDSourceParameter(Encoder.PIDSourceParameter.kRate);
@@ -36,6 +40,11 @@ public class ChassisSubsystem extends Subsystem {
         
         pidLeft.setOutputRange(-1.0, 1.0);
         pidRight.setOutputRange(-1.0, 1.0);
+        pidGyro.setOutputRange(-1.0, 1.0);
+        
+        pidLeft.setPercentTolerance(10.0);
+        pidRight.setPercentTolerance(10.0);
+        pidGyro.setAbsoluteTolerance(5.0); //+- 5 degrees
         
         updateInputRange();
     }
@@ -48,14 +57,34 @@ public class ChassisSubsystem extends Subsystem {
         return pidLeft.isEnable() && pidRight.isEnable();
     }
     
+    public boolean isEnabledPIDGyro() {
+        return pidGyro.isEnable();
+    }
+    
     public void disablePID() {
-        pidLeft.disable();
-        pidRight.disable();
+        if(pidLeft.isEnable() || pidRight.isEnable()) {
+            pidLeft.disable();
+            pidRight.disable();
+        }
     }
     
     public void enablePID() {
-        pidLeft.enable();
-        pidRight.enable();
+        if(!pidLeft.isEnable() || !pidRight.isEnable()) {
+            pidLeft.enable();
+            pidRight.enable();
+        }
+    }
+    
+    public void disablePIDGyro() {
+        if(pidGyro.isEnable()) {
+            pidGyro.disable();
+        }
+    }
+    
+    public void enablePIDGyro() {
+        if(!pidGyro.isEnable()) {
+            pidGyro.enable();
+        }
     }
     
     public void disable() {
@@ -85,8 +114,8 @@ public class ChassisSubsystem extends Subsystem {
                 updateInputRange();
                 
                 //High gear
-                pidLeft.setSetpoint(leftOutputStorage.get() * MAX_HIGH_ENCODER_RATE.get());
-                pidRight.setSetpoint(rightOutputStorage.get() * MAX_HIGH_ENCODER_RATE.get());
+                pidLeft.setSetpoint(leftOutputStorage.get() * MAX_LOW_ENCODER_RATE.get());
+                pidRight.setSetpoint(rightOutputStorage.get() * MAX_LOW_ENCODER_RATE.get());
             } else {
                 updateInputRange();
                 
@@ -98,6 +127,14 @@ public class ChassisSubsystem extends Subsystem {
             leftMotor.set(leftOutputStorage.get());
             rightMotor.set(rightOutputStorage.get());
         }
+    }
+    
+    public void pidGyroSetpoint(double relativeAngle) {
+        pidGyro.setSetpoint(CommandBase.positioningSubsystem.positionGyro.getAngle() + relativeAngle);
+    }
+    
+    public boolean pidGyroOnTarget() {
+        return pidGyro.onTarget();
     }
 
     public void shift(boolean value) {
@@ -132,5 +169,7 @@ public class ChassisSubsystem extends Subsystem {
         System.out.println("LeftOutputStorage: " + leftOutputStorage.get() + " RightOutputStorage: " + rightOutputStorage.get());
         System.out.println("PIDLeft output: " + pidLeft.get() + " PIDRight output: " + pidRight.get());
         System.out.println("PIDLeft setpoint: " + pidLeft.getSetpoint() + " PIDRight setpoint: " + pidRight.getSetpoint());
+        System.out.println("PIDGyro setpoint: " + pidGyro.getSetpoint() + " output: " + pidGyro.get());
+        System.out.println("PIDGyro outputStorage: " + pidGyroStorage.get() + " PIDGyro onTarget: " + pidGyroOnTarget());
     }
 }

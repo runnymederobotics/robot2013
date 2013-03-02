@@ -26,6 +26,7 @@ public class OutputStorage implements SpeedController {
     }
 
     public void pidWrite(double d) {
+        value = d;
     }
     
 }
