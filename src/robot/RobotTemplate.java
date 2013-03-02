@@ -13,10 +13,12 @@ import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
 import robot.commands.AutonomousRotateCommand;
 import robot.commands.CommandBase;
+import robot.parsable.ParsableDouble;
 
 public class RobotTemplate extends IterativeRobot {
 
     Compressor compressor = new Compressor(Constants.COMPRESSOR_DI, Constants.COMPRESSOR_RELAY);
+    ParsableDouble autonomousMode = new ParsableDouble("autonomous_mode", 0);
     double lastPrintTime = 0;
     
     //Dynamic numbering system to handle single/double solenoids
@@ -103,6 +105,7 @@ public class RobotTemplate extends IterativeRobot {
 
     //This function is called at the start of autonomous
     public void autonomousInit() {
+        System.out.println(autonomousMode.get());
         (new AutonomousRotateCommand(90)).start();
         
         enableSubsystems();

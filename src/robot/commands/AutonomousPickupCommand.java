@@ -29,20 +29,16 @@ public class AutonomousPickupCommand extends CommandBase {
     }
 
     protected boolean isFinished() {
-        double now = Timer.getFPGATimestamp();
-        //If we've waited long enough
-        if (now - startTime > AUTONOMOUS_PICKUP_DELAY.get()) {
-            return true;
-        }
-
         DriverStation ds = DriverStation.getInstance();
 
         if (!ds.isAutonomous()) {
             Scheduler.getInstance().add(new TeleopPickupCommand());
             return true;
         }
-
-        return false;
+        
+        double now = Timer.getFPGATimestamp();
+        //If we've waited long enough
+        return now - startTime > AUTONOMOUS_PICKUP_DELAY.get();
     }
 
     protected void end() {

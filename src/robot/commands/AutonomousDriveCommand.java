@@ -5,33 +5,43 @@ import edu.wpi.first.wpilibj.command.Scheduler;
 
 public class AutonomousDriveCommand extends CommandBase {
 
-    int counts;
+    int relativeCounts;
 
-    public AutonomousDriveCommand(int counts) {
-        this.counts = counts;
+    public AutonomousDriveCommand(int relativeCounts) {
+        this.relativeCounts = relativeCounts;
     }
 
     protected void initialize() {
         requires(chassisSubsystem);
+        
+        chassisSubsystem.pidGyroSetpoint(0.0);
+        chassisSubsystem.pidCountSetpoint(relativeCounts);
     }
 
     protected void execute() {
+        chassisSubsystem.enablePID();
+        chassisSubsystem.enablePIDGyro();
+        chassisSubsystem.enablePIDCount();
+        
+        chassisSubsystem.drive(chassisSubsystem.pidCount.get(), -chassisSubsystem.pidGyro.get());
     }
 
     protected boolean isFinished() {
-        DriverStation ds = DriverStation.getInstance();
-
-        if (!ds.isAutonomous()) {
+        if (!DriverStation.getInstance().isAutonomous()) {
             Scheduler.getInstance().add(new TeleopDriveCommand());
             return true;
         }
 
-        return false;
+        return chassisSubsystem.pidCountOnTarget();
     }
 
     protected void end() {
+        chassisSubsystem.disablePIDGyro();
+        chassisSubsystem.disablePIDCount();
     }
 
     protected void interrupted() {
+        chassisSubsystem.disablePIDGyro();
+        chassisSubsystem.disablePIDCount();
     }
 }

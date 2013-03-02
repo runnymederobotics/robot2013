@@ -13,6 +13,17 @@ public class CustomEncoder extends Thread {
     double lastStateChange = 0;
     boolean oldValue = false;
     double revsPerSec = 0;
+    
+    public CustomEncoder(String name, int channel) {
+        digitalInput = new DigitalInput(channel);
+        init(name);
+    }
+
+    public CustomEncoder(String name, int moduleNumber, int channel) {
+        digitalInput = new DigitalInput(moduleNumber, channel);
+        init(name);
+    }
+
 
     private synchronized void doCalculations() {
         boolean newValue = digitalInput.get();
@@ -37,16 +48,6 @@ public class CustomEncoder extends Thread {
         while (true) {
             doCalculations();
         }
-    }
-
-    public CustomEncoder(String name, int channel) {
-        digitalInput = new DigitalInput(channel);
-        init(name);
-    }
-
-    public CustomEncoder(String name, int moduleNumber, int channel) {
-        digitalInput = new DigitalInput(moduleNumber, channel);
-        init(name);
     }
 
     private void init(String name) {

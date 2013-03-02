@@ -4,10 +4,9 @@ import edu.wpi.first.wpilibj.SpeedController;
 
 public class OutputStorage implements SpeedController {
 
-    double value;
+    double value = 0.0;
     
     public OutputStorage() {
-        value = 0.0;
     }
     
     public double get() {
@@ -15,7 +14,7 @@ public class OutputStorage implements SpeedController {
     }
 
     public void set(double d, byte b) {
-        value = d;
+        set(d);
     }
 
     public void set(double d) {
@@ -26,7 +25,7 @@ public class OutputStorage implements SpeedController {
     }
 
     public void pidWrite(double d) {
-        value = d;
+        set(d);
     }
     
 }
