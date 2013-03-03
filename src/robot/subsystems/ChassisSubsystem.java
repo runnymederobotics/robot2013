@@ -19,22 +19,22 @@ public class ChassisSubsystem extends Subsystem {
     public static final double INCHES_PER_ENCODER_COUNT = 34.5 / 499;
     public static final double PID_DRIVE_PERCENT_TOLERANCE = 10.0;
     public static final double PID_GYRO_ABSOLUTE_TOLERANCE = 2.0;
-    public static final double PID_COUNT_ABSOLUTE_TOLERANCE = 30.0;
+    public static final double PID_COUNT_ABSOLUTE_TOLERANCE = 15.0;
     public ParsableDouble MAX_LOW_ENCODER_RATE = new ParsableDouble("max_low_encoder_rate", 500);
     public ParsableDouble MAX_HIGH_ENCODER_RATE = new ParsableDouble("max_high_encoder_rate", 2800);
     Victor leftMotor = new Victor(Constants.LEFT_MOTOR_CHANNEL);
     Victor rightMotor = new Victor(Constants.RIGHT_MOTOR_CHANNEL);
     Encoder encLeft = new Encoder(Constants.ENC_LEFT_ONE, Constants.ENC_LEFT_TWO, true);
     Encoder encRight = new Encoder(Constants.ENC_RIGHT_ONE, Constants.ENC_RIGHT_TWO, true);
-    EncoderAverager encAverager = new EncoderAverager(encLeft, false, encRight, false, true); //Dont reverse, use counts
+    EncoderAverager encAverager = new EncoderAverager(encLeft, true, encRight, false, true); //Left is negative, use counts
     public Pneumatic shifterPneumatic; //Pneumatics are initialized in CommandBase.java
     OutputStorage leftOutputStorage = new OutputStorage();
     OutputStorage rightOutputStorage = new OutputStorage();
     RobotDrive robotDrive = new RobotDrive(leftOutputStorage, rightOutputStorage);
-    ParsablePIDController pidLeft = new ParsablePIDController("pidleft", 0.0, 0.00025, 0.0, encLeft, leftMotor);
-    ParsablePIDController pidRight = new ParsablePIDController("pidright", 0.0, 0.00025, 0.0, encRight, rightMotor);
+    ParsablePIDController pidLeft = new ParsablePIDController("pidleft", 0.0, 0.0005, 0.0, encLeft, leftMotor);
+    ParsablePIDController pidRight = new ParsablePIDController("pidright", 0.0, 0.0005, 0.0, encRight, rightMotor);
     public ParsablePIDController pidGyro = new ParsablePIDController("pidgyro", 0.02, 0.0, 0.0, CommandBase.positioningSubsystem.positionGyro, new OutputStorage());
-    public ParsablePIDController pidCount = new ParsablePIDController("pidcount", 0.02, 0.0, 0.0, encAverager, new OutputStorage());
+    public ParsablePIDController pidCount = new ParsablePIDController("pidcount", 0.0005, 0.0, 0.0, encAverager, new OutputStorage());
 
     public ChassisSubsystem() {
         encLeft.setPIDSourceParameter(Encoder.PIDSourceParameter.kRate);
@@ -46,12 +46,12 @@ public class ChassisSubsystem extends Subsystem {
         pidLeft.setOutputRange(-1.0, 1.0);
         pidRight.setOutputRange(-1.0, 1.0);
         pidGyro.setOutputRange(-1.0, 1.0);
-        pidGyro.setOutputRange(-1.0, 1.0);
+        pidCount.setOutputRange(-1.0, 1.0);
 
         pidLeft.setPercentTolerance(PID_DRIVE_PERCENT_TOLERANCE);
         pidRight.setPercentTolerance(PID_DRIVE_PERCENT_TOLERANCE);
         pidGyro.setAbsoluteTolerance(PID_GYRO_ABSOLUTE_TOLERANCE);
-        pidGyro.setAbsoluteTolerance(PID_COUNT_ABSOLUTE_TOLERANCE);
+        pidCount.setAbsoluteTolerance(PID_COUNT_ABSOLUTE_TOLERANCE);
 
         updateInputRange();
     }
@@ -117,6 +117,7 @@ public class ChassisSubsystem extends Subsystem {
     }
 
     private void updateInputRange() {
+        //The input ranges should change so that the onTarget remains accurate between high and low gear
         if (isEnabledPID()) {
             pidLeft.setInputRange(-MAX_HIGH_ENCODER_RATE.get(), MAX_HIGH_ENCODER_RATE.get());
             pidRight.setInputRange(-MAX_HIGH_ENCODER_RATE.get(), MAX_HIGH_ENCODER_RATE.get());
@@ -197,5 +198,6 @@ public class ChassisSubsystem extends Subsystem {
         System.out.println("PIDLeft output: " + pidLeft.get() + " PIDRight output: " + pidRight.get());
         System.out.println("PIDLeft setpoint: " + pidLeft.getSetpoint() + " PIDRight setpoint: " + pidRight.getSetpoint());
         System.out.println("PIDGyro setpoint: " + pidGyro.getSetpoint() + " output: " + pidGyro.get());
+        System.out.println("PIDCount setpoint: " + pidCount.getSetpoint() + " output: " + pidCount.get());
     }
 }

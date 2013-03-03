@@ -34,6 +34,7 @@
                 var sendVariableToRobot = function(prop, value) {
                     var params = {};
                     params[prop] = value;
+                    
                     $.ajax({url: "http://10.13.10.2:8080/constants", data: params, dataType: "json"})
                 }
       
@@ -55,11 +56,8 @@
                 
                 var updateVariableList = function() {
                     $.ajax({url: "http://10.13.10.2:8080/constants", dataType: "json"}).done(function(data) {
+                        //Do sorting here!!!!*********
                         for(var property in data) {
-                            //We dont care about what the robot thinks about these variables, we just send them to the robot ourselves
-                            if(property == "autonomous_mode") {
-                                continue;
-                            }
                             addToGUI(data, property);
                         }
                     });
@@ -200,6 +198,8 @@
       
                 var connected = false;
                 var sentInit = false;
+                
+                var lastAutonomous = 0;
       
                 setInterval(function() {
                     var now = new Date().getTime();
@@ -226,7 +226,10 @@
                             var now = new Date().getTime();
                             
                             var value = $('input[name=autonomous]:checked').val();
-                            //sendVariableToRobot("autonomous_mode", value);
+                            if(value != lastAutonomous) {
+                                sendVariableToRobot("autonomous_mode", value);
+                            }
+                            lastAutonomous = value;
                             
                             if(data.hasOwnProperty("xPosition") && data.hasOwnProperty("yPosition") && data.hasOwnProperty("anglePosition")) {
                                 var x = data.xPosition;
@@ -285,7 +288,7 @@
         <div id="camera_charts"></div>
         <div id="data_charts"></div>
         <form action="">
-            <input type="radio" name="autonomous" id="drive30" value="1">Drive 30 counts<br>
+            <input type="radio" name="autonomous" id="drive30" value="1" checked>Drive 30 counts<br>
             <input type="radio" name="autonomous" id="rotate90" value="2">Rotate 90 degrees
         </form>
     </body>

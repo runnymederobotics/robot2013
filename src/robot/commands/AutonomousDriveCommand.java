@@ -8,12 +8,12 @@ public class AutonomousDriveCommand extends CommandBase {
     int relativeCounts;
 
     public AutonomousDriveCommand(int relativeCounts) {
+        requires(chassisSubsystem);
+        
         this.relativeCounts = relativeCounts;
     }
 
     protected void initialize() {
-        requires(chassisSubsystem);
-        
         chassisSubsystem.pidGyroSetpoint(0.0);
         chassisSubsystem.pidCountSetpoint(relativeCounts);
     }
@@ -23,7 +23,7 @@ public class AutonomousDriveCommand extends CommandBase {
         chassisSubsystem.enablePIDGyro();
         chassisSubsystem.enablePIDCount();
         
-        chassisSubsystem.drive(chassisSubsystem.pidCount.get(), -chassisSubsystem.pidGyro.get());
+        chassisSubsystem.drive(-chassisSubsystem.pidCount.get(), -chassisSubsystem.pidGyro.get());
     }
 
     protected boolean isFinished() {
