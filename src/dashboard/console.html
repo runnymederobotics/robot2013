@@ -36,7 +36,6 @@
                     for (var i = 0; i < variables.length; ++i) {
                         params[variables[i]] = true;
                     }
-                    //$.getJSON("http://10.13.10.2:8080/stream/add", {data: params});
                     $.ajax({url: "http://10.13.10.2:8080/stream/add", data: params, dataType: "json"});
                 }
                 
@@ -248,7 +247,7 @@
                         gui = new dat.GUI( {width: 500} );
                         
                         // Robot data stream
-                        startStreaming("http://10.13.10.2:8080/stream?frequency=30", function(event) {
+                        startStreaming("http://10.13.10.2:8080/stream?frequency=10", function(event) {
                             //Successful connection
                             connected = true;
                             
@@ -278,7 +277,7 @@
                             for(var i = 0; i < pidControllers.length; ++i) {
                                 var name = pidControllers[i];
                                 if(data.hasOwnProperty(name)) {
-                                    dataCharts(i + 1)(now, data[name]);
+                                    dataCharts[i + 1](now, data[name]);
                                 }
                             }
                         });
