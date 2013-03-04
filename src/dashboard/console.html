@@ -6,6 +6,15 @@
         <script src="js/lib/dat.gui.min.js"></script>
         <script src="js/lib/modernizr-2.0.6-development-only.js"></script>
         <script type="text/javascript">
+            function toggleGraphs() {
+                var graphs = $('#graphs');
+                var state = graphs.is(":visible")
+                if(!state) {
+                    graphs.show();
+                } else {
+                    graphs.hide();
+                }
+            }
             $(function() {
                 var startStreaming = function(url, onData) {
                     var xhr = new XMLHttpRequest();
@@ -197,6 +206,17 @@
                         width: 200, height: 50
                     }),*/
                 ];
+                
+                var pidControllers = ["pidleft", "pidright", "pidgyro", "pidcount"];
+      
+                for(var i = 0; i < pidControllers.length; ++i) {
+                    var name = pidControllers[i];
+                    dataCharts.push(makeSmoothieChart("#data_charts", {
+                        title: name + " Input and Setpoint",
+                        dataFields: ["input", "setpoint"],
+                        width: 400, height: 50
+                    }));
+                }
       
                 var lastData = {
                     camera: new Date().getTime(),
@@ -249,6 +269,13 @@
                             if(data.hasOwnProperty("shooterEncoder")) {
                                 dataCharts[0](now, data);
                             }
+                            
+                            for(var i = 0; i < pidControllers.length; ++i) {
+                                var name = pidControllers[i];
+                                if(data.hasOwnProperty(name)) {
+                                    dataCharts(i + 1)(now, data[name]);
+                                }
+                            }
                         });
                     }
                     
@@ -256,7 +283,12 @@
                     if(connected && !sentInit) {
                         updateVariableList();
           
-                        setStreamingVariables(["xPosition", "yPosition", "anglePosition", "shooterEncoder"]);
+                        var streamingVariables = ["xPosition", "yPosition", "anglePosition", "shooterEncoder"];
+                        for(var i = 0; i < pidControllers.length; ++i) {
+                            streamingVariables.push(pidControllers[i]);
+                        }
+          
+                        setStreamingVariables(streamingVariables);
 
                         sentInit = true;
                     }
@@ -290,13 +322,16 @@
         <img class="field" src="field.png"/>
         <canvas class="field" id="fieldCanvas" width="324" height="648"></canvas>
         <canvas id="frisbeeCounter" width="250" height="200"></canvas>
-        <div id="output"></div>
-        <div id="streams"></div>
-        <div id="camera_charts"></div>
-        <div id="data_charts"></div>
         <form action="">
             <input type="radio" name="autonomous" id="drive30" value="1" checked>Drive 30 counts<br>
             <input type="radio" name="autonomous" id="rotate90" value="2">Rotate 90 degrees
         </form>
+        <button id="hide_button" onclick="toggleGraphs()">Toggle Graphs</button>
+        <div id="graphs" style="display: none;">
+            <div id="output"></div>
+            <div id="streams"></div>
+            <div id="camera_charts"></div>
+            <div id="data_charts"></div>
+        </div>
     </body>
 </html>
