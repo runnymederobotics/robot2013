@@ -56,9 +56,16 @@
                 
                 var updateVariableList = function() {
                     $.ajax({url: "http://10.13.10.2:8080/constants", dataType: "json"}).done(function(data) {
-                        //Do sorting here!!!!*********
+                        var array = [];
+                        
                         for(var property in data) {
-                            addToGUI(data, property);
+                            array.push(property);
+                        }
+                        
+                        array.sort();
+                        
+                        for(var i = 0; i < array.length; ++i) {
+                            addToGUI(data, array[i]);
                         }
                     });
                 }
