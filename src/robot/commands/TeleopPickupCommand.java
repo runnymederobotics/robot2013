@@ -13,10 +13,12 @@ public class TeleopPickupCommand extends CommandBase {
         boolean lowerButton = oi.getPickupLower();
 
         //False is down, true is up
-        if(shooterSubsystem.inLoadState()) {
-            pickupSubsystem.setPneumatic(!lowerButton);
+        if(oi.getPickupLowerOverride()) {
+            pickupSubsystem.setPneumatic(true);
+        } else if(shooterSubsystem.inLoadState()) {
+            pickupSubsystem.setPneumatic(lowerButton);
         } else {
-            pickupSubsystem.setPneumatic(false);
+            pickupSubsystem.setPneumatic(true);
         }
         
         pickupSubsystem.runRoller(lowerButton);

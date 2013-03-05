@@ -160,6 +160,7 @@ public class WebServer extends Thread {
         }
 
         public void start() {
+            needComma = false;
             buffer.append("{");
         }
 
