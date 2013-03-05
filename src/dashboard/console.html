@@ -277,10 +277,10 @@
                                     if(data.hasOwnProperty(name)) {
                                         if(name == "pidleft") {
                                             dataCharts[i](now, data[name]); //pidleft
-                                            dataCharts[i + 1](now, data[name]); //pidright
+                                            dataCharts[i + 1](now, data["pidright"]); //pidright
                                         } else if(name == "pidright") {
                                             dataCharts[i](now, data[name]); //pidright
-                                            dataCharts[i - 1](now, data[name]); //pidleft
+                                            dataCharts[i - 1](now, data["pidleft"]); //pidleft
                                         } else {
                                             dataCharts[i](now, data[name]);
                                         }
