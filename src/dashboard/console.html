@@ -85,7 +85,7 @@
                     var b = Math.floor(Math.random() * 255);
                     var rgbString = "rgb(" + r + "," + g + "," + b + ")";
                     
-                    var newDiv = $("<div><b style='color:" + rgbString + "'>" + options.title + "</b><br><canvas width='"
+                    var newDiv = $("<div id='" + options.title + "'><b style='color:" + rgbString + "'>" + options.title + "</b><br><canvas width='"
                         + options.width + "' height='" + options.height + "'/></div>");
                     $(parent).append(newDiv);
                     var chart = new SmoothieChart();
@@ -214,14 +214,19 @@
                 
                 var pidControllers = ["pidleft", "pidright", "pidgyro", "pidcount"];
       
+                $("#data_charts").append("<form>");
+                var firstRun = true;
                 for(var i = 0; i < pidControllers.length; ++i) {
                     var name = pidControllers[i];
                     dataCharts.push(makeSmoothieChart("#data_charts", {
-                        title: name + " Input and Setpoint",
+                        title: name,
                         dataFields: ["input", "setpoint"],
                         width: 400, height: 50
                     }));
+                    $("#" + name).append("<input type='radio' name='pid_graphs' value='" + i + "'" + (firstRun ? " checked" : "") + ">Enabled</button>");
+                    firstRun = false;
                 }
+                $("#data_charts").append("</form>");
       
                 var lastData = {
                     camera: new Date().getTime(),
@@ -233,7 +238,7 @@
                 
                 var lastAutonomous = 0;
       
-                setInterval(function() {
+                setInterval(function() {             
                     var now = new Date().getTime();
                     if (now - lastData.data > 2000) {
                         //We've timed out, meaning we're current disconnected and we haven't sent our init
@@ -277,8 +282,15 @@
                             
                             for(var i = 0; i < pidControllers.length; ++i) {
                                 var name = pidControllers[i];
-                                if(data.hasOwnProperty(name)) {
-                                    dataCharts(i + 1)(now, data[name]);
+                                var cur = $("input[name=pid_graphs]:checked").val();
+                                if(cur == i) {
+                                    if(data.hasOwnProperty(name)) {
+                                        if(name == "pidleft" || name == "pidright") {
+                                            dataCharts(i + 1)(now, data[name]);
+                                        } else {
+                                            dataCharts(i + 1)(now, data[name]);
+                                        }
+                                    }
                                 }
                             }
                         });
