@@ -200,11 +200,6 @@
                 ];
 
                 var dataCharts = [
-                    makeSmoothieChart("#data_charts", {
-                        title: "Shooter Encoder",
-                        dataFields: ["shooterEncoder"],
-                        width: 400, height: 50
-                    }),
                     /*makeSmoothieChart("#data_charts", {
                         title: "Data Charts Example Two",
                         dataFields: ["two", "three"],
@@ -212,10 +207,9 @@
                     }),*/
                 ];
                 
-                var pidControllers = ["pidleft", "pidright", "pidgyro", "pidcount"];
+                var pidControllers = ["pidleft", "pidright", "pidgyro", "pidcount", "pidshooter"];
       
                 $("#data_charts").append("<form>");
-                var firstRun = true;
                 for(var i = 0; i < pidControllers.length; ++i) {
                     var name = pidControllers[i];
                     dataCharts.push(makeSmoothieChart("#data_charts", {
@@ -223,8 +217,8 @@
                         dataFields: ["input", "setpoint"],
                         width: 400, height: 50
                     }));
-                    $("#" + name).append("<input type='radio' name='pid_graphs' value='" + i + "'" + (firstRun ? " checked" : "") + ">Enabled</button>");
-                    firstRun = false;
+                    $("#" + name).append("<label for='pid_graphs" + i + "'><input type='radio' name='pid_graphs' id='pid_graphs" + i
+                        + "' value='" + i + "'>Enabled</label>");
                 }
                 $("#data_charts").append("</form>");
       
@@ -276,20 +270,21 @@
                                 drawRobot(x, y, angle);
                             }
                             
-                            if(data.hasOwnProperty("shooterEncoder")) {
-                                dataCharts[0](now, data);
-                            }
-                            
                             for(var i = 0; i < pidControllers.length; ++i) {
                                 var name = pidControllers[i];
                                 var cur = $("input[name=pid_graphs]:checked").val();
                                 if(cur == i) {
                                     if(data.hasOwnProperty(name)) {
-                                        if(name == "pidleft" || name == "pidright") {
-                                            dataCharts(i + 1)(now, data[name]);
+                                        if(name == "pidleft") {
+                                            dataCharts[i](now, data[name]); //pidleft
+                                            dataCharts[i + 1](now, data[name]); //pidright
+                                        } else if(name == "pidright") {
+                                            dataCharts[i](now, data[name]); //pidright
+                                            dataCharts[i - 1](now, data[name]); //pidleft
                                         } else {
-                                            dataCharts(i + 1)(now, data[name]);
+                                            dataCharts[i](now, data[name]);
                                         }
+                                        break;
                                     }
                                 }
                             }
@@ -340,8 +335,13 @@
         <canvas class="field" id="fieldCanvas" width="324" height="648"></canvas>
         <canvas id="frisbeeCounter" width="250" height="200"></canvas>
         <form action="">
-            <input type="radio" name="autonomous" id="drive30" value="1" checked>Drive 30 counts<br>
-            <input type="radio" name="autonomous" id="rotate90" value="2">Rotate 90 degrees
+            <label for="drive30">
+                <input type="radio" name="autonomous" id="drive30" value="1" checked>Drive 30 counts
+            </label>
+            <br>
+            <label for="rotate90">
+                <input type="radio" name="autonomous" id="rotate90" value="2">Rotate 90 degrees
+            </label>
         </form>
         <button id="hide_button" onclick="toggleGraphs()">Toggle Graphs</button>
         <div id="graphs" style="display: none;">
