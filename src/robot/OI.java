@@ -24,6 +24,7 @@ public class OI {
         public static ParsableInt TOGGLE_AUTO_SHIFT_BUTTON = new ParsableInt("driver_toggle_auto_shift_button", 1);
         public static ParsableInt TOGGLE_ENABLE_CHASSIS_PID_BUTTON = new ParsableInt("driver_toggle_enable_chassis_pid_button", 2);
         public static ParsableInt PICKUP_LOWER_BUTTON = new ParsableInt("driver_pickup_lower_button", 6);
+        public static ParsableInt PICKUP_LOWER_OVERRIDE_BUTTON = new ParsableInt("driver_pickup_lower_override_button", 5);
     }
 
     public static class Operator {
@@ -86,6 +87,10 @@ public class OI {
 
     public boolean getPickupLower() {
         return stickDriver.getRawButton(Driver.PICKUP_LOWER_BUTTON.get());
+    }
+    
+    public boolean getPickupLowerOverride() {
+        return stickDriver.getRawButton(Driver.PICKUP_LOWER_OVERRIDE_BUTTON.get());
     }
 
     public boolean getRequestShot() {

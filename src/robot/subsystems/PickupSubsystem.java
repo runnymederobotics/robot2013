@@ -35,8 +35,9 @@ public class PickupSubsystem extends Subsystem {
 
     //Down is false, up is true
     public void setPneumatic(boolean value) {
-        double now = Timer.getFPGATimestamp();
-        if(!value) {
+        pickupPneumatic.set(value);
+        /*double now = Timer.getFPGATimestamp();
+        if(value) {
             //If we're trying to lower the pickup
             if(now - lastFrisbeeSensorTime > DELAY_AFTER_FRISBEE.get()) {
                 //If we've waited enough time since the last time we saw a frisbee
@@ -45,7 +46,7 @@ public class PickupSubsystem extends Subsystem {
         } else {
             pickupPneumatic.set(value);
         }
-        lastFrisbeeSensorTime = frisbeeSensor.get() ? now : lastFrisbeeSensorTime;
+        lastFrisbeeSensorTime = frisbeeSensor.get() ? now : lastFrisbeeSensorTime;*/
     }
 
     public void runRoller(boolean value) {
@@ -55,5 +56,6 @@ public class PickupSubsystem extends Subsystem {
     public void print() {
         System.out.println("[" + this.getName() + "]");
         System.out.println("pickupRoller: " + pickupRoller.get() + " pickupPneumatic: " + pickupPneumatic.get());
+        System.out.println("frisbeeSensor: " + frisbeeSensor.get());
     }
 }
