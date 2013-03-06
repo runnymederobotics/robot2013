@@ -25,8 +25,7 @@ public class Constants {
     public static final int SECONDARY_MODULE = 2;
     public static final boolean SHIFTER_SINGLE_SOLENOID = false;
     public static final boolean SHOOTER_LOADER_SINGLE_SOLENOID = false;
-    public static final boolean STACK_HOLDER_SINGLE_SOLENOID = true;
-    public static final boolean STACK_DROPPER_SINGLE_SOLENOID = false;
+    public static final boolean HANGER_PNEUMATIC_SINGLE_SOLENOID = false;
     public static final boolean PICKUP_SINGLE_SOLENOID = false;
     public static final boolean SHOOTER_LOW_SINGLE_SOLENOID = false;
     public static final boolean SHOOTER_HIGH_SINGLE_SOLENOID = false;

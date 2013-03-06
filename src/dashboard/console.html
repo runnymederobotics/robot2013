@@ -31,12 +31,20 @@
                     }
                 }
       
-                var setStreamingVariables = function(variables) {
+                var addStreamingVariables = function(variables) {
                     var params = {};
                     for (var i = 0; i < variables.length; ++i) {
                         params[variables[i]] = true;
                     }
                     $.ajax({url: "http://10.13.10.2:8080/stream/add", data: params, dataType: "json"});
+                }
+                
+                var removeStreamingVariables = function(variables) {
+                    var params = {};
+                    for (var i = 0; i < variables.length; ++i) {
+                        params[variables[i]] = true;
+                    }
+                    $.ajax({url: "http://10.13.10.2:8080/stream/rm", data: params, dataType: "json"});
                 }
                 
                 var sendVariableToRobot = function(prop, value) {
@@ -80,13 +88,8 @@
                     });
                 }
 
-                var makeSmoothieChart = function(parent, options) {
-                    var r = Math.floor(Math.random() * 255);
-                    var g = Math.floor(Math.random() * 255);
-                    var b = Math.floor(Math.random() * 255);
-                    var rgbString = "rgb(" + r + "," + g + "," + b + ")";
-                    
-                    var newDiv = $("<div id='" + options.title + "'><b style='color:" + rgbString + "'>" + options.title + "</b><br><canvas width='"
+                var makeSmoothieChart = function(parent, options) {                    
+                    var newDiv = $("<div id='" + options.title + "'>" + options.title + "<br><canvas width='"
                         + options.width + "' height='" + options.height + "'/></div>");
                     $(parent).append(newDiv);
                     var chart = new SmoothieChart();
@@ -95,7 +98,7 @@
                     var l = options.dataFields.length;
                     for (var i = 0; i < l; i++) {
                         series[options.dataFields[i]] = new TimeSeries();
-                        chart.addTimeSeries(series[options.dataFields[i]], { strokeStyle:rgbString, fillStyle:"rgba(0, 0, 0, 0)" });
+                        chart.addTimeSeries(series[options.dataFields[i]], { strokeStyle:"rgb(0, 255, 0)", fillStyle:"rgba(0, 0, 0, 0)" });
                     }
                     return function(now, data) {
                         var l = options.dataFields.length;
@@ -222,6 +225,19 @@
                         + "' value='" + i + "'>Enabled</label>");
                 }
                 $("#data_charts").append("</form>");
+                
+                for(var i = 0; i < pidControllers.length; ++i) {
+                    $("#pid_graphs" + i).click(function() {
+                        var val = $(this).val();
+                        var name = pidControllers[val];
+                        var checked = $(this).attr("checked");
+                        if(checked) {
+                            addStreamingVariables([name]);
+                        } else {
+                            removeStreamingVariables([name]);
+                        }
+                    });
+                }
       
                 var lastData = {
                     camera: new Date().getTime(),
@@ -289,11 +305,8 @@
                         updateVariableList();
                         
                         var streamingVariables = ["xPosition", "yPosition", "anglePosition", "shooterEncoder"];
-                        for(var i = 0; i < pidControllers.length; ++i) {
-                            streamingVariables.push(pidControllers[i]);
-                        }
           
-                        setStreamingVariables(streamingVariables);
+                        addStreamingVariables(streamingVariables);
 
                         sentInit = true;
                     }

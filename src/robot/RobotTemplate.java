@@ -38,6 +38,11 @@ public class RobotTemplate extends IterativeRobot {
         } else {
             CommandBase.hopperSubsystem.shooterLoader = new Pneumatic(Constants.PRIMARY_MODULE, ++primaryChannel, ++primaryChannel);
         }
+        if (Constants.HANGER_PNEUMATIC_SINGLE_SOLENOID) {
+            CommandBase.hangerSubsystem.hangerPneumatic = new Pneumatic(Constants.PRIMARY_MODULE, ++primaryChannel);
+        } else {
+            CommandBase.hangerSubsystem.hangerPneumatic = new Pneumatic(Constants.PRIMARY_MODULE, ++primaryChannel, ++primaryChannel);
+        }
 
         //Secondary module
         int secondaryChannel = 0;

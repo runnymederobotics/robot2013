@@ -129,7 +129,7 @@ public class OI {
         return stickOperator.getRawButton(Operator.HIGH_STATE_BUTTON.get());
     }
     
-    public boolean getReleaseHanger() {
+    public boolean getRaiseHanger() {
         return (stickOperator.getRawButton(Operator.RELEASE_HANGER_BUTTON_ONE.get()) && stickOperator.getRawButton(Operator.RELEASE_HANGER_BUTTON_TWO.get()));
     }
 }

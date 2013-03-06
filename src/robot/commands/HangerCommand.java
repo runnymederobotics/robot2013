@@ -1,7 +1,5 @@
 package robot.commands;
 
-import edu.wpi.first.wpilibj.DriverStation;
-
 public class HangerCommand extends CommandBase {
     
     public HangerCommand() {
@@ -12,7 +10,7 @@ public class HangerCommand extends CommandBase {
     }
 
     protected void execute() {
-        hangerSubsystem.raiseHanger(DriverStation.getInstance().isOperatorControl() && oi.getReleaseHanger());
+        hangerSubsystem.raiseHanger(oi.getRaiseHanger());
     }
 
     protected boolean isFinished() {
