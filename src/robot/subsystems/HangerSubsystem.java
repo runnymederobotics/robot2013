@@ -28,7 +28,7 @@ public class HangerSubsystem extends Subsystem {
         hangerServo.set(SERVO_ENGAGE_POSITION);
     }
     
-    public void releaseHanger(boolean value) {
+    public void raiseHanger(boolean value) {
         /*releaseHanger = value ? true : releaseHanger;
         
         if(releaseHanger) {

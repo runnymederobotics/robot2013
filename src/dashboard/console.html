@@ -55,9 +55,7 @@
                         sendVariableToRobot(prop, value);
                     });
                 };
-                
-                
-                
+
                 var clearVariableList = function() {
                     guiVariables = {};
                 }
@@ -71,6 +69,10 @@
                         }
                         
                         array.sort();
+                        
+                        if(data.hasOwnProperty("autonomous_mode")) {
+                            $("input[name=autonomous][value='" + data["autonomous_mode"] + "']").attr('checked', true);
+                        }
                         
                         for(var i = 0; i < array.length; ++i) {
                             addToGUI(data, array[i]);
@@ -216,7 +218,7 @@
                         dataFields: ["input", "setpoint"],
                         width: 400, height: 50
                     }));
-                    $("#" + name).append("<label for='pid_graphs" + i + "'><input type='radio' name='pid_graphs' id='pid_graphs" + i
+                    $("#" + name).append("<label for='pid_graphs" + i + "'><input type='checkbox' id='pid_graphs" + i
                         + "' value='" + i + "'>Enabled</label>");
                 }
                 $("#data_charts").append("</form>");
@@ -272,19 +274,10 @@
                             for(var i = 0; i < pidControllers.length; ++i) {
                                 var name = pidControllers[i];
 
-                                var cur = $("input[name=pid_graphs]:checked").val();
+                                var cur = $("input[id=pid_graphs" + i + "]:checked").val();
                                 if(cur == i) {
                                     if(data.hasOwnProperty(name)) {
-                                        if(name == "pidleft") {
-                                            dataCharts[i](now, data[name]); //pidleft
-                                            dataCharts[i + 1](now, data["pidright"]); //pidright
-                                        } else if(name == "pidright") {
-                                            dataCharts[i](now, data[name]); //pidright
-                                            dataCharts[i - 1](now, data["pidleft"]); //pidleft
-                                        } else {
-                                            dataCharts[i](now, data[name]);
-                                        }
-                                        break;
+                                        dataCharts[i](now, data[name]);
                                     }
                                 }
                             }
@@ -294,7 +287,7 @@
                     //As soon as we connect and we havent sent our init, send the init
                     if(connected && !sentInit) {
                         updateVariableList();
-          
+                        
                         var streamingVariables = ["xPosition", "yPosition", "anglePosition", "shooterEncoder"];
                         for(var i = 0; i < pidControllers.length; ++i) {
                             streamingVariables.push(pidControllers[i]);
@@ -335,12 +328,16 @@
         <canvas class="field" id="fieldCanvas" width="324" height="648"></canvas>
         <canvas id="frisbeeCounter" width="250" height="200"></canvas>
         <form action="">
-            <label for="drive30">
-                <input type="radio" name="autonomous" id="drive30" value="1" checked>Drive 30 counts
+            <label for="three_frisbee">
+                <input type="radio" name="autonomous" id="three_frisbee" value="0">Shoot 3 frisbees
             </label>
             <br>
-            <label for="rotate90">
-                <input type="radio" name="autonomous" id="rotate90" value="2">Rotate 90 degrees
+            <label for="seven_frisbee">
+                <input type="radio" name="autonomous" id="seven_frisbee" value="1">Shoot 7 frisbees
+            </label>
+            <br>
+            <label for="five_frisbee">
+                <input type="radio" name="autonomous" id="five_frisbee" value="2">Shoot 5 frisbees
             </label>
         </form>
         <button id="hide_button" onclick="toggleGraphs()">Toggle Graphs</button>

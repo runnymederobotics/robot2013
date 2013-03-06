@@ -9,10 +9,12 @@ package robot;
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.IterativeRobot;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.command.CommandGroup;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
-import robot.commands.AutonomousDriveCommand;
-import robot.commands.AutonomousRotateCommand;
+import robot.commands.AutonomousFiveFrisbeeCommandGroup;
+import robot.commands.AutonomousSevenFrisbeeCommandGroup;
+import robot.commands.AutonomousThreeFrisbeeCommandGroup;
 import robot.commands.CommandBase;
 import robot.parsable.ParsableInt;
 
@@ -35,16 +37,6 @@ public class RobotTemplate extends IterativeRobot {
             CommandBase.hopperSubsystem.shooterLoader = new Pneumatic(Constants.PRIMARY_MODULE, ++primaryChannel);
         } else {
             CommandBase.hopperSubsystem.shooterLoader = new Pneumatic(Constants.PRIMARY_MODULE, ++primaryChannel, ++primaryChannel);
-        }
-        if (Constants.STACK_HOLDER_SINGLE_SOLENOID) {
-            CommandBase.hopperSubsystem.stackHolder = new Pneumatic(Constants.PRIMARY_MODULE, ++primaryChannel);
-        } else {
-            CommandBase.hopperSubsystem.stackHolder = new Pneumatic(Constants.PRIMARY_MODULE, ++primaryChannel, ++primaryChannel);
-        }
-        if (Constants.STACK_DROPPER_SINGLE_SOLENOID) {
-            CommandBase.hopperSubsystem.stackDropper = new Pneumatic(Constants.PRIMARY_MODULE, ++primaryChannel);
-        } else {
-            CommandBase.hopperSubsystem.stackDropper = new Pneumatic(Constants.PRIMARY_MODULE, ++primaryChannel, ++primaryChannel);
         }
 
         //Secondary module
@@ -106,17 +98,23 @@ public class RobotTemplate extends IterativeRobot {
 
     //This function is called at the start of autonomous
     public void autonomousInit() {
+        CommandGroup autonomousCommand = null;
         switch (autonomousMode.get()) {
             case 0:
-                //7 Frisbee auton
+                autonomousCommand = new AutonomousThreeFrisbeeCommandGroup();
+                break;
             case 1: 
-                (new AutonomousDriveCommand(900)).start();
+                autonomousCommand = new AutonomousSevenFrisbeeCommandGroup();
                 break;
             case 2: 
-                (new AutonomousRotateCommand(90)).start();
+                autonomousCommand = new AutonomousFiveFrisbeeCommandGroup();
                 break;
-
         }
+        
+        if(autonomousCommand != null) {
+            autonomousCommand.start();
+        }
+        
         enableSubsystems();
     }
 

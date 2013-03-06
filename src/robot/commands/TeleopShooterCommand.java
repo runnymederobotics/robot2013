@@ -2,9 +2,9 @@ package robot.commands;
 
 import robot.subsystems.ShooterSubsystem;
 
-public class ShooterCommand extends CommandBase {
+public class TeleopShooterCommand extends CommandBase {
 
-    public ShooterCommand() {
+    public TeleopShooterCommand() {
         requires(shooterSubsystem);
     }
 
@@ -12,6 +12,7 @@ public class ShooterCommand extends CommandBase {
     }
 
     protected void execute() {
+        shooterSubsystem.setSetpoint(oi.getManualShooterSpeed());
         shooterSubsystem.runMotor(oi.getManualShooterSpeed());
 
         if (oi.getShooterLoad()) {
@@ -24,7 +25,7 @@ public class ShooterCommand extends CommandBase {
             shooterSubsystem.setShooterState(ShooterSubsystem.ShooterState.HIGH);
         }
 
-        shooterSubsystem.runShooterStateMachine();
+        shooterSubsystem.doShooterState();
     }
 
     protected boolean isFinished() {

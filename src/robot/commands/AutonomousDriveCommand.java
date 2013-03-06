@@ -23,6 +23,8 @@ public class AutonomousDriveCommand extends CommandBase {
         chassisSubsystem.enablePIDGyro();
         chassisSubsystem.enablePIDCount();
         
+        System.out.println("PIDCount on target: " + chassisSubsystem.pidCountOnTarget());
+        
         chassisSubsystem.drive(-chassisSubsystem.pidCount.get(), -chassisSubsystem.pidGyro.get());
     }
 
@@ -31,16 +33,24 @@ public class AutonomousDriveCommand extends CommandBase {
             Scheduler.getInstance().add(new TeleopDriveCommand());
             return true;
         }
-
-        return chassisSubsystem.pidCountOnTarget();
+        
+        boolean finished = chassisSubsystem.pidCountOnTarget();
+        
+        if(finished) {
+            chassisSubsystem.drive(0.0, 0.0);
+        }
+        
+        return finished;
     }
 
     protected void end() {
+        chassisSubsystem.disablePID();
         chassisSubsystem.disablePIDGyro();
         chassisSubsystem.disablePIDCount();
     }
 
     protected void interrupted() {
+        chassisSubsystem.disablePID();
         chassisSubsystem.disablePIDGyro();
         chassisSubsystem.disablePIDCount();
     }

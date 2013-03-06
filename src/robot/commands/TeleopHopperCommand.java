@@ -12,9 +12,7 @@ public class TeleopHopperCommand extends CommandBase {
 
     protected void execute() {
         boolean otherSubsystemsReady = shooterSubsystem.onTargetAndAboveThreshold() && hopperSubsystem.hasFrisbee();
-        if (otherSubsystemsReady || oi.getShootOverride()) {
-            hopperSubsystem.update(oi.getRequestShot());
-        }
+        hopperSubsystem.update(oi.getRequestShot() && (otherSubsystemsReady || oi.getShootOverride()));
     }
 
     protected boolean isFinished() {

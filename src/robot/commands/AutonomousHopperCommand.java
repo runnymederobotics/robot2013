@@ -11,33 +11,29 @@ public class AutonomousHopperCommand extends CommandBase {
     double lastFrisbeeTime = 0.0;
     
     public AutonomousHopperCommand() {
+        requires(hopperSubsystem);
     }
 
     protected void initialize() {
-        requires(hopperSubsystem);
     }
 
     protected void execute() {
         boolean requestShot = shooterSubsystem.onTargetAndAboveThreshold() && hopperSubsystem.hasFrisbee();
         
         hopperSubsystem.update(requestShot);
+        
+        if(hopperSubsystem.hasFrisbee()) {
+            lastFrisbeeTime = Timer.getFPGATimestamp();
+        }
     }
 
     protected boolean isFinished() {
-        DriverStation ds = DriverStation.getInstance();
-
-        if (!ds.isAutonomous()) {
-            Scheduler.getInstance().add(new TeleopPickupCommand());
+        if (!DriverStation.getInstance().isAutonomous()) {
+            Scheduler.getInstance().add(new TeleopHopperCommand());
             return true;
         }
         
-        double now = Timer.getFPGATimestamp();
-        
-        if(hopperSubsystem.hasFrisbee()) {
-            lastFrisbeeTime = now;
-        }
-
-        return now - lastFrisbeeTime > TIME_AFTER_LAST_FRISBEE.get();
+        return Timer.getFPGATimestamp() - lastFrisbeeTime > TIME_AFTER_LAST_FRISBEE.get();
     }
 
     protected void end() {

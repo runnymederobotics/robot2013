@@ -1,5 +1,7 @@
 package robot.commands;
 
+import robot.subsystems.ShooterSubsystem;
+
 public class TeleopPickupCommand extends CommandBase {
 
     public TeleopPickupCommand() {
@@ -15,7 +17,7 @@ public class TeleopPickupCommand extends CommandBase {
         //False is down, true is up
         if(oi.getPickupLowerOverride()) {
             pickupSubsystem.setPneumatic(true);
-        } else if(shooterSubsystem.inLoadState()) {
+        } else if(shooterSubsystem.getShooterState() == ShooterSubsystem.ShooterState.LOAD) {
             pickupSubsystem.setPneumatic(lowerButton);
         } else {
             pickupSubsystem.setPneumatic(true);

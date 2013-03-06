@@ -12,7 +12,7 @@ public class HangerCommand extends CommandBase {
     }
 
     protected void execute() {
-        hangerSubsystem.releaseHanger(DriverStation.getInstance().isOperatorControl() && oi.getReleaseHanger());
+        hangerSubsystem.raiseHanger(DriverStation.getInstance().isOperatorControl() && oi.getReleaseHanger());
     }
 
     protected boolean isFinished() {

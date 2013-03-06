@@ -13,10 +13,11 @@ public class AutonomousPickupCommand extends CommandBase {
 
     public AutonomousPickupCommand(boolean value) {
         this.value = value;
+        
+        requires(pickupSubsystem);
     }
 
     protected void initialize() {
-        requires(pickupSubsystem);
     }
 
     protected void execute() {
@@ -29,9 +30,7 @@ public class AutonomousPickupCommand extends CommandBase {
     }
 
     protected boolean isFinished() {
-        DriverStation ds = DriverStation.getInstance();
-
-        if (!ds.isAutonomous()) {
+        if (!DriverStation.getInstance().isAutonomous()) {
             Scheduler.getInstance().add(new TeleopPickupCommand());
             return true;
         }

@@ -12,9 +12,7 @@ public class HopperSubsystem extends Subsystem {
 
     public static ParsableDouble PNEUMATIC_DELAY = new ParsableDouble("hopper_pneumatic_delay", 0.5);
     public static ParsableDouble RELEASE_DELAY = new ParsableDouble("hopper_shoot_delay", 0.5);
-    //Pneumatics are initialized in CommandBase.java
-    public Pneumatic stackDropper;
-    public Pneumatic stackHolder;
+    //Pneumatics are initialized in RobotTemplate.java
     public Pneumatic shooterLoader;
     DigitalInput frisbeeSensor = new DigitalInput(Constants.HOPPER_FRISBEE_SENSOR);
     double lastReleaseTime = 0.0;
@@ -47,7 +45,7 @@ public class HopperSubsystem extends Subsystem {
     }
     
     public boolean hasFrisbee() {
-        return frisbeeSensor.get();
+        return !frisbeeSensor.get();
     }
 
     public void update(boolean requestShot) {
@@ -85,8 +83,7 @@ public class HopperSubsystem extends Subsystem {
     public void print() {
         System.out.println("[" + this.getName() + "]");
         System.out.println("curState: " + curState);
-        System.out.println("stackHolder: " + stackHolder.get());
-        System.out.println("stackDropper: " + stackDropper.get());
         System.out.println("shooterLoader: " + shooterLoader.get());
+        System.out.println("Frisbee Sensor: " + frisbeeSensor.get());
     }
 }
