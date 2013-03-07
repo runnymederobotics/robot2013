@@ -136,8 +136,8 @@ public class ChassisSubsystem extends Subsystem {
                 updateInputRange();
 
                 //High gear
-                pidLeft.setSetpoint(leftOutputStorage.get() * MAX_LOW_ENCODER_RATE.get());
-                pidRight.setSetpoint(rightOutputStorage.get() * MAX_LOW_ENCODER_RATE.get());
+                pidLeft.setSetpoint(leftOutputStorage.get() * MAX_HIGH_ENCODER_RATE.get());
+                pidRight.setSetpoint(rightOutputStorage.get() * MAX_HIGH_ENCODER_RATE.get());
             } else {
                 updateInputRange();
 
