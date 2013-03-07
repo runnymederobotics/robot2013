@@ -21,8 +21,8 @@ public class ChassisSubsystem extends Subsystem {
     public static final double PID_COUNT_ABSOLUTE_TOLERANCE = 20.0;
     public ParsableDouble MAX_LOW_ENCODER_RATE = new ParsableDouble("max_low_encoder_rate", 800);
     public ParsableDouble MAX_HIGH_ENCODER_RATE = new ParsableDouble("max_high_encoder_rate", 2800);
-    Victor leftMotor = new Victor(Constants.LEFT_MOTOR_CHANNEL);
-    Victor rightMotor = new Victor(Constants.RIGHT_MOTOR_CHANNEL);
+    Victor vicLeft = new Victor(Constants.LEFT_MOTOR_CHANNEL);
+    Victor vicRight = new Victor(Constants.RIGHT_MOTOR_CHANNEL);
     Encoder encLeft = new Encoder(Constants.ENC_LEFT_ONE, Constants.ENC_LEFT_TWO, true);
     Encoder encRight = new Encoder(Constants.ENC_RIGHT_ONE, Constants.ENC_RIGHT_TWO, true);
     EncoderAverager encAverager = new EncoderAverager(encLeft, true, encRight, false, true); //Left is negative, use counts
@@ -30,8 +30,8 @@ public class ChassisSubsystem extends Subsystem {
     OutputStorage leftOutputStorage = new OutputStorage();
     OutputStorage rightOutputStorage = new OutputStorage();
     RobotDrive robotDrive = new RobotDrive(leftOutputStorage, rightOutputStorage);
-    ParsablePIDController pidLeft = new ParsablePIDController("pidleft", 0.001, 0.0005, 0.0, encLeft, leftMotor);
-    ParsablePIDController pidRight = new ParsablePIDController("pidright", 0.001, 0.0005, 0.0, encRight, rightMotor);
+    ParsablePIDController pidLeft = new ParsablePIDController("pidleft", 0.001, 0.0005, 0.0, encLeft, vicLeft);
+    ParsablePIDController pidRight = new ParsablePIDController("pidright", 0.001, 0.0005, 0.0, encRight, vicRight);
     public ParsablePIDController pidGyro = new ParsablePIDController("pidgyro", 0.02, 0.0, 0.0, CommandBase.positioningSubsystem.positionGyro, new OutputStorage());
     public ParsablePIDController pidCount = new ParsablePIDController("pidcount", 0.02, 0.0, 0.0, encAverager, new OutputStorage());
 
@@ -146,8 +146,8 @@ public class ChassisSubsystem extends Subsystem {
                 pidRight.setSetpoint(rightOutputStorage.get() * MAX_LOW_ENCODER_RATE.get());
             }
         } else {
-            leftMotor.set(leftOutputStorage.get());
-            rightMotor.set(rightOutputStorage.get());
+            vicLeft.set(leftOutputStorage.get());
+            vicRight.set(rightOutputStorage.get());
         }
     }
 

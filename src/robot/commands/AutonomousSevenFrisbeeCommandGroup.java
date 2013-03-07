@@ -2,7 +2,6 @@ package robot.commands;
 
 import edu.wpi.first.wpilibj.command.CommandGroup;
 import robot.parsable.ParsableDouble;
-import robot.subsystems.ChassisSubsystem;
 import robot.subsystems.ShooterSubsystem;
 
 public class AutonomousSevenFrisbeeCommandGroup extends CommandGroup {
@@ -16,7 +15,7 @@ public class AutonomousSevenFrisbeeCommandGroup extends CommandGroup {
         addSequential(new AutonomousShooterCommand(ShooterSubsystem.ShooterState.HIGH, 0.5));
         
         //Drive forward the correct number of counts
-        addSequential(new AutonomousDriveCommand((int) (DRIVE_FORWARD_DISTANCE_INCHES.get() / ChassisSubsystem.INCHES_PER_ENCODER_COUNT)));
+        addSequential(new AutonomousDriveCommand(DRIVE_FORWARD_DISTANCE_INCHES.get()));
         addSequential(new AutonomousShooterCommand(ShooterSubsystem.ShooterState.HIGH, 0.5)); //This will be for setting the setpoint after we've reached our destination
         addSequential(new AutonomousHopperCommand(true));
     }

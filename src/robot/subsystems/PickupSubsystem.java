@@ -1,7 +1,6 @@
 package robot.subsystems;
 
 import edu.wpi.first.wpilibj.DigitalInput;
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.Victor;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import robot.Constants;
@@ -51,6 +50,10 @@ public class PickupSubsystem extends Subsystem {
 
     public void runRoller(boolean value) {
         pickupRoller.set(value ? ROLLER_SPEED.get() : 0.0);
+    }
+    
+    public boolean pickupDown() {
+        return pickupPneumatic.get();
     }
 
     public void print() {

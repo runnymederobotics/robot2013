@@ -1,8 +1,6 @@
 package robot.commands;
 
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.command.Scheduler;
 import robot.parsable.ParsableDouble;
 
 public class AutonomousPickupCommand extends CommandBase {
@@ -30,11 +28,6 @@ public class AutonomousPickupCommand extends CommandBase {
     }
 
     protected boolean isFinished() {
-        if (!DriverStation.getInstance().isAutonomous()) {
-            Scheduler.getInstance().add(new TeleopPickupCommand());
-            return true;
-        }
-        
         double now = Timer.getFPGATimestamp();
         //If we've waited long enough
         return now - startTime > AUTONOMOUS_PICKUP_DELAY.get();

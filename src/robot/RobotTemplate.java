@@ -16,6 +16,10 @@ import robot.commands.AutonomousFiveFrisbeeCommandGroup;
 import robot.commands.AutonomousSevenFrisbeeCommandGroup;
 import robot.commands.AutonomousThreeFrisbeeCommandGroup;
 import robot.commands.CommandBase;
+import robot.commands.TeleopDriveCommand;
+import robot.commands.TeleopHopperCommand;
+import robot.commands.TeleopPickupCommand;
+import robot.commands.TeleopShooterCommand;
 import robot.parsable.ParsableInt;
 
 public class RobotTemplate extends IterativeRobot {
@@ -116,9 +120,7 @@ public class RobotTemplate extends IterativeRobot {
                 break;
         }
         
-        if(autonomousCommand != null) {
-            autonomousCommand.start();
-        }
+        Scheduler.getInstance().add(autonomousCommand);
         
         enableSubsystems();
     }
@@ -133,6 +135,12 @@ public class RobotTemplate extends IterativeRobot {
     //This function is called at the start of teleop
     public void teleopInit() {
         enableSubsystems();
+        Scheduler scheduler = Scheduler.getInstance();
+        
+        scheduler.add(new TeleopDriveCommand());
+        scheduler.add(new TeleopHopperCommand());
+        scheduler.add(new TeleopPickupCommand());
+        scheduler.add(new TeleopShooterCommand());
     }
 
     //This function is called periodically during teleop

@@ -1,8 +1,5 @@
 package robot.commands;
 
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.command.Scheduler;
-
 public class AutonomousRotateCommand extends CommandBase {
 
     double relativeAngle;
@@ -27,12 +24,7 @@ public class AutonomousRotateCommand extends CommandBase {
     }
 
     // Make this return true when this Command no longer needs to run execute()
-    protected boolean isFinished() {
-        if (!DriverStation.getInstance().isAutonomous()) {
-            Scheduler.getInstance().add(new TeleopDriveCommand());
-            return true;
-        }
-        
+    protected boolean isFinished() {        
         return chassisSubsystem.pidGyroOnTarget();
     }
 
