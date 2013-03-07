@@ -39,8 +39,8 @@ public class OI {
         public static ParsableInt LOW_STATE_BUTTON = new ParsableInt("operator_low_state_button", 8);
         public static ParsableInt MEDIUM_STATE_BUTTON = new ParsableInt("operator_medium_state_button", 9);
         public static ParsableInt HIGH_STATE_BUTTON = new ParsableInt("operator_high_state_button", 10);
-        public static ParsableInt RELEASE_HANGER_BUTTON_ONE = new ParsableInt("operator_release_hanger_button_one", 5);
-        public static ParsableInt RELEASE_HANGER_BUTTON_TWO = new ParsableInt("operator_release_hanger_button_two", 6);
+        public static ParsableInt RAISE_HANGER_BUTTON_ONE = new ParsableInt("operator_raise_hanger_button_one", 5);
+        public static ParsableInt RAISE_HANGER_BUTTON_TWO = new ParsableInt("operator_raise_hanger_button_two", 6);
     }
     public static final ParsableDouble SHOOTER_MINIMUM_SPEED = new ParsableDouble("shooter_minimum_speed", 0.75);
     Joystick stickDriver = new Joystick(Driver.PORT);
@@ -107,7 +107,7 @@ public class OI {
         //Bottom is -1.0, top is 1.0
         final double complement = (1 - SHOOTER_MINIMUM_SPEED.get()) / 2;
         final double complementsComplement = 1 - complement;
-        double axis = -stickOperator.getAxis(Joystick.AxisType.kThrottle);
+        double axis = -stickOperator.getAxis(Joystick.AxisType.kZ);
         double ret = -(axis * complement + complementsComplement);
         //It is now between 0.75 and 1.0
         return axis >= THROTTLE_DEAD_ZONE ? ret : 0.0;
@@ -130,6 +130,6 @@ public class OI {
     }
     
     public boolean getRaiseHanger() {
-        return (stickOperator.getRawButton(Operator.RELEASE_HANGER_BUTTON_ONE.get()) && stickOperator.getRawButton(Operator.RELEASE_HANGER_BUTTON_TWO.get()));
+        return (stickOperator.getRawButton(Operator.RAISE_HANGER_BUTTON_ONE.get()) && stickOperator.getRawButton(Operator.RAISE_HANGER_BUTTON_TWO.get()));
     }
 }

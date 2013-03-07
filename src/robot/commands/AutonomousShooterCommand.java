@@ -6,22 +6,23 @@ import edu.wpi.first.wpilibj.command.Scheduler;
 public class AutonomousShooterCommand extends CommandBase {
 
     int shooterState = 0;
+    double setpoint = 0.0;
     
-    public AutonomousShooterCommand(int shooterState) {
+    public AutonomousShooterCommand(int shooterState, double setpoint) {
         requires(shooterSubsystem);
         
         this.shooterState = shooterState;
+        this.setpoint = setpoint;
     }
 
     protected void initialize() {
+        shooterSubsystem.setSetpoint(setpoint);
     }
 
     protected void execute() {
         shooterSubsystem.setShooterState(shooterState);
         
         shooterSubsystem.doShooterState();
-        
-        shooterSubsystem.setSetpoint(1.0);
     }
 
     protected boolean isFinished() {
@@ -29,9 +30,8 @@ public class AutonomousShooterCommand extends CommandBase {
             Scheduler.getInstance().add(new TeleopShooterCommand());
             return true;
         }
-        
-        //Run the shooter for the length of autonomous mode
-        return false;
+      
+        return shooterSubsystem.getShooterState() == shooterState;
     }
 
     protected void end() {

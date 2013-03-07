@@ -7,22 +7,33 @@ import robot.parsable.ParsableDouble;
 
 public class AutonomousHopperCommand extends CommandBase {
 
+    ParsableDouble TIME_AFTER_START = new ParsableDouble("autonomous_time_after_start", 2.0);
     ParsableDouble TIME_AFTER_LAST_FRISBEE = new ParsableDouble("autonomous_time_after_last_frisbee", 1.0);
+    boolean dontStop = false;
+    double startTime = 0.0;
     double lastFrisbeeTime = 0.0;
-    
-    public AutonomousHopperCommand() {
+
+    public AutonomousHopperCommand(boolean dontStop) {
         requires(hopperSubsystem);
+
+        this.dontStop = dontStop;
     }
 
     protected void initialize() {
+        double now = Timer.getFPGATimestamp();
+        startTime = now;
+        lastFrisbeeTime = now;
     }
 
     protected void execute() {
-        boolean requestShot = shooterSubsystem.onTargetAndAboveThreshold() && hopperSubsystem.hasFrisbee();
+        //Dont wait if we dont want to stop
+        if (dontStop || Timer.getFPGATimestamp() - startTime > TIME_AFTER_START.get()) {
+            boolean requestShot = shooterSubsystem.onTargetAndAboveThreshold() && hopperSubsystem.hasFrisbee();
+
+            hopperSubsystem.update(requestShot);
+        }
         
-        hopperSubsystem.update(requestShot);
-        
-        if(hopperSubsystem.hasFrisbee()) {
+        if (hopperSubsystem.hasFrisbee()) {
             lastFrisbeeTime = Timer.getFPGATimestamp();
         }
     }
@@ -32,8 +43,12 @@ public class AutonomousHopperCommand extends CommandBase {
             Scheduler.getInstance().add(new TeleopHopperCommand());
             return true;
         }
-        
-        return Timer.getFPGATimestamp() - lastFrisbeeTime > TIME_AFTER_LAST_FRISBEE.get();
+
+        if (dontStop) {
+            return false;
+        } else {
+            return Timer.getFPGATimestamp() - lastFrisbeeTime > TIME_AFTER_LAST_FRISBEE.get();
+        }
     }
 
     protected void end() {

@@ -1,6 +1,5 @@
 package robot.subsystems;
 
-import edu.wpi.first.wpilibj.Counter;
 import edu.wpi.first.wpilibj.Victor;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import robot.Constants;
@@ -17,7 +16,7 @@ public class ShooterSubsystem extends Subsystem {
     public static ParsableDouble MIN_SHOOT_THRESHOLD = new ParsableDouble("shooter_min_shoot_threshold", 0.5);
     Victor vicShooter = new Victor(Constants.SHOOTER_MOTOR_CHANNEL);
     CustomEncoder encShooter = new CustomEncoder(Constants.ENC_SHOOTER);
-    ParsablePIDController pidShooter = new ParsablePIDController("pidshooter", 0.05, 0.0, 0.0, encShooter, vicShooter);
+    ParsablePIDController pidShooter = new ParsablePIDController("pidshooter", 0.01, 0.0005, 0.0, encShooter, vicShooter);
     //Pneumatics are initialized in CommandBase.java
     public Pneumatic shooterPneumaticLow;
     public Pneumatic shooterPneumaticHigh;
@@ -93,7 +92,7 @@ public class ShooterSubsystem extends Subsystem {
         boolean aboveThreshold = encShooter.get() > MAX_SHOOTER_ENCODER_RATE * MIN_SHOOT_THRESHOLD.get();
         boolean onTarget = pidShooter.onTarget();
         
-        return true;//onTarget && aboveThreshold;
+        return onTarget && aboveThreshold;
     }
 
     public void print() {

@@ -10,7 +10,7 @@ import robot.parsable.ParsableDouble;
 
 public class HopperSubsystem extends Subsystem {
 
-    public static ParsableDouble PNEUMATIC_DELAY = new ParsableDouble("hopper_pneumatic_delay", 0.5);
+    public static ParsableDouble PNEUMATIC_DELAY = new ParsableDouble("hopper_pneumatic_delay", 0.2);
     public static ParsableDouble RELEASE_DELAY = new ParsableDouble("hopper_shoot_delay", 0.5);
     //Pneumatics are initialized in RobotTemplate.java
     public Pneumatic shooterLoader;

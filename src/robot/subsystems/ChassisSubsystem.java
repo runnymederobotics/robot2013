@@ -15,11 +15,11 @@ import robot.parsable.ParsablePIDController;
 
 public class ChassisSubsystem extends Subsystem {
 
-    public static final double INCHES_PER_ENCODER_COUNT = 34.5 / 499;
+    public static final double INCHES_PER_ENCODER_COUNT = 92.5 / 1242.5385;
     public static final double PID_DRIVE_PERCENT_TOLERANCE = 10.0;
     public static final double PID_GYRO_ABSOLUTE_TOLERANCE = 2.0;
     public static final double PID_COUNT_ABSOLUTE_TOLERANCE = 20.0;
-    public ParsableDouble MAX_LOW_ENCODER_RATE = new ParsableDouble("max_low_encoder_rate", 500);
+    public ParsableDouble MAX_LOW_ENCODER_RATE = new ParsableDouble("max_low_encoder_rate", 800);
     public ParsableDouble MAX_HIGH_ENCODER_RATE = new ParsableDouble("max_high_encoder_rate", 2800);
     Victor leftMotor = new Victor(Constants.LEFT_MOTOR_CHANNEL);
     Victor rightMotor = new Victor(Constants.RIGHT_MOTOR_CHANNEL);
@@ -30,10 +30,10 @@ public class ChassisSubsystem extends Subsystem {
     OutputStorage leftOutputStorage = new OutputStorage();
     OutputStorage rightOutputStorage = new OutputStorage();
     RobotDrive robotDrive = new RobotDrive(leftOutputStorage, rightOutputStorage);
-    ParsablePIDController pidLeft = new ParsablePIDController("pidleft", 0.0, 0.0005, 0.0, encLeft, leftMotor);
-    ParsablePIDController pidRight = new ParsablePIDController("pidright", 0.0, 0.0005, 0.0, encRight, rightMotor);
+    ParsablePIDController pidLeft = new ParsablePIDController("pidleft", 0.001, 0.0005, 0.0, encLeft, leftMotor);
+    ParsablePIDController pidRight = new ParsablePIDController("pidright", 0.001, 0.0005, 0.0, encRight, rightMotor);
     public ParsablePIDController pidGyro = new ParsablePIDController("pidgyro", 0.02, 0.0, 0.0, CommandBase.positioningSubsystem.positionGyro, new OutputStorage());
-    public ParsablePIDController pidCount = new ParsablePIDController("pidcount", 0.01, 0.0, 0.0, encAverager, new OutputStorage());
+    public ParsablePIDController pidCount = new ParsablePIDController("pidcount", 0.02, 0.0, 0.0, encAverager, new OutputStorage());
 
     public ChassisSubsystem() {
         encLeft.setPIDSourceParameter(Encoder.PIDSourceParameter.kRate);
@@ -48,7 +48,7 @@ public class ChassisSubsystem extends Subsystem {
         pidLeft.setOutputRange(-1.0, 1.0);
         pidRight.setOutputRange(-1.0, 1.0);
         pidGyro.setOutputRange(-1.0, 1.0);
-        pidCount.setOutputRange(-0.5, 0.5);
+        pidCount.setOutputRange(-0.75, 0.75);
 
         pidLeft.setPercentTolerance(PID_DRIVE_PERCENT_TOLERANCE);
         pidRight.setPercentTolerance(PID_DRIVE_PERCENT_TOLERANCE);

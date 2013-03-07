@@ -290,11 +290,8 @@
                             for(var i = 0; i < pidControllers.length; ++i) {
                                 var name = pidControllers[i];
 
-                                var cur = $("input[id=pid_graphs" + i + "]:checked").val();
-                                if(cur == i) {
-                                    if(data.hasOwnProperty(name)) {
-                                        dataCharts[i](now, data[name]);
-                                    }
+                                if(data.hasOwnProperty(name)) {
+                                    dataCharts[i](now, data[name]);
                                 }
                             }
                         });
