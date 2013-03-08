@@ -16,8 +16,7 @@ public class Constants {
     public static final int RIGHT_MOTOR_CHANNEL = 2;
     public static final int PICKUP_ROLLER_MOTOR_CHANNEL = 3;
     public static final int SHOOTER_MOTOR_CHANNEL = 4;
-    public static final int HOPPER_RELEASE_MOTOR_CHANNEL = 5;
-    public static final int HANGER_SERVO = 6;
+    public static final int ELEVATOR_ROLLER_MOTOR_CHANNEL = 5;
     //Relay outputs
     public static final int COMPRESSOR_RELAY = 1;
     //Solenoid outputs

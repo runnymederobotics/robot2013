@@ -11,8 +11,8 @@ import robot.parsable.ParsablePIDController;
 
 public class ShooterSubsystem extends Subsystem {
 
-    public static final double PID_SHOOTER_PERCENT_TOLERANCE = 0.1;
-    public static final double MAX_SHOOTER_ENCODER_RATE = 120; //RPS
+    public static final double PID_SHOOTER_PERCENT_TOLERANCE = 10;
+    public static final double MAX_SHOOTER_ENCODER_RATE = 175; //RPS
     public static ParsableDouble MIN_SHOOT_THRESHOLD = new ParsableDouble("shooter_min_shoot_threshold", 0.3);
     Victor vicShooter = new Victor(Constants.SHOOTER_MOTOR_CHANNEL);
     CustomEncoder encShooter = new CustomEncoder(Constants.ENC_SHOOTER);

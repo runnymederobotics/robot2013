@@ -25,7 +25,7 @@ import robot.parsable.ParsableInt;
 public class RobotTemplate extends IterativeRobot {
 
     Compressor compressor = new Compressor(Constants.COMPRESSOR_DI, Constants.COMPRESSOR_RELAY);
-    ParsableInt autonomousMode = new ParsableInt("autonomous_mode", 0);
+    public static ParsableInt autonomousMode = new ParsableInt("autonomous_mode", 0);
     double lastPrintTime = 0;
     
     //Dynamic numbering system to handle single/double solenoids

@@ -5,8 +5,8 @@ import robot.parsable.ParsableDouble;
 
 public class AutonomousHopperCommand extends CommandBase {
 
-    ParsableDouble TIME_AFTER_START = new ParsableDouble("autonomous_time_after_start", 2.0);
-    ParsableDouble FRISBEE_TIMEOUT = new ParsableDouble("autonomous_frisbee_timeout", 1.0);
+    public static ParsableDouble TIME_AFTER_START = new ParsableDouble("autonomous_time_after_start", 2.0);
+    public static ParsableDouble FRISBEE_TIMEOUT = new ParsableDouble("autonomous_frisbee_timeout", 1.0);
     boolean dontStop = false;
     double startTime = 0.0;
     double lastFrisbeeTime = 0.0;

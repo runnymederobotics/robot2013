@@ -4,8 +4,8 @@ import robot.parsable.ParsableDouble;
 
 public class TeleopDriveCommand extends CommandBase {
 
-    ParsableDouble SHIFT_UP_THRESHOLD = new ParsableDouble("auto_shift_up_threshold", 0.9);
-    ParsableDouble SHIFT_DOWN_THRESHOLD = new ParsableDouble("auto_shift_down_threshold", 0.5);
+    public static ParsableDouble SHIFT_UP_THRESHOLD = new ParsableDouble("auto_shift_up_threshold", 0.9);
+    public static ParsableDouble SHIFT_DOWN_THRESHOLD = new ParsableDouble("auto_shift_down_threshold", 0.5);
 
     public TeleopDriveCommand() {
         // Use requires() here to declare subsystem dependencies

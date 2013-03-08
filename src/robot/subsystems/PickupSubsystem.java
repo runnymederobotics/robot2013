@@ -11,8 +11,10 @@ import robot.parsable.ParsableDouble;
 public class PickupSubsystem extends Subsystem {
 
     ParsableDouble ROLLER_SPEED = new ParsableDouble("pickup_roller_speed", -1.0);
-    ParsableDouble DELAY_AFTER_FRISBEE = new ParsableDouble("delay_after_frisbee", 1.0);
+    ParsableDouble ELEVATOR_SPEED = new ParsableDouble("elevator_roller_speed", -1.0);
+    ParsableDouble DELAY_AFTER_FRISBEE = new ParsableDouble("pickup_delay_after_frisbee", 1.0);
     Victor pickupRoller = new Victor(Constants.PICKUP_ROLLER_MOTOR_CHANNEL);
+    Victor elevatorRoller = new Victor(Constants.ELEVATOR_ROLLER_MOTOR_CHANNEL);
     DigitalInput frisbeeSensor = new DigitalInput(Constants.PICKUP_FRISBEE_SENSOR);
     //Pneumatics are initialized in CommandBase.java
     public Pneumatic pickupPneumatic;
@@ -50,6 +52,7 @@ public class PickupSubsystem extends Subsystem {
 
     public void runRoller(boolean value) {
         pickupRoller.set(value ? ROLLER_SPEED.get() : 0.0);
+        elevatorRoller.set(value ? ELEVATOR_SPEED.get() : 0.0);
     }
     
     public boolean pickupDown() {
@@ -59,6 +62,7 @@ public class PickupSubsystem extends Subsystem {
     public void print() {
         System.out.println("[" + this.getName() + "]");
         System.out.println("pickupRoller: " + pickupRoller.get() + " pickupPneumatic: " + pickupPneumatic.get());
+        System.out.println("elevatorRoller: " + elevatorRoller.get());
         System.out.println("frisbeeSensor: " + frisbeeSensor.get());
     }
 }
