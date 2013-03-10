@@ -5,6 +5,7 @@
         <script src="js/lib/smoothie.js"></script>
         <script src="js/lib/dat.gui.min.js"></script>
         <script src="js/lib/modernizr-2.0.6-development-only.js"></script>
+        <script src="camera.js"></script>
         <script type="text/javascript">
             function toggleGraphs() {
                 var graphs = $('#graphs');
@@ -186,7 +187,7 @@
                 }, 500);
 
                 var cameraCharts = [
-                    makeSmoothieChart("#camera_charts", {
+                    /*makeSmoothieChart("#camera_charts", {
                         title: "Camera Processing Time (seconds/sec)",
                         dataFields: ["total_time"],
                         width: 200, height: 50
@@ -200,7 +201,7 @@
                         title: "Camera Bandwidth (KB/sec)",
                         dataFields: ["bandwidth"],
                         width: 200, height: 50
-                    }),
+                    }),*/
                 ];
 
                 var dataCharts = [
@@ -248,6 +249,11 @@
                 var sentInit = false;
                 
                 var lastAutonomous = 0;
+                
+                startCamera("#js_camera", "http://192.168.1.144:8080/videofeed",
+                    function (data) {
+                      $("#camera_data").text(JSON.stringify(data));
+                    });
       
                 setInterval(function() {             
                     var now = new Date().getTime();
@@ -325,16 +331,16 @@
                         $("#streams").append("<img src='/stream/raw?" + now + "'/>");
                         $("#streams").append("<img src='/stream/processed?" + now + "'/>");
                     }
-                }, 1000);
+                }, 10000);
             });
         </script>
         <style type="text/css">
-            .field { position: absolute; left: 600px; right: 0px; bottom: 0px; top: 0px }
-            #frisbeeCounter {position: absolute; left: 375px; right: 0px; bottom: 0px; top: 5px }
+            #fieldCanvas {
+              background: url(field.png);
+            }
         </style>
     </head>
     <body id="body">
-        <img class="field" src="field.png"/>
         <canvas class="field" id="fieldCanvas" width="324" height="648"></canvas>
         <canvas id="frisbeeCounter" width="250" height="200"></canvas>
         <form action="">
@@ -357,5 +363,7 @@
             <div id="camera_charts"></div>
             <div id="data_charts"></div>
         </div>
+        <div id="js_camera"></div>
+        <div id="camera_data"></div>
     </body>
 </html>

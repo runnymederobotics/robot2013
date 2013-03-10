@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <script src="js/lib/jquery.min.js"></script>
+    <script src="js/lib/smoothie.js"></script>
+    <script src="js/filters.js"></script>
+    <script type="text/javascript">
+    $(function() {
+        var makeSmoothieChart = function(id) {
+            var chart = new SmoothieChart();
+            chart.streamTo(document.getElementById(id), /* delay */ 1000);
+            for (var i = 1; i < arguments.length; ++i) {
+                chart.addTimeSeries(arguments[i]);
+            }
+            return chart;
+        }
+
+        var processImage = function(rawPixels) {
+            var filtered = Filters.toHSV(rawPixels);
+            filtered = Filters.inRange(filtered, [10, 120, 55], [255, 255, 115]);
+            return filtered;
+        }
+
+        // Creates a new canvas element. The canvas will be appended to the element identified by 'selector' (if
+        // 'selector' is specified)
+        var getCanvasContext = function(width, height, selector) {
+            var canvas = document.createElement('canvas');
+            canvas.width = width;
+            canvas.height = height;
+            if (selector) {
+                $(selector).append(canvas);
+            }
+            return canvas.getContext("2d");
+        }
+
+        var lastImageTime = 0;
+        var frameTime = new TimeSeries();
+        makeSmoothieChart("frame_time", frameTime);
+        var fps = new TimeSeries();
+        makeSmoothieChart("camera_fps", fps);
+        var frames = 0;
+        var lastFrameTime = 0;
+        var frameWorker = new Worker("js/image_processor.js");
+
+        var startCamera = function() {
+            var streamsContainer = $("#streams");
+            if (frameWorker) {
+                frameWorker.onmessage = function() {};
+            }
+            streamsContainer.empty();
+            var offScreenContext = null;
+            var context = null;
+            streamsContainer.append("<img src='http://192.168.1.125:8080/videofeed' crossOrigin='Anonymous'/>");
+            streamsContainer.children("img").load(function() {
+                if (!context) {
+                    context = getCanvasContext(this.width, this.height, "#streams");
+                    if (frameWorker) {
+                        frameWorker.onmessage = function(event) {
+                            context.putImageData(event.data, 0, 0);
+                        }
+                    }
+                }
+                if (!offScreenContext) {
+                    offScreenContext = getCanvasContext(this.width, this.height, null);
+                }
+
+                var now = new Date().getTime();
+                if (now - lastFrameTime >= 1000) {
+                    fps.append(now, frames);
+                    frames = 0;
+                    lastFrameTime = now;
+                }
+                frames += 1;
+
+                try {
+                    offScreenContext.drawImage(this, 0, 0);
+
+                    var imageData = offScreenContext.getImageData(0, 0, this.width, this.height);
+                    if (frameWorker) {
+                        frameWorker.postMessage(imageData)
+                    } else {
+                        context.putImageData(processImage(imageData), 0, 0);
+                    }
+                } catch (e) {
+                    $("#error_message").text("Error reading the image data. This is most likely caused by a cross origin security issue. "
+                            + "Ensure the video feed has a valid Access-Control-Allow-Origin header. The ForceCORS Firefox "
+                            + "extension can be used to add the header to all responses. ONLY USE THE EXTENSION IF YOU KNOW "
+                            + "WHAT YOU'RE DOING. DISABLE IT WHEN YOU'RE DONE. https://addons.mozilla.org/en-US/firefox/addon/forcecors/");
+                    streamsContainer.empty();
+                    throw e;
+                }
+                lastImageTime = new Date().getTime();
+                frameTime.append(lastImageTime, lastImageTime - now);
+            });
+        }
+
+        var connectionCount = 0;
+        setInterval(function() {
+            var now = new Date().getTime();
+            if (now - lastImageTime > 2000) {
+                connectionCount += 1;
+                $("#connection_count").text("Connection Attempts: " + connectionCount);
+                startCamera();
+            }
+        }, 1000)
+    });
+    </script>
+</head>
+<body>
+    <div id="streams"></div>
+    <p id="connection_count"></p>
+    <div>
+        <p>Frame Processing Time (ms)</p>
+        <canvas id="frame_time" width="200" height="50"/>
+    </div>
+    <div>
+        <p>Camera FPS</p>
+        <canvas id="camera_fps" width="200" height="50"/>
+    </div>
+    <h1 id="error_message"></h1>
+</body>
+</html>
