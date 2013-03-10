@@ -20,14 +20,12 @@ import robot.commands.TeleopDriveCommand;
 import robot.commands.TeleopHopperCommand;
 import robot.commands.TeleopPickupCommand;
 import robot.commands.TeleopShooterCommand;
-import robot.parsable.ParsableInt;
 
 public class RobotTemplate extends IterativeRobot {
 
     Compressor compressor = new Compressor(Constants.COMPRESSOR_DI, Constants.COMPRESSOR_RELAY);
-    public static ParsableInt autonomousMode = new ParsableInt("autonomous_mode", 0);
     double lastPrintTime = 0;
-    
+
     //Dynamic numbering system to handle single/double solenoids
     private static void initPneumatics() {
         //Primary module
@@ -70,13 +68,13 @@ public class RobotTemplate extends IterativeRobot {
     public void robotInit() {
         // Initialize all subsystems
         CommandBase.init();
-        
+
         //Initialize our pneumatics. They are controlled by a dynamic numbering system based on whether or not they are double or single solenoids
         initPneumatics();
 
         compressor.start();
     }
-    
+
     private void disableSubsystems() {
         CommandBase.chassisSubsystem.disable();
         CommandBase.hopperSubsystem.disable();
@@ -85,7 +83,7 @@ public class RobotTemplate extends IterativeRobot {
         CommandBase.pickupSubsystem.disable();
         CommandBase.hangerSubsystem.disable();
     }
-    
+
     private void enableSubsystems() {
         CommandBase.chassisSubsystem.enable();
         CommandBase.hopperSubsystem.enable();
@@ -108,20 +106,20 @@ public class RobotTemplate extends IterativeRobot {
     //This function is called at the start of autonomous
     public void autonomousInit() {
         CommandGroup autonomousCommand = null;
-        switch (autonomousMode.get()) {
+        switch (Constants.AUTONOMOUS_MODE.get()) {
             case 0:
                 autonomousCommand = new AutonomousThreeFrisbeeCommandGroup();
                 break;
-            case 1: 
+            case 1:
                 autonomousCommand = new AutonomousSevenFrisbeeCommandGroup();
                 break;
-            case 2: 
+            case 2:
                 autonomousCommand = new AutonomousFiveFrisbeeCommandGroup();
                 break;
         }
-        
+
         Scheduler.getInstance().add(autonomousCommand);
-        
+
         enableSubsystems();
     }
 
@@ -136,7 +134,7 @@ public class RobotTemplate extends IterativeRobot {
     public void teleopInit() {
         enableSubsystems();
         Scheduler scheduler = Scheduler.getInstance();
-        
+
         scheduler.add(new TeleopDriveCommand());
         scheduler.add(new TeleopHopperCommand());
         scheduler.add(new TeleopPickupCommand());

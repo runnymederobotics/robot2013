@@ -10,7 +10,6 @@ import robot.OutputStorage;
 import robot.Pneumatic;
 import robot.commands.CommandBase;
 import robot.commands.TeleopDriveCommand;
-import robot.parsable.ParsableDouble;
 import robot.parsable.ParsablePIDController;
 
 public class ChassisSubsystem extends Subsystem {
@@ -19,8 +18,6 @@ public class ChassisSubsystem extends Subsystem {
     public static final double PID_DRIVE_PERCENT_TOLERANCE = 10.0;
     public static final double PID_GYRO_ABSOLUTE_TOLERANCE = 2.0;
     public static final double PID_COUNT_ABSOLUTE_TOLERANCE = 20.0;
-    public ParsableDouble MAX_LOW_ENCODER_RATE = new ParsableDouble("max_low_encoder_rate", 800);
-    public ParsableDouble MAX_HIGH_ENCODER_RATE = new ParsableDouble("max_high_encoder_rate", 2800);
     Victor vicLeft = new Victor(Constants.LEFT_MOTOR_CHANNEL);
     Victor vicRight = new Victor(Constants.RIGHT_MOTOR_CHANNEL);
     Encoder encLeft = new Encoder(Constants.ENC_LEFT_ONE, Constants.ENC_LEFT_TWO, true);
@@ -41,10 +38,10 @@ public class ChassisSubsystem extends Subsystem {
 
         encLeft.start();
         encRight.start();
-        
+
         pidGyro.setInputRange(Double.MIN_VALUE, Double.MAX_VALUE);
         pidCount.setInputRange(Double.MIN_VALUE, Double.MAX_VALUE);
-        
+
         pidLeft.setOutputRange(-1.0, 1.0);
         pidRight.setOutputRange(-1.0, 1.0);
         pidGyro.setOutputRange(-1.0, 1.0);
@@ -105,7 +102,7 @@ public class ChassisSubsystem extends Subsystem {
             pidGyro.enable();
         }
     }
-    
+
     public void disablePIDCount() {
         if (pidCount.isEnable()) {
             pidCount.disable();
@@ -121,11 +118,11 @@ public class ChassisSubsystem extends Subsystem {
     private void updateInputRange() {
         //The input ranges should change so that the onTarget remains accurate between high and low gear
         if (isEnabledPID()) {
-            pidLeft.setInputRange(-MAX_HIGH_ENCODER_RATE.get(), MAX_HIGH_ENCODER_RATE.get());
-            pidRight.setInputRange(-MAX_HIGH_ENCODER_RATE.get(), MAX_HIGH_ENCODER_RATE.get());
+            pidLeft.setInputRange(-Constants.CHASSIS_MAX_HIGH_ENCODER_RATE.get(), Constants.CHASSIS_MAX_HIGH_ENCODER_RATE.get());
+            pidRight.setInputRange(-Constants.CHASSIS_MAX_HIGH_ENCODER_RATE.get(), Constants.CHASSIS_MAX_HIGH_ENCODER_RATE.get());
         } else {
-            pidLeft.setInputRange(-MAX_LOW_ENCODER_RATE.get(), MAX_LOW_ENCODER_RATE.get());
-            pidRight.setInputRange(-MAX_LOW_ENCODER_RATE.get(), MAX_LOW_ENCODER_RATE.get());
+            pidLeft.setInputRange(-Constants.CHASSIS_MAX_LOW_ENCODER_RATE.get(), Constants.CHASSIS_MAX_LOW_ENCODER_RATE.get());
+            pidRight.setInputRange(-Constants.CHASSIS_MAX_LOW_ENCODER_RATE.get(), Constants.CHASSIS_MAX_LOW_ENCODER_RATE.get());
         }
     }
 
@@ -136,14 +133,14 @@ public class ChassisSubsystem extends Subsystem {
                 updateInputRange();
 
                 //High gear
-                pidLeft.setSetpoint(leftOutputStorage.get() * MAX_HIGH_ENCODER_RATE.get());
-                pidRight.setSetpoint(rightOutputStorage.get() * MAX_HIGH_ENCODER_RATE.get());
+                pidLeft.setSetpoint(leftOutputStorage.get() * Constants.CHASSIS_MAX_HIGH_ENCODER_RATE.get());
+                pidRight.setSetpoint(rightOutputStorage.get() * Constants.CHASSIS_MAX_HIGH_ENCODER_RATE.get());
             } else {
                 updateInputRange();
 
                 //Low gear
-                pidLeft.setSetpoint(leftOutputStorage.get() * MAX_LOW_ENCODER_RATE.get());
-                pidRight.setSetpoint(rightOutputStorage.get() * MAX_LOW_ENCODER_RATE.get());
+                pidLeft.setSetpoint(leftOutputStorage.get() * Constants.CHASSIS_MAX_LOW_ENCODER_RATE.get());
+                pidRight.setSetpoint(rightOutputStorage.get() * Constants.CHASSIS_MAX_LOW_ENCODER_RATE.get());
             }
         } else {
             vicLeft.set(leftOutputStorage.get());
@@ -154,7 +151,7 @@ public class ChassisSubsystem extends Subsystem {
     public void pidGyroSetpoint(double relativeAngle) {
         pidGyro.setSetpoint(CommandBase.positioningSubsystem.positionGyro.getAngle() + relativeAngle);
     }
-    
+
     public void pidCountSetpoint(double relativeCounts) {
         pidCount.setSetpoint(encAverager.get() + relativeCounts);
     }
@@ -162,7 +159,7 @@ public class ChassisSubsystem extends Subsystem {
     public boolean pidGyroOnTarget() {
         return pidGyro.onTarget();
     }
-    
+
     public boolean pidCountOnTarget() {
         return pidCount.onTarget();
     }

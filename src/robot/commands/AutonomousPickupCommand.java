@@ -1,17 +1,16 @@
 package robot.commands;
 
 import edu.wpi.first.wpilibj.Timer;
-import robot.parsable.ParsableDouble;
+import robot.Constants;
 
 public class AutonomousPickupCommand extends CommandBase {
 
-    public static ParsableDouble AUTONOMOUS_PICKUP_DELAY = new ParsableDouble("autonomous_pickup_delay", 1.0);
     boolean value;
     double startTime = 0;
 
     public AutonomousPickupCommand(boolean value) {
         this.value = value;
-        
+
         requires(pickupSubsystem);
     }
 
@@ -19,7 +18,7 @@ public class AutonomousPickupCommand extends CommandBase {
     }
 
     protected void execute() {
-        pickupSubsystem.runRoller(value);
+        pickupSubsystem.runRoller(value, false); //Don't run roller in reverse
         pickupSubsystem.setPneumatic(value);
 
         double now = Timer.getFPGATimestamp();
@@ -30,7 +29,7 @@ public class AutonomousPickupCommand extends CommandBase {
     protected boolean isFinished() {
         double now = Timer.getFPGATimestamp();
         //If we've waited long enough
-        return now - startTime > AUTONOMOUS_PICKUP_DELAY.get();
+        return now - startTime > Constants.AUTONOMOUS_PICKUP_DELAY.get();
     }
 
     protected void end() {

@@ -1,6 +1,7 @@
 package robot;
 
 import robot.parsable.ParsableDouble;
+import robot.parsable.ParsableInt;
 
 /**
  * The RobotMap is a mapping from the ports sensors and actuators are wired into
@@ -10,7 +11,35 @@ import robot.parsable.ParsableDouble;
  */
 public class Constants {
 
+    //Robot template
     public static ParsableDouble PRINT_DELAY = new ParsableDouble("print_delay", 1.0);
+    public static ParsableInt AUTONOMOUS_MODE = new ParsableInt("autonomous_mode", 0);
+    //Positioning subsystem
+    public static ParsableDouble POSITIONING_RESOLUTION = new ParsableDouble("positioning_resolution", 30.0);
+    //Drive command
+    public static ParsableDouble AUTO_SHIFT_UP_THRESHOLD = new ParsableDouble("auto_shift_up_threshold", 0.9);
+    public static ParsableDouble AUTO_SHIFT_DOWN_THRESHOLD = new ParsableDouble("auto_shift_down_threshold", 0.5);
+    //Chassis subsystem
+    public static ParsableDouble CHASSIS_MAX_LOW_ENCODER_RATE = new ParsableDouble("chassis_max_low_encoder_rate", 800);
+    public static ParsableDouble CHASSIS_MAX_HIGH_ENCODER_RATE = new ParsableDouble("chassis_max_high_encoder_rate", 2800);
+    //Hopper subsystem
+    public static ParsableDouble HOPPER_PNEUMATIC_DELAY = new ParsableDouble("hopper_pneumatic_delay", 0.2);
+    public static ParsableDouble HOPPER_RELEASE_DELAY = new ParsableDouble("hopper_shoot_delay", 0.5);
+    //Pickup subsystem
+    public static ParsableDouble PICKUP_SPEED = new ParsableDouble("pickup_roller_speed", -1.0);
+    public static ParsableDouble ELEVATOR_SPEED = new ParsableDouble("elevator_roller_speed", -1.0);
+    public static ParsableDouble PICKUP_DELAY_AFTER_FRISBEE = new ParsableDouble("pickup_delay_after_frisbee", 1.0);
+    //Shooter subsystem
+    public static ParsableDouble SHOOTER_MIN_SHOOT_THRESHOLD = new ParsableDouble("shooter_min_shoot_threshold", 0.3);
+    //Seven frisbee autonomous
+    public static ParsableDouble SEVEN_FRISBEE_DRIVE_FORWARD_INCHES = new ParsableDouble("seven_frisbee_drive_forward_inches", 90);
+    //Five frisbee autonomous
+    public static ParsableDouble FIVE_FRISBEE_DRIVE_FORWARD_INCHES = new ParsableDouble("five_frisbee_drive_forward_inches", 90);
+    //Autonomous hopper command
+    public static ParsableDouble AUTONOMOUS_HOPPER_TIME_AFTER_START = new ParsableDouble("autonomous_hopper_time_after_start", 2.0);
+    public static ParsableDouble AUTONOMOUS_HOPPER_FRISBEE_TIMEOUT = new ParsableDouble("autonomous_frisbee_timeout", 1.0);
+    //Autonomous pickup command
+    public static ParsableDouble AUTONOMOUS_PICKUP_DELAY = new ParsableDouble("autonomous_pickup_delay", 1.0);
     //PWM outputs
     public static final int LEFT_MOTOR_CHANNEL = 1;
     public static final int RIGHT_MOTOR_CHANNEL = 2;

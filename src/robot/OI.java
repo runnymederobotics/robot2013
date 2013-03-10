@@ -41,6 +41,7 @@ public class OI {
         public static ParsableInt HIGH_STATE_BUTTON = new ParsableInt("operator_high_state_button", 10);
         public static ParsableInt RAISE_HANGER_BUTTON_ONE = new ParsableInt("operator_raise_hanger_button_one", 5);
         public static ParsableInt RAISE_HANGER_BUTTON_TWO = new ParsableInt("operator_raise_hanger_button_two", 6);
+        public static ParsableInt REVERSE_PICKUP = new ParsableInt("operator_reverse_pickup_button", 11);
     }
     public static final ParsableDouble SHOOTER_MINIMUM_SPEED = new ParsableDouble("shooter_minimum_speed", 0.75);
     Joystick stickDriver = new Joystick(Driver.PORT);
@@ -131,5 +132,9 @@ public class OI {
     
     public boolean getRaiseHanger() {
         return (stickOperator.getRawButton(Operator.RAISE_HANGER_BUTTON_ONE.get()) && stickOperator.getRawButton(Operator.RAISE_HANGER_BUTTON_TWO.get()));
+    }
+    
+    public boolean getReversePickup() {
+        return stickOperator.getRawButton(Operator.REVERSE_PICKUP.get());
     }
 }

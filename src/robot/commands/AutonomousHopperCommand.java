@@ -1,12 +1,10 @@
 package robot.commands;
 
 import edu.wpi.first.wpilibj.Timer;
-import robot.parsable.ParsableDouble;
+import robot.Constants;
 
 public class AutonomousHopperCommand extends CommandBase {
 
-    public static ParsableDouble TIME_AFTER_START = new ParsableDouble("autonomous_time_after_start", 2.0);
-    public static ParsableDouble FRISBEE_TIMEOUT = new ParsableDouble("autonomous_frisbee_timeout", 1.0);
     boolean dontStop = false;
     double startTime = 0.0;
     double lastFrisbeeTime = 0.0;
@@ -25,9 +23,9 @@ public class AutonomousHopperCommand extends CommandBase {
 
     protected void execute() {
         boolean requestShot = false;
-        
+
         //Dont wait if we dont want to stop
-        if (dontStop || Timer.getFPGATimestamp() - startTime > TIME_AFTER_START.get()) {
+        if (dontStop || Timer.getFPGATimestamp() - startTime > Constants.AUTONOMOUS_HOPPER_TIME_AFTER_START.get()) {
             requestShot = shooterSubsystem.onTargetAndAboveThreshold()
                     && hopperSubsystem.hasFrisbee() && pickupSubsystem.pickupDown();
         }
@@ -43,7 +41,7 @@ public class AutonomousHopperCommand extends CommandBase {
         if (dontStop) {
             return false;
         } else {
-            return Timer.getFPGATimestamp() - lastFrisbeeTime > FRISBEE_TIMEOUT.get();
+            return Timer.getFPGATimestamp() - lastFrisbeeTime > Constants.AUTONOMOUS_HOPPER_FRISBEE_TIMEOUT.get();
         }
     }
 

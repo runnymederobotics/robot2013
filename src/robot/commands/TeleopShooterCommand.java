@@ -14,7 +14,7 @@ public class TeleopShooterCommand extends CommandBase {
     protected void execute() {
         shooterSubsystem.setShooter(Math.abs(oi.getManualShooterSpeed()));
         //shooterSubsystem.runMotor(oi.getManualShooterSpeed());
-        
+
         if (oi.getShooterLoad()) {
             shooterSubsystem.setShooterState(ShooterSubsystem.ShooterState.LOAD);
         } else if (oi.getShooterLow()) {

@@ -48,7 +48,7 @@ public abstract class CommandBase extends Command {
         // yet. Thus, their requires() statements may grab null pointers. Bad
         // news. Don't move it.
         oi = new OI();
-        
+
         StreamerHandler streamerHandler = new StreamerHandler();
 
         webServer.registerHandler("/constants", new Parsable.ParsablesHandler());
@@ -60,16 +60,6 @@ public abstract class CommandBase extends Command {
         webServer.registerHandler("/stream/add", streamerHandler.getSelectHandler());
         webServer.registerHandler("/stream/rm", streamerHandler.getDeselectHandler());
 
-        //Initialize the ParsableInt and ParsableDouble variables in these classes.
-        new OI.Driver();
-        new OI.Operator();
-        new AutonomousThreeFrisbeeCommandGroup();
-        new AutonomousSevenFrisbeeCommandGroup();
-        new AutonomousFiveFrisbeeCommandGroup();
-        new AutonomousPickupCommand(false);
-        new AutonomousHopperCommand(false);
-        new TeleopDriveCommand();
-        
         addPrintables(ParsablePIDController.parsablePIDControllers);
         addPrintables(Parsable.parsables);
         addPrintables(SendableInt.sendableInts);

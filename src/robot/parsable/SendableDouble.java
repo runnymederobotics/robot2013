@@ -6,7 +6,6 @@ import java.util.Hashtable;
 public class SendableDouble implements JSONPrintable {
 
     public static Hashtable sendableDoubles = new Hashtable();
-    
     String name;
     double value;
 
