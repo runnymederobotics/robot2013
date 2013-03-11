@@ -18,7 +18,7 @@ public class AutonomousRotateCommand extends CommandBase {
         chassisSubsystem.enablePID();
         chassisSubsystem.enablePIDGyro();
 
-        chassisSubsystem.pidGyroSetpoint(relativeAngle);
+        chassisSubsystem.pidGyroRelativeSetpoint(relativeAngle);
     }
 
     // Called repeatedly when this Command is scheduled to run

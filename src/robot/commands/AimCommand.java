@@ -28,7 +28,7 @@ public class AimCommand extends CommandBase {
 
         //Only set the setpoint if it's changed from the last setpoint we saw
         if (lastTargetAngle != targetAngle) {
-            chassisSubsystem.pidGyroSetpoint(targetAngle);
+            chassisSubsystem.pidGyroRelativeSetpoint(targetAngle);
         }
         lastTargetAngle = targetAngle;
 

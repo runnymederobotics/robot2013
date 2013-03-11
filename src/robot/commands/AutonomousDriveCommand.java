@@ -19,8 +19,8 @@ public class AutonomousDriveCommand extends CommandBase {
     protected void initialize() {
         chassisSubsystem.shift(false); //Stay in low gear
 
-        chassisSubsystem.pidGyroSetpoint(0.0);
-        chassisSubsystem.pidCountSetpoint(relativeCounts);
+        chassisSubsystem.pidGyroRelativeSetpoint(0.0);
+        chassisSubsystem.pidCountRelativeSetpoint(relativeCounts);
     }
 
     protected void execute() {
