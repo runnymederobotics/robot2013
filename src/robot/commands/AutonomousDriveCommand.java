@@ -5,15 +5,15 @@ import robot.subsystems.ChassisSubsystem;
 public class AutonomousDriveCommand extends CommandBase {
 
     int relativeCounts;
-    
+
     public AutonomousDriveCommand(int relativeCounts) {
         requires(chassisSubsystem);
-        
+
         this.relativeCounts = relativeCounts;
     }
-    
+
     public AutonomousDriveCommand(double relativeInches) {
-        this((int)(relativeInches / ChassisSubsystem.INCHES_PER_ENCODER_COUNT));
+        this((int) (relativeInches / ChassisSubsystem.INCHES_PER_ENCODER_COUNT));
     }
 
     protected void initialize() {
@@ -25,20 +25,20 @@ public class AutonomousDriveCommand extends CommandBase {
         chassisSubsystem.enablePID();
         chassisSubsystem.enablePIDGyro();
         chassisSubsystem.enablePIDCount();
-        
+
         System.out.println("PIDCount on target: " + chassisSubsystem.pidCountOnTarget());
-        
+
         chassisSubsystem.drive(-chassisSubsystem.pidCount.get(), -chassisSubsystem.pidGyro.get());
     }
 
-    protected boolean isFinished() {        
+    protected boolean isFinished() {
         boolean finished = chassisSubsystem.pidCountOnTarget();
-        
-        if(finished) {
+
+        if (finished) {
             //Give the drive a setpoint of 0.0, so that the PID actually stops rather than going forever
             chassisSubsystem.drive(0.0, 0.0);
         }
-        
+
         return finished;
     }
 

@@ -6,7 +6,6 @@ import java.util.Hashtable;
 public class SendableInt implements JSONPrintable {
 
     public static Hashtable sendableInts = new Hashtable();
-    
     String name;
     int value;
 

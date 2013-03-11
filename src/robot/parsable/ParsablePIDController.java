@@ -105,7 +105,7 @@ public class ParsablePIDController implements JSONPrintable {
         p = new ParsableDouble(this.name + "_p", Kp);
         i = new ParsableDouble(this.name + "_i", Ki);
         d = new ParsableDouble(this.name + "_d", Kd);
-        
+
         this.pidSource = pidSource;
         parsablePIDControllers.put(this.name, this);
     }

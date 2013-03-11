@@ -14,16 +14,20 @@ public class TeleopPickupCommand extends CommandBase {
     protected void execute() {
         boolean lowerButton = oi.getPickupLower();
 
+        boolean lowerOverride = oi.getPickupLowerOverride();
+
         //True is down, false is up
-        if(oi.getPickupLowerOverride()) {
+        if (lowerOverride) {
             pickupSubsystem.setPneumatic(true);
-        } else if(shooterSubsystem.getShooterState() == ShooterSubsystem.ShooterState.LOAD) {
+        } else if (shooterSubsystem.getShooterState() == ShooterSubsystem.ShooterState.LOAD) {
             pickupSubsystem.setPneumatic(lowerButton);
         } else {
             pickupSubsystem.setPneumatic(true);
         }
-        
-        pickupSubsystem.runRoller(lowerButton);
+
+        boolean reverse = lowerOverride && oi.getReversePickup();
+
+        pickupSubsystem.runRoller(lowerButton, reverse);
     }
 
     protected boolean isFinished() {

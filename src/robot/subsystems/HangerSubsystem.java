@@ -9,7 +9,7 @@ public class HangerSubsystem extends Subsystem {
     //Initialized in RobotTemplate.java
     public Pneumatic hangerPneumatic;
     boolean releaseHanger = false;
-    
+
     public HangerSubsystem() {
     }
 
@@ -23,7 +23,7 @@ public class HangerSubsystem extends Subsystem {
     public void enable() {
         hangerPneumatic.set(false);
     }
-    
+
     public void raiseHanger(boolean value) {
         hangerPneumatic.set(value);
     }

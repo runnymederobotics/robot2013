@@ -1,7 +1,7 @@
 package robot.commands;
 
 public class HangerCommand extends CommandBase {
-    
+
     public HangerCommand() {
         requires(hangerSubsystem);
     }
@@ -22,5 +22,4 @@ public class HangerCommand extends CommandBase {
 
     protected void interrupted() {
     }
-    
 }

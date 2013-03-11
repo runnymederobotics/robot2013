@@ -5,7 +5,6 @@ import RobotCLI.WebServer.JSONStringBuilder;
 import RobotCLI.WebServer.Streamer;
 import java.util.Enumeration;
 import java.util.Hashtable;
-import java.util.Vector;
 import robot.parsable.JSONPrintable;
 
 public class StreamerHandler extends Streamer {

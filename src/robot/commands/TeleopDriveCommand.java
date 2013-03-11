@@ -1,11 +1,8 @@
 package robot.commands;
 
-import robot.parsable.ParsableDouble;
+import robot.Constants;
 
 public class TeleopDriveCommand extends CommandBase {
-
-    public static ParsableDouble SHIFT_UP_THRESHOLD = new ParsableDouble("auto_shift_up_threshold", 0.9);
-    public static ParsableDouble SHIFT_DOWN_THRESHOLD = new ParsableDouble("auto_shift_down_threshold", 0.5);
 
     public TeleopDriveCommand() {
         // Use requires() here to declare subsystem dependencies
@@ -31,9 +28,9 @@ public class TeleopDriveCommand extends CommandBase {
                 //If lowGear && above threshold { shiftUp; }
                 //If highGear && below threshold { shiftDown; }
                 //Currently set to chassisSubsystem.getShiftState() = false when in low gear
-                if (!chassisSubsystem.getShiftState() && Math.abs(rate) > SHIFT_UP_THRESHOLD.get() * chassisSubsystem.MAX_LOW_ENCODER_RATE.get()) {
+                if (!chassisSubsystem.getShiftState() && Math.abs(rate) > Constants.AUTO_SHIFT_UP_THRESHOLD.get() * Constants.CHASSIS_MAX_LOW_ENCODER_RATE.get()) {
                     chassisSubsystem.shift(true);
-                } else if (chassisSubsystem.getShiftState() && Math.abs(rate) < SHIFT_DOWN_THRESHOLD.get() * chassisSubsystem.MAX_LOW_ENCODER_RATE.get()) {
+                } else if (chassisSubsystem.getShiftState() && Math.abs(rate) < Constants.AUTO_SHIFT_DOWN_THRESHOLD.get() * Constants.CHASSIS_MAX_LOW_ENCODER_RATE.get()) {
                     chassisSubsystem.shift(false);
                 }
             }

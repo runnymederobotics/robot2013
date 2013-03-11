@@ -26,10 +26,10 @@ public class PositioningSubsystem extends Subsystem {
     protected void initDefaultCommand() {
         setDefaultCommand(new PositioningCommand());
     }
-    
+
     public void disable() {
     }
-    
+
     public void enable() {
         positionGyro.reset();
     }
