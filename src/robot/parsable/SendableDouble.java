@@ -16,7 +16,7 @@ public class SendableDouble implements JSONPrintable {
     }
 
     public void jsonPrint(String name, JSONStringBuilder response) {
-        response.append(name, value);
+        response.append(name, (double) (((int) (value * 1000)) * 0.001)); //Format to 3 decimal places
     }
 
     public void set(double value) {

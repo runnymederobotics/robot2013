@@ -13,13 +13,16 @@ public class AutonomousRotateCommand extends CommandBase {
 
     // Called just before this Command runs the first time
     protected void initialize() {
+        chassisSubsystem.shift(false); //Stay in low gear
+
+        chassisSubsystem.enablePID();
+        chassisSubsystem.enablePIDGyro();
+
         chassisSubsystem.pidGyroSetpoint(relativeAngle);
     }
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-        chassisSubsystem.enablePID();
-        chassisSubsystem.enablePIDGyro();
         chassisSubsystem.drive(0.0, -chassisSubsystem.pidGyro.get());
     }
 
@@ -36,6 +39,6 @@ public class AutonomousRotateCommand extends CommandBase {
     // Called when another command which requires one or more of the same
     // subsystems is scheduled to run
     protected void interrupted() {
-        chassisSubsystem.disablePIDGyro();
+        end();
     }
 }

@@ -39,6 +39,8 @@ public class ChassisSubsystem extends Subsystem {
         encLeft.start();
         encRight.start();
 
+        pidLeft.setInputRange(-Constants.CHASSIS_MAX_HIGH_ENCODER_RATE.get(), Constants.CHASSIS_MAX_HIGH_ENCODER_RATE.get());
+        pidRight.setInputRange(-Constants.CHASSIS_MAX_HIGH_ENCODER_RATE.get(), Constants.CHASSIS_MAX_HIGH_ENCODER_RATE.get());
         pidGyro.setInputRange(Double.MIN_VALUE, Double.MAX_VALUE);
         pidCount.setInputRange(Double.MIN_VALUE, Double.MAX_VALUE);
 
@@ -51,8 +53,6 @@ public class ChassisSubsystem extends Subsystem {
         pidRight.setPercentTolerance(PID_DRIVE_PERCENT_TOLERANCE);
         pidGyro.setAbsoluteTolerance(PID_GYRO_ABSOLUTE_TOLERANCE);
         pidCount.setAbsoluteTolerance(PID_COUNT_ABSOLUTE_TOLERANCE);
-
-        updateInputRange();
     }
 
     public void initDefaultCommand() {
@@ -115,29 +115,14 @@ public class ChassisSubsystem extends Subsystem {
         }
     }
 
-    private void updateInputRange() {
-        //The input ranges should change so that the onTarget remains accurate between high and low gear
-        if (isEnabledPID()) {
-            pidLeft.setInputRange(-Constants.CHASSIS_MAX_HIGH_ENCODER_RATE.get(), Constants.CHASSIS_MAX_HIGH_ENCODER_RATE.get());
-            pidRight.setInputRange(-Constants.CHASSIS_MAX_HIGH_ENCODER_RATE.get(), Constants.CHASSIS_MAX_HIGH_ENCODER_RATE.get());
-        } else {
-            pidLeft.setInputRange(-Constants.CHASSIS_MAX_LOW_ENCODER_RATE.get(), Constants.CHASSIS_MAX_LOW_ENCODER_RATE.get());
-            pidRight.setInputRange(-Constants.CHASSIS_MAX_LOW_ENCODER_RATE.get(), Constants.CHASSIS_MAX_LOW_ENCODER_RATE.get());
-        }
-    }
-
     public void drive(double speed, double rotation) {
         robotDrive.arcadeDrive(speed, -rotation);
         if (isEnabledPID()) {
             if (getShiftState()) {
-                updateInputRange();
-
                 //High gear
                 pidLeft.setSetpoint(leftOutputStorage.get() * Constants.CHASSIS_MAX_HIGH_ENCODER_RATE.get());
                 pidRight.setSetpoint(rightOutputStorage.get() * Constants.CHASSIS_MAX_HIGH_ENCODER_RATE.get());
             } else {
-                updateInputRange();
-
                 //Low gear
                 pidLeft.setSetpoint(leftOutputStorage.get() * Constants.CHASSIS_MAX_LOW_ENCODER_RATE.get());
                 pidRight.setSetpoint(rightOutputStorage.get() * Constants.CHASSIS_MAX_LOW_ENCODER_RATE.get());

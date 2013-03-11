@@ -19,6 +19,9 @@ public class Constants {
     //Drive command
     public static ParsableDouble AUTO_SHIFT_UP_THRESHOLD = new ParsableDouble("auto_shift_up_threshold", 0.9);
     public static ParsableDouble AUTO_SHIFT_DOWN_THRESHOLD = new ParsableDouble("auto_shift_down_threshold", 0.5);
+    //Aim command
+    public static ParsableDouble AUTO_AIM_TARGET_ANGLE = new ParsableDouble("auto_aim_target_angle", 0.0);
+    public static ParsableDouble AUTO_AIM_ON_TARGET_TIME = new ParsableDouble("auto_aim_on_target_time", 1.0);
     //Chassis subsystem
     public static ParsableDouble CHASSIS_MAX_LOW_ENCODER_RATE = new ParsableDouble("chassis_max_low_encoder_rate", 800);
     public static ParsableDouble CHASSIS_MAX_HIGH_ENCODER_RATE = new ParsableDouble("chassis_max_high_encoder_rate", 2800);

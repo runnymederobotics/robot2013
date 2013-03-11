@@ -25,6 +25,7 @@ public class OI {
         public static ParsableInt TOGGLE_ENABLE_CHASSIS_PID_BUTTON = new ParsableInt("driver_toggle_enable_chassis_pid_button", 2);
         public static ParsableInt PICKUP_LOWER_BUTTON = new ParsableInt("driver_pickup_lower_button", 6);
         public static ParsableInt PICKUP_LOWER_OVERRIDE_BUTTON = new ParsableInt("driver_pickup_lower_override_button", 5);
+        public static ParsableInt AUTO_AIM_BUTTON = new ParsableInt("driver_auto_aim_button", 3);
     }
 
     public static class Operator {
@@ -47,8 +48,9 @@ public class OI {
     Joystick stickDriver = new Joystick(Driver.PORT);
     Joystick stickOperator = new Joystick(Operator.PORT);
     Toggle autoShift = new Toggle(false);
-    Toggle enableChassisPID = new Toggle(false);
+    Toggle enableChassisPID = new Toggle(true);
 
+    //DRIVER
     public boolean getAutoShift() {
         return autoShift.update(stickDriver.getRawButton(Driver.TOGGLE_AUTO_SHIFT_BUTTON.get()));
     }
@@ -89,11 +91,16 @@ public class OI {
     public boolean getPickupLower() {
         return stickDriver.getRawButton(Driver.PICKUP_LOWER_BUTTON.get());
     }
-    
+
     public boolean getPickupLowerOverride() {
         return stickDriver.getRawButton(Driver.PICKUP_LOWER_OVERRIDE_BUTTON.get());
     }
 
+    public boolean getAutoAim() {
+        return stickDriver.getRawButton(Driver.AUTO_AIM_BUTTON.get());
+    }
+
+    //OPERATOR
     public boolean getRequestShot() {
         return stickOperator.getRawButton(Operator.SHOOT_BUTTON.get());
     }
@@ -101,16 +108,16 @@ public class OI {
     public boolean getShootOverride() {
         return stickOperator.getRawButton(Operator.SHOOT_OVERRIDE_BUTTON.get());
     }
+    //Bottom is -1.0, top is 1.0
     //Only allow greater than -0.8
     final double THROTTLE_DEAD_ZONE = -0.8;
 
     public double getManualShooterSpeed() {
-        //Bottom is -1.0, top is 1.0
         final double complement = (1 - SHOOTER_MINIMUM_SPEED.get()) / 2;
         final double complementsComplement = 1 - complement;
         double axis = -stickOperator.getAxis(Joystick.AxisType.kZ);
         double ret = -(axis * complement + complementsComplement);
-        //It is now between 0.75 and 1.0
+        //It is now between SHOOTER_MINIMUM_SPEED and 1.0
         return axis >= THROTTLE_DEAD_ZONE ? ret : 0.0;
     }
 
@@ -129,11 +136,11 @@ public class OI {
     public boolean getShooterHigh() {
         return stickOperator.getRawButton(Operator.HIGH_STATE_BUTTON.get());
     }
-    
+
     public boolean getRaiseHanger() {
         return (stickOperator.getRawButton(Operator.RAISE_HANGER_BUTTON_ONE.get()) && stickOperator.getRawButton(Operator.RAISE_HANGER_BUTTON_TWO.get()));
     }
-    
+
     public boolean getReversePickup() {
         return stickOperator.getRawButton(Operator.REVERSE_PICKUP.get());
     }
