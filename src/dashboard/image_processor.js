@@ -165,6 +165,80 @@ var findOuterPolygons = function(contours) {
   return results;
 }
 
+var determineCorners = function(poly, centroid) {
+  var result = {topLeft: null,
+      topRight: null,
+      bottomLeft: null,
+      bottomRight: null
+  };
+  for (var i = 0; i < poly.length; ++i) {
+    var p = poly[i]
+    if (p.x < centroid.x && p.y < centroid.y) {
+      result.topLeft = p;
+    } else if (p.x < centroid.x && p.y > centroid.y) {
+      result.bottomLeft = p;
+    } else if (p.x > centroid.x && p.y < centroid.y) {
+      result.topRight = p;
+    } else {
+      result.bottomRight = p;
+    }
+  }
+  return result;
+}
+
+var lineLength = function(line) {
+  var x = line[1].x - line[0].x;
+  var y = line[1].y - line[0].y;
+  return Math.sqrt(x * x + y * y);
+}
+
+var toRadians = function(degrees) {
+  return degrees * (Math.PI / 180);
+}
+
+// TODO: confirm the angle of view variables
+var xAngleOfView = 55.0; //Found in a pdf on axis.com
+var yAngleOfView = 43; //xAngleOfView / aspectRatio;
+// TODO: select real values for the variables below
+var rlTargetHeight = 18; //inches
+var cameraHeight = 48; //inches
+
+var selectTarget = function(outerPolygons, centroids, imageWidth, imageHeight) {
+  // Select the highest target
+  var highestY = 1000000;
+  var selected = -1;
+  for (var i = 0; i < centroids.length; ++i) {
+    if (centroids[i].y < highestY) {
+      highestY = centroids[i].y;
+      selected = i;
+    }
+  }
+
+  if (selected >= 0) {
+    var poly = outerPolygons[selected];
+    
+    var centroid = centroids[selected];
+    var normalizedCentroid = {x: (centroid.x / imageWidth - 0.5) * 2,
+        y: (centroid.y / imageHeight - 0.5) * 2
+    };
+
+    var corners = determineCorners(poly, centroid);
+    var leftSide = [corners.topLeft, corners.bottomLeft];
+    var rightSide = [corners.topRight, corners.bottomRight];
+    
+    var xAngle = normalizedCentroid.x  * xAngleOfView * 0.5;
+    
+    // TODO: something better than averaging the sides?
+    var objectHeight = (lineLength(leftSide) + lineLength(rightSide)) * 0.5 
+    var fovInches = (rlTargetHeight * imageHeight) / objectHeight;
+    var zReal = (fovInches * 0.5) / Math.tan(toRadians(yAngleOfView * 0.5));
+    
+    return {targetAngle: xAngle, targetDistance: zReal,
+        leftSide: leftSide, rightSide: rightSide};
+  }
+  return null;
+}
+
 var binary = [];
 
 var detector = new AR.Detector();
@@ -181,17 +255,22 @@ onmessage = function(event) {
   var pixels = event.data.pixels;
   var hsv = Filters.toHSV(pixels);
   var inRange = Filters.inRange(hsv, event.data.width, event.data.height,
-      [10, 120, 55], [255, 255, 115]);
+      // TODO: make the colours selectable
+      [10, 100, 115], [255,255, 175]);
   var contours = CV.findContours(inRange, binary);
   var candidates = detector.findCandidates(contours, event.data.width * 0.20,
       0.05, 10)
   var outerPolygons = findOuterPolygons(candidates);
+  var centroids = getCentroids(outerPolygons);
+  var selected = selectTarget(outerPolygons, centroids, event.data.width,
+      event.data.height);
   cvImageToPixels(inRange, pixels);
   var end = new Date().getTime();
   self.postMessage({image: pixels,
       processing_time: end - start,
       contours: contours,
       candidates: candidates,
-      centroids: getCentroids(candidates),
-      outerPolygons: outerPolygons});
+      centroids: centroids,
+      outerPolygons: outerPolygons,
+      selected: selected});
 };

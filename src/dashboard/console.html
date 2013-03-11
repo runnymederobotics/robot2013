@@ -54,6 +54,10 @@
                     
                     $.ajax({url: "http://10.13.10.2:8080/constants", data: params, dataType: "json"})
                 }
+                
+                var sendVariablesToRobot = function(params) {
+                    $.ajax({url: "http://10.13.10.2:8080/constants", data: params, dataType: "json"})
+                }
       
                 var gui;
                 var guiVariables = {};
@@ -253,7 +257,14 @@
                 startCamera("#js_camera", "http://192.168.1.144:8080/videofeed",
                     function (data) {
                       // TODO: send coordinates to robot
-                      //$("#camera_data").text(JSON.stringify(data.outerPolygons));
+                      //alert("here: " + JSON.stringify(data));
+                      $("#camera_data").text(JSON.stringify(data.selected));
+                      
+                      if (data.selected) {
+                        var selected = data.selected;
+                        sendVariablesToRobot({auto_aim_target_angle: selected.targetAngle,
+                            auto_aim_target_distance: selected.targetDistance});
+                      }
                     });
       
                 setInterval(function() {             
@@ -345,7 +356,7 @@
         <span>
           <span id="js_camera" style="float:left"></span>
           <br>
-          <span id="camera_data"></span>
+          <div id="camera_data"></div>
         </span>
         <span>
           <canvas class="field" id="fieldCanvas" width="324" height="648"></canvas>

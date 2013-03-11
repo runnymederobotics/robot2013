@@ -35,9 +35,11 @@ var startCamera = function(divId, url, callback) {
   var offScreenContext = null;
   var context = null;
   
-  var drawContours = function(contours, colour) {
+  var drawContours = function(contours, colour, width) {
     var all = contours;
     var ctx = context;
+    var oldWidth = ctx.lineWidth;
+    ctx.lineWidth = width;
     ctx.strokeStyle = colour;
     for (var i = 0; i < all.length; ++i) {
       var c = all[i];
@@ -49,13 +51,25 @@ var startCamera = function(divId, url, callback) {
       ctx.lineTo(c[0].x, c[0].y);
       ctx.stroke();
     }
+    ctx.lineWidth = oldWidth;
   }
   
   var drawDots = function(dots, colour) {
     context.fillStyle = colour;
     for (var i = 0; i < dots.length; ++i) {
-      context.fillRect(dots[i].x, dots[i].y, 1, 1);
+      context.fillRect(dots[i].x, dots[i].y, 3, 3);
     }
+  }
+  
+  var drawLine = function(line, colour, width) {
+    context.strokeStyle = colour;
+    var oldWidth = context.lineWidth;
+    context.lineWidth = width;
+    context.beginPath();
+    context.moveTo(line[0].x, line[0].y);
+    context.lineTo(line[1].x, line[1].y);
+    context.stroke();
+    context.lineWidth = oldWidth;
   }
             
   var image = imageDiv.append("<img src='#' crossOrigin='Anonymous'/>").children("img");
@@ -65,10 +79,16 @@ var startCamera = function(divId, url, callback) {
       frameWorker.onmessage = function(event) {
         var data = event.data;
         context.putImageData(data.image, 0, 0);
-        drawContours(data.contours, "#00ff00");
-        drawContours(data.candidates, "#ff0000");
-        drawContours(data.outerPolygons, "#0000ff");
+        drawContours(data.contours, "#00ff00", 1);
+        drawContours(data.candidates, "#ff0000", 1);
+        drawContours(data.outerPolygons, "#0000ff", 2);
         drawDots(data.centroids, "#ff0000");
+        //$("#camera_data").text(JSON.stringify(data.centroids));
+        if (data.selected) {
+          var selected = data.selected;
+          drawLine(selected.leftSide, "#ff007f", 4);
+          drawLine(selected.rightSide, "#ff7f00", 4);
+        }
         var now = new Date().getTime();
         frameTime.append(now, data.processing_time);
         if (now - lastFpsTime >= 1000) {
@@ -114,7 +134,7 @@ var startCamera = function(divId, url, callback) {
       image.attr("src", "#");
       image.attr("src", url);
     } else {
-      connectionCounter.text("" + (now - lastImageTime));
+      connectionCounter.text("");
     }
   }
   setInterval(connect, 1000)
