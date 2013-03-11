@@ -254,7 +254,7 @@ SmoothieChart.prototype.render = function(canvas, time) {
 
     // Set style for this dataSet.
     canvasContext.lineWidth = seriesOptions.lineWidth || 1;
-    canvasContext.fillStyle = seriesOptions.fillStyle;
+    canvasContext.fillStyle = seriesOptions.fillStyle || canvasContext.fillStyle;
     canvasContext.strokeStyle = seriesOptions.strokeStyle || '#ffffff';
     // Draw the line...
     canvasContext.beginPath();
