@@ -50,6 +50,13 @@ var startCamera = function(divId, url, callback) {
       ctx.stroke();
     }
   }
+  
+  var drawDots = function(dots, colour) {
+    context.fillStyle = colour;
+    for (var i = 0; i < dots.length; ++i) {
+      context.fillRect(dots[i].x, dots[i].y, 1, 1);
+    }
+  }
             
   var image = imageDiv.append("<img src='#' crossOrigin='Anonymous'/>").children("img");
   image.load(function() {
@@ -59,7 +66,9 @@ var startCamera = function(divId, url, callback) {
         var data = event.data;
         context.putImageData(data.image, 0, 0);
         drawContours(data.contours, "#00ff00");
-        drawContours(data.candidates, "#FF00FF");
+        drawContours(data.candidates, "#ff0000");
+        drawContours(data.outerPolygons, "#0000ff");
+        drawDots(data.centroids, "#ff0000");
         var now = new Date().getTime();
         frameTime.append(now, data.processing_time);
         if (now - lastFpsTime >= 1000) {
