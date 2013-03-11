@@ -9,7 +9,7 @@ public class AimCommand extends CommandBase {
 
     public static double lastTargetAngle = 0.0;
     double pidGyroNotOnTargetTime = 0.0;
-    
+
     public AimCommand() {
         requires(chassisSubsystem);
     }
@@ -33,8 +33,8 @@ public class AimCommand extends CommandBase {
         lastTargetAngle = targetAngle;
 
         chassisSubsystem.drive(0.0, -chassisSubsystem.pidGyro.get()); //pidGyro output is opposite
-        
-        if(!chassisSubsystem.pidGyroOnTarget()) {
+
+        if (!chassisSubsystem.pidGyroOnTarget()) {
             pidGyroNotOnTargetTime = Timer.getFPGATimestamp();
         }
     }
