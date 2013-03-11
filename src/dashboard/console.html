@@ -253,6 +253,7 @@
                 startCamera("#js_camera", "http://192.168.1.144:8080/videofeed",
                     function (data) {
                       // TODO: send coordinates to robot
+                      //$("#camera_data").text(JSON.stringify(data.candidates));
                     });
       
                 setInterval(function() {             
@@ -331,7 +332,7 @@
                         $("#streams").append("<img src='/stream/raw?" + now + "'/>");
                         $("#streams").append("<img src='/stream/processed?" + now + "'/>");
                     }
-                }, 10000);
+                }, 1000);
             });
         </script>
         <style type="text/css">
@@ -341,10 +342,14 @@
         </style>
     </head>
     <body id="body">
-        <span id="js_camera" style="float:left"></span>
         <span>
-        <canvas class="field" id="fieldCanvas" width="324" height="648"></canvas>
-        <canvas id="frisbeeCounter" width="250" height="200"></canvas>
+          <span id="js_camera" style="float:left"></span>
+          <br>
+          <span id="camera_data"></span>
+        </span>
+        <span>
+          <canvas class="field" id="fieldCanvas" width="324" height="648"></canvas>
+          <canvas id="frisbeeCounter" width="250" height="200"></canvas>
         </span>
         <form action="">
             <label for="three_frisbee">

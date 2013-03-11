@@ -27,31 +27,51 @@ var startCamera = function(divId, url, callback) {
   var fps = makeSmoothieChart();
   var frames = 0;
   var lastImageTime = 0;
+  var lastFpsTime = 0;
   
   var frameWorker = new Worker("image_processor.js");
   frameWorker.onmessage = function() {};
   
   var offScreenContext = null;
   var context = null;
+  
+  var drawContours = function(contours, colour) {
+    var all = contours;
+    var ctx = context;
+    ctx.strokeStyle = colour;
+    for (var i = 0; i < all.length; ++i) {
+      var c = all[i];
+      ctx.beginPath();
+      ctx.moveTo(c[0].x, c[0].y);
+      for (var j = 1; j < c.length; ++j) {
+        ctx.lineTo(c[j].x, c[j].y);
+      }
+      ctx.lineTo(c[0].x, c[0].y);
+      ctx.stroke();
+    }
+  }
             
   var image = imageDiv.append("<img src='#' crossOrigin='Anonymous'/>").children("img");
   image.load(function() {
     if (!context) {
       context = getCanvasContext(this.width, this.height, imageDiv);
       frameWorker.onmessage = function(event) {
-        context.putImageData(event.data.image, 0, 0);
+        var data = event.data;
+        context.putImageData(data.image, 0, 0);
+        drawContours(data.contours, "#00ff00");
+        drawContours(data.candidates, "#FF00FF");
         var now = new Date().getTime();
-        frameTime.append(now, event.data.processing_time);
-        if (now - lastImageTime >= 1000) {
+        frameTime.append(now, data.processing_time);
+        if (now - lastFpsTime >= 1000) {
           fps.append(now, frames);
           frames = 0;
-          lastImageTime = now;
+          lastFpsTime = now;
         }
         frames += 1;
         lastImageTime = now;
         if (callback) {
-          event.data.image = "[Binary Blob]";
-          callback(event.data);
+          data.image = "[Binary Blob]";
+          callback(data);
         }
       }
       offScreenContext = getCanvasContext(this.width, this.height, null);
@@ -61,7 +81,9 @@ var startCamera = function(divId, url, callback) {
       offScreenContext.drawImage(this, 0, 0);
       
       var imageData = offScreenContext.getImageData(0, 0, this.width, this.height);
-      frameWorker.postMessage(imageData);
+      frameWorker.postMessage({pixels: imageData,
+          width: this.width,
+          height: this.height});
     } catch (e) {
       container.empty();
       container.append("<p>Error reading the image data. This is most likely caused by a cross origin security issue. "
@@ -83,7 +105,7 @@ var startCamera = function(divId, url, callback) {
       image.attr("src", "#");
       image.attr("src", url);
     } else {
-      connectionCounter.text("");
+      connectionCounter.text("" + (now - lastImageTime));
     }
   }
   setInterval(connect, 1000)
