@@ -256,8 +256,6 @@
                 
                 startCamera("#js_camera", "http://192.168.1.144:8080/videofeed",
                     function (data) {
-                      // TODO: send coordinates to robot
-                      //alert("here: " + JSON.stringify(data));
                       $("#camera_data").text(JSON.stringify(data.selected));
                       
                       if (data.selected) {

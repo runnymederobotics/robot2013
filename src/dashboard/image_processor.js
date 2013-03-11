@@ -256,7 +256,7 @@ onmessage = function(event) {
   var hsv = Filters.toHSV(pixels);
   var inRange = Filters.inRange(hsv, event.data.width, event.data.height,
       // TODO: make the colours selectable
-      [10, 100, 115], [255,255, 175]);
+      [10, 120, 55], [255, 255, 115]);
   var contours = CV.findContours(inRange, binary);
   var candidates = detector.findCandidates(contours, event.data.width * 0.20,
       0.05, 10)
