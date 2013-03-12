@@ -72,7 +72,7 @@ var startCamera = function(divId, url, callback) {
         context.lineWidth = oldWidth;
     }
             
-    var image = imageDiv.append("<img src='#' crossOrigin='Anonymous'/>").children("img");
+    var image = imageDiv.append("<img src='#' cross-origin:'anonymous'/>").children("img");
     image.load(function() {
         if (!context) {
             context = getCanvasContext(this.width, this.height, imageDiv);
@@ -133,7 +133,9 @@ var startCamera = function(divId, url, callback) {
         if (now - lastImageTime > 2000) {
             connectionCount += 1;
             connectionCounter.text("Connection Attempts: " + connectionCount);
-            image.attr("src", "#");
+            //image.attr("src", "#");
+            //image.attr("width", 320);
+            //image.attr("height", 240);
             image.attr("src", url);
         } else {
             connectionCounter.text("");
