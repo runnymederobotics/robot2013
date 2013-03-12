@@ -72,37 +72,44 @@ var startCamera = function(divId, url, callback) {
         context.lineWidth = oldWidth;
     }
 
+    frameWorker.onmessage = function(event) {
+        var data = event.data;
+        context.putImageData(data.image, 0, 0);
+        drawContours(data.contours, "#00ff00", 1);
+        drawContours(data.candidates, "#ff0000", 1);
+        drawContours(data.outerPolygons, "#0000ff", 2);
+        drawDots(data.centroids, "#ff0000");
+        //$("#camera_data").text(JSON.stringify(data.centroids));
+        if (data.selected) {
+            var selected = data.selected;
+            drawLine(selected.leftSide, "#ff007f", 4);
+            drawLine(selected.rightSide, "#ff7f00", 4);
+        }
+        var now = new Date().getTime();
+        frameTime.append(now, data.processing_time);
+        if (now - lastFpsTime >= 1000) {
+            fps.append(now, frames);
+            frames = 0;
+            lastFpsTime = now;
+        }
+        frames += 1;
+        lastImageTime = now;
+        if (callback) {
+            data.image = "[Binary Blob]";
+            callback(data);
+        }
+    }
+    
+    var width = 0;
+    var height = 0;
+    
     var image = imageDiv.append("<img src='#' crossOrigin='Anonymous'/>").children("img");
     image.load(function() {
         if (!context) {
+            width = this.width;
+            height = this.height;
+            
             context = getCanvasContext(this.width, this.height, imageDiv);
-            frameWorker.onmessage = function(event) {
-                var data = event.data;
-                context.putImageData(data.image, 0, 0);
-                drawContours(data.contours, "#00ff00", 1);
-                drawContours(data.candidates, "#ff0000", 1);
-                drawContours(data.outerPolygons, "#0000ff", 2);
-                drawDots(data.centroids, "#ff0000");
-                //$("#camera_data").text(JSON.stringify(data.centroids));
-                if (data.selected) {
-                    var selected = data.selected;
-                    drawLine(selected.leftSide, "#ff007f", 4);
-                    drawLine(selected.rightSide, "#ff7f00", 4);
-                }
-                var now = new Date().getTime();
-                frameTime.append(now, data.processing_time);
-                if (now - lastFpsTime >= 1000) {
-                    fps.append(now, frames);
-                    frames = 0;
-                    lastFpsTime = now;
-                }
-                frames += 1;
-                lastImageTime = now;
-                if (callback) {
-                    data.image = "[Binary Blob]";
-                    callback(data);
-                }
-            }
             offScreenContext = getCanvasContext(this.width, this.height, null);
         }
     
@@ -141,4 +148,12 @@ var startCamera = function(divId, url, callback) {
     }
     setInterval(connect, 1000)
     connect();
+    
+    return function() {
+      imageDiv.children("canvas").remove();
+      if (width) {
+          context = getCanvasContext(width, height, imageDiv);
+          offScreenContext = getCanvasContext(width, height, null);
+      }
+    }
 }

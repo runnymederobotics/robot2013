@@ -17,6 +17,8 @@
                 }
             }
             $(function() {
+                $.ajaxSetup ({cache: false});
+
                 var startStreaming = function(url, onData) {
                     var xhr = new XMLHttpRequest();
                     if (xhr) {
@@ -254,16 +256,24 @@
                 
                 var lastAutonomous = 0;
                 
-                startCamera("#js_camera", "http://10.13.10.11:80/mjpg/video.mjpg?resolution=320x240" /*"http://10.13.10.11:80/mjpg/video.mjpg?resolution=320x240" /*"http://192.168.1.144:8080/videofeed"*/,
-                function (data) {
-                    $("#camera_data").text(JSON.stringify(data.selected));
-                      
-                    if (data.selected) {
-                        var selected = data.selected;
-                        sendVariablesToRobot({auto_aim_target_angle: selected.targetAngle,
-                            auto_aim_target_distance: selected.targetDistance});
+                var lastCameraUpdate = new Date().getTime();
+                var resetCamera = startCamera("#js_camera", "http://10.13.10.11:80/mjpg/video.mjpg?resolution=320x240" /*"http://10.13.10.11:80/mjpg/video.mjpg?resolution=320x240" /*"http://192.168.1.144:8080/videofeed"*/,
+                    function (data) {
+                        $("#camera_data").text(JSON.stringify(data.selected) + new Date().getTime());
+
+                        if (data.selected) {
+                            var selected = data.selected;
+                            sendVariablesToRobot({auto_aim_target_angle: selected.targetAngle,
+                                auto_aim_target_distance: selected.targetDistance});
+                        }
+                        
+                        lastCameraUpdate = new Date().getTime();
+                    });
+                setInterval(function() {
+                    if (new Date().getTime() - lastCameraUpdate > 1000) {
+                        resetCamera();alert();
                     }
-                });
+                }, 1000);
       
                 setInterval(function() {             
                     var now = new Date().getTime();
