@@ -108,7 +108,7 @@ var startCamera = function(divId, url, callback) {
     
         try {
             offScreenContext.drawImage(this, 0, 0);
-      
+            
             var imageData = offScreenContext.getImageData(0, 0, this.width, this.height);
             frameWorker.postMessage({
                 pixels: imageData,
