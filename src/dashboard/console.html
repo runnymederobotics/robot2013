@@ -224,7 +224,7 @@
                     dataCharts.push(makeSmoothieChart("#data_charts", {
                         title: name,
                         dataFields: ["input", "setpoint"],
-                        width: 400, height: 50
+                        width: 200, height: 50
                     }));
                     $("#" + name).append("<label for='pid_graphs" + i + "'><input type='checkbox' id='pid_graphs" + i
                         + "' value='" + i + "'>Enabled</label>");
@@ -254,16 +254,16 @@
                 
                 var lastAutonomous = 0;
                 
-                startCamera("#js_camera", "http://192.168.1.144:8080/videofeed",
-                    function (data) {
-                      $("#camera_data").text(JSON.stringify(data.selected));
+                startCamera("#js_camera", "http://10.13.10.11:80/mjpg/video.mjpg?resolution=320x240" /*"http://192.168.1.144:8080/videofeed"*/,
+                function (data) {
+                    $("#camera_data").text(JSON.stringify(data.selected));
                       
-                      if (data.selected) {
+                    if (data.selected) {
                         var selected = data.selected;
                         sendVariablesToRobot({auto_aim_target_angle: selected.targetAngle,
                             auto_aim_target_distance: selected.targetDistance});
-                      }
-                    });
+                    }
+                });
       
                 setInterval(function() {             
                     var now = new Date().getTime();
@@ -346,19 +346,19 @@
         </script>
         <style type="text/css">
             #fieldCanvas {
-              background: url(field.png);
+                background: url(field.png);
             }
         </style>
     </head>
     <body id="body">
         <span>
-          <span id="js_camera" style="float:left"></span>
-          <br>
-          <div id="camera_data"></div>
+            <span id="js_camera" style="float:left"></span>
+            <br>
+            <div id="camera_data"></div>
         </span>
         <span>
-          <canvas class="field" id="fieldCanvas" width="324" height="648"></canvas>
-          <canvas id="frisbeeCounter" width="250" height="200"></canvas>
+            <canvas class="field" id="fieldCanvas" width="324" height="648"></canvas>
+            <canvas id="frisbeeCounter" width="250" height="200"></canvas>
         </span>
         <form action="">
             <label for="three_frisbee">
