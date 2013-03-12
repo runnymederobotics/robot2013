@@ -7,15 +7,6 @@
         <script src="js/lib/modernizr-2.0.6-development-only.js"></script>
         <script src="camera.js"></script>
         <script type="text/javascript">
-            function toggleGraphs() {
-                var graphs = $('#graphs');
-                var state = graphs.is(":visible")
-                if(!state) {
-                    graphs.show();
-                } else {
-                    graphs.hide();
-                }
-            }
             $(function() {
                 $.ajaxSetup ({cache: false});
 
@@ -23,7 +14,7 @@
                     var xhr = new XMLHttpRequest();
                     if (xhr) {
                         if (typeof xhr.multipart == 'undefined') {
-                            alert("Streaming not supported - try Firefox.");
+                            //alert("Streaming not supported - try Firefox.");
                             return;
                         }
 
@@ -96,7 +87,7 @@
                 }
 
                 var makeSmoothieChart = function(parent, options) {                    
-                    var newDiv = $("<div id='" + options.title + "'>" + options.title + "<br><canvas width='"
+                    var newDiv = $("<div><h1>" + options.title + "</h1><br><canvas width='"
                         + options.width + "' height='" + options.height + "'/></div>");
                     $(parent).append(newDiv);
                     var chart = new SmoothieChart();
@@ -220,18 +211,17 @@
                 
                 var pidControllers = ["pidleft", "pidright", "pidgyro", "pidcount", "pidshooter"];
       
-                $("#data_charts").append("<form>");
                 for(var i = 0; i < pidControllers.length; ++i) {
                     var name = pidControllers[i];
                     dataCharts.push(makeSmoothieChart("#data_charts", {
                         title: name,
                         dataFields: ["input", "setpoint"],
-                        width: 200, height: 50
+                        width: 250, height: 50
                     }));
-                    $("#" + name).append("<label for='pid_graphs" + i + "'><input type='checkbox' id='pid_graphs" + i
-                        + "' value='" + i + "'>Enabled</label>");
+                    
+                    $("#data_charts").find("h1").last().after("<div class='labelholder'><label for='pid_graphs" + i + "'><input type='checkbox' id='pid_graphs" + i
+                        + "' value='" + i + "'>Enabled</label></div>");
                 }
-                $("#data_charts").append("</form>");
                 
                 for(var i = 0; i < pidControllers.length; ++i) {
                     $("#pid_graphs" + i).click(function() {
@@ -255,25 +245,16 @@
                 var sentInit = false;
                 
                 var lastAutonomous = 0;
-                
-                var lastCameraUpdate = new Date().getTime();
-                var resetCamera = startCamera("#js_camera", "http://10.13.10.11:80/mjpg/video.mjpg?resolution=320x240" /*"http://10.13.10.11:80/mjpg/video.mjpg?resolution=320x240" /*"http://192.168.1.144:8080/videofeed"*/,
+                //"http://10.13.10.11:80/mjpg/video.mjpg?resolution=320x240"
+                //"http://192.168.1.144:8080/videofeed"
+                startCamera("#camera_area", "http://10.13.10.11:80/mjpg/video.mjpg?resolution=320x240",
                     function (data) {
-                        $("#camera_data").text(JSON.stringify(data.selected) + new Date().getTime());
-
-                        if (data.selected) {
+                        if (data.selected.found) {
                             var selected = data.selected;
                             sendVariablesToRobot({auto_aim_target_angle: selected.targetAngle,
                                 auto_aim_target_distance: selected.targetDistance});
                         }
-                        
-                        lastCameraUpdate = new Date().getTime();
                     });
-                setInterval(function() {
-                    if (new Date().getTime() - lastCameraUpdate > 1000) {
-                        resetCamera();alert();
-                    }
-                }, 1000);
       
                 setInterval(function() {             
                     var now = new Date().getTime();
@@ -355,40 +336,87 @@
             });
         </script>
         <style type="text/css">
+            div {
+                vertical-align: top;
+            }
+            
+            h1 {
+                font-size: 14;
+                margin: 0;
+            }
+            
+            #auto_modes label {
+                display: block;
+            }
+            
+            #graphs h1, #graphs input, #graphs label {
+                display: inline-block;
+            }
+            #graphs .labelholder {
+                float: right;
+            }
+            
             #fieldCanvas {
                 background: url(field.png);
+                display: inline-block;
+            }
+            ol { 
+                list-style-type: none;
+            }
+            li {
+                display: block;
+            }
+            
+            #auto_selector {
+                display: inline-block;
+            }
+            
+            #camera_area {
+                display: inline-block;
+            }
+            #camera_area table {
+                border-collapse:collapse;
+                width: 320;
+            }
+            #camera_area table, #camera_area th, #camera_area td {
+                border: 1px solid black;
+            }
+            #camera_area td {
+                width: 50%;
+            }
+            #camera_area .data {
+                text-align: right;
             }
         </style>
     </head>
     <body id="body">
-        <span>
-            <span id="js_camera" style="float:left"></span>
-            <br>
-            <div id="camera_data"></div>
-        </span>
-        <span>
-            <canvas class="field" id="fieldCanvas" width="324" height="648"></canvas>
+        <div id="camera_area"></div>
+        <div id="auto_selector">
+            <div id="auto_modes">
+                <h1>Autonomous Mode</h1>
+                <form action="">
+                    <label for="three_frisbee">
+                        <input type="radio" name="autonomous" id="three_frisbee" value="0">Shoot 3 frisbees
+                    </label>
+                    <label for="seven_frisbee">
+                        <input type="radio" name="autonomous" id="seven_frisbee" value="1">Shoot 7 frisbees
+                    </label>
+                    <label for="five_frisbee">
+                        <input type="radio" name="autonomous" id="five_frisbee" value="2">Shoot 5 frisbees
+                    </label>
+                </form>
+            </div>
             <canvas id="frisbeeCounter" width="250" height="200"></canvas>
-        </span>
-        <form action="">
-            <label for="three_frisbee">
-                <input type="radio" name="autonomous" id="three_frisbee" value="0">Shoot 3 frisbees
-            </label>
-            <br>
-            <label for="seven_frisbee">
-                <input type="radio" name="autonomous" id="seven_frisbee" value="1">Shoot 7 frisbees
-            </label>
-            <br>
-            <label for="five_frisbee">
-                <input type="radio" name="autonomous" id="five_frisbee" value="2">Shoot 5 frisbees
-            </label>
-        </form>
-        <button id="hide_button" onclick="toggleGraphs()">Toggle Graphs</button>
-        <div id="graphs" style="display: none;">
-            <div id="output"></div>
-            <div id="streams"></div>
-            <div id="camera_charts"></div>
-            <div id="data_charts"></div>
+            <div>
+                <button onclick="$('#graphs').toggle()">Toggle Graphs</button>
+                <div id="graphs" style="display: none;">
+                    <div id="output"></div>
+                    <div id="streams"></div>
+                    <div id="camera_charts"></div>
+                    <div id="data_charts"></div>
+                </div>
+            </div>
         </div>
+        <canvas class="field" id="fieldCanvas" width="324" height="648"></canvas>
     </body>
 </html>

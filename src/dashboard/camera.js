@@ -2,7 +2,13 @@ var startCamera = function(divId, url, callback) {
     var container = $(divId);
     container.empty();
   
-    var imageDiv = container.append("<div></div>").children("div");
+    var topLevel = container.append("<ol></ol>");
+    var imageDiv = topLevel.append("<li></li>").children("li").last();
+    var processedDiv = topLevel.append("<li></li>").children("li").last();
+    var toggle = topLevel.append("<li><button>Toggle Camera Data</button></li>").find("button");
+    toggle.click(function() {
+      topLevel.find(".hideable").toggle();
+    });
     var getCanvasContext = function(width, height, location) {
         var canvas = document.createElement('canvas');
         canvas.width = width;
@@ -13,18 +19,29 @@ var startCamera = function(divId, url, callback) {
         return canvas.getContext("2d");
     }
   
-    var makeSmoothieChart = function() {
+    var makeSmoothieChart = function(title) {
+        var newLi = topLevel.append("<li class='hideable'><h1>" + title + "</h1></li>").children("li").last();
         var canvas = document.createElement('canvas');
-        $(divId).append(canvas);
+        canvas.width = 320;
+        canvas.height = 50;
+        newLi.append(canvas);
         var chart = new SmoothieChart();
         chart.streamTo(canvas, /* delay */ 1000);
         var timeSeries = new TimeSeries();
         chart.addTimeSeries(timeSeries);
         return timeSeries;
     }
+    
+    var addTableRow = function (table, name) {
+      return table.append("<tr><td>" + name + "</td><td class='data'></td></tr>").find("td").last();
+    }
   
-    var frameTime = makeSmoothieChart();
-    var fps = makeSmoothieChart();
+    var frameTime = makeSmoothieChart("Frame Processing Time");
+    var fps = makeSmoothieChart("FPS");
+    var dataDiv = topLevel.append("<li class='hideable'><table><tr><th>Name</th><th>Value</th></tr></table></li>").children("li").last();
+    var dataTable = dataDiv.find("table");
+    var targetAngleDisplay = addTableRow(dataTable, "Target Angle");
+    var targetDistanceDisplay = addTableRow(dataTable, "Target Distance");
     var frames = 0;
     var lastImageTime = 0;
     var lastFpsTime = 0;
@@ -79,7 +96,7 @@ var startCamera = function(divId, url, callback) {
         drawContours(data.candidates, "#ff0000", 1);
         drawContours(data.outerPolygons, "#0000ff", 2);
         drawDots(data.centroids, "#ff0000");
-        //$("#camera_data").text(JSON.stringify(data.centroids));
+
         if (data.selected) {
             var selected = data.selected;
             drawLine(selected.leftSide, "#ff007f", 4);
@@ -93,11 +110,13 @@ var startCamera = function(divId, url, callback) {
             lastFpsTime = now;
         }
         frames += 1;
-        lastImageTime = now;
+        targetAngleDisplay.text(data.selected.targetAngle.toFixed(5));
+        targetDistanceDisplay.text(data.selected.targetDistance.toFixed(5));
         if (callback) {
             data.image = "[Binary Blob]";
             callback(data);
         }
+        lastImageTime = now;
     }
     
     var width = 0;
@@ -109,7 +128,7 @@ var startCamera = function(divId, url, callback) {
             width = this.width;
             height = this.height;
             
-            context = getCanvasContext(this.width, this.height, imageDiv);
+            context = getCanvasContext(this.width, this.height, processedDiv);
             offScreenContext = getCanvasContext(this.width, this.height, null);
         }
     
@@ -149,11 +168,5 @@ var startCamera = function(divId, url, callback) {
     setInterval(connect, 1000)
     connect();
     
-    return function() {
-      imageDiv.children("canvas").remove();
-      if (width) {
-          context = getCanvasContext(width, height, imageDiv);
-          offScreenContext = getCanvasContext(width, height, null);
-      }
-    }
+    //topLevel.find(".hideable").hide();
 }

@@ -214,7 +214,12 @@ var selectTarget = function(outerPolygons, centroids, imageWidth, imageHeight) {
     }
   }
 
-  if (selected >= 0) {
+  var xAngle = 0;
+  var zReal = 0;
+  var leftSide = null;
+  var rightSide = null;
+  var found = selected >= 0;
+  if (found) {
     var poly = outerPolygons[selected];
     
     var centroid = centroids[selected];
@@ -223,20 +228,18 @@ var selectTarget = function(outerPolygons, centroids, imageWidth, imageHeight) {
     };
 
     var corners = determineCorners(poly, centroid);
-    var leftSide = [corners.topLeft, corners.bottomLeft];
-    var rightSide = [corners.topRight, corners.bottomRight];
+    leftSide = [corners.topLeft, corners.bottomLeft];
+    rightSide = [corners.topRight, corners.bottomRight];
     
-    var xAngle = normalizedCentroid.x  * xAngleOfView * 0.5;
+    xAngle = normalizedCentroid.x  * xAngleOfView * 0.5;
     
     // TODO: something better than averaging the sides?
     var objectHeight = (lineLength(leftSide) + lineLength(rightSide)) * 0.5 
     var fovInches = (rlTargetHeight * imageHeight) / objectHeight;
-    var zReal = (fovInches * 0.5) / Math.tan(toRadians(yAngleOfView * 0.5));
-    
-    return {targetAngle: xAngle, targetDistance: zReal,
-        leftSide: leftSide, rightSide: rightSide};
+    zReal = (fovInches * 0.5) / Math.tan(toRadians(yAngleOfView * 0.5));
   }
-  return null;
+  return {found: found, targetAngle: xAngle, targetDistance: zReal,
+        leftSide: leftSide, rightSide: rightSide};
 }
 
 var binary = [];
