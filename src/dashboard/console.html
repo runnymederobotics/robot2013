@@ -254,7 +254,7 @@
                 
                 var lastAutonomous = 0;
                 
-                startCamera("#js_camera", "http://83.64.164.6/axis-cgi/mjpg/video.cgi?resolution=320x240" /*"http://10.13.10.11:80/mjpg/video.mjpg?resolution=320x240" /*"http://192.168.1.144:8080/videofeed"*/,
+                startCamera("#js_camera", "http://192.168.1.144:8080/videofeed" /*"http://10.13.10.11:80/mjpg/video.mjpg?resolution=320x240" /*"http://192.168.1.144:8080/videofeed"*/,
                 function (data) {
                     $("#camera_data").text(JSON.stringify(data.selected));
                       

@@ -72,7 +72,7 @@ var startCamera = function(divId, url, callback) {
         context.lineWidth = oldWidth;
     }
             
-    var image = imageDiv.append("<img src='#' cross-origin:'anonymous'/>").children("img");
+    var image = imageDiv.append("<img src='#' crossOrigin:'Anonymous'/>").children("img");
     image.load(function() {
         if (!context) {
             context = getCanvasContext(this.width, this.height, imageDiv);
