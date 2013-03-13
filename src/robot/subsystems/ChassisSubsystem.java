@@ -166,6 +166,11 @@ public class ChassisSubsystem extends Subsystem {
         return encAverager.get(); //Average rate
     }
 
+    public boolean isMoving() {
+        //If we are above the threshold then we are moving
+        return Math.abs(getAverageRate()) > Constants.CHASSIS_ENCODER_MOVEMENT_THRESHOLD.get();
+    }
+
     public void resetEncoders() {
         encLeft.reset();
         encRight.reset();

@@ -28,7 +28,7 @@ public class ShooterSubsystem extends Subsystem {
 
     public ShooterSubsystem() {
         encShooter.setSemiPeriodMode(false);
-        encShooter.setMaxPeriod(1.0); //Timeout after this time. Will give 1 / x RPS where x is the max period
+        encShooter.setMaxPeriod(0.1); //Timeout after this time. Will give 1 / x RPS where x is the max period
         encShooter.start();
 
         pidShooter.setInputRange(0, MAX_SHOOTER_ENCODER_RATE);
@@ -47,12 +47,12 @@ public class ShooterSubsystem extends Subsystem {
     protected void initDefaultCommand() {
         setDefaultCommand(new TeleopShooterCommand());
     }
-
-    public void setShooter(double value) {
+    
+    public void setSetpoint(double setpoint) {
         if (pidShooter.isEnable()) {
-            pidShooter.setSetpoint(value * MAX_SHOOTER_ENCODER_RATE);
+            pidShooter.setSetpoint(setpoint);
         } else {
-            vicShooter.set(value);
+            vicShooter.set(setpoint / MAX_SHOOTER_ENCODER_RATE);
         }
     }
 
@@ -77,12 +77,13 @@ public class ShooterSubsystem extends Subsystem {
                 break;
         }
     }
+    
+    public boolean onTarget() {
+        return pidShooter.onTarget();
+    }
 
-    public boolean onTargetAndAboveThreshold() {
-        boolean aboveThreshold = encShooter.get() > MAX_SHOOTER_ENCODER_RATE * Constants.SHOOTER_MIN_SHOOT_THRESHOLD.get();
-        boolean onTarget = pidShooter.onTarget();
-
-        return onTarget && aboveThreshold;
+    public boolean aboveThreshold() {
+        return encShooter.get() > MAX_SHOOTER_ENCODER_RATE * Constants.SHOOTER_MIN_SHOOT_THRESHOLD.get();
     }
 
     public void print() {

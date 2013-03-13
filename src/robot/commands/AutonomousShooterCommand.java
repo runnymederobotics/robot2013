@@ -30,7 +30,7 @@ public class AutonomousShooterCommand extends CommandBase {
 
     protected void initialize() {
         if (doSetpoint) {
-            shooterSubsystem.setShooter(setpoint);
+            shooterSubsystem.setSetpoint(setpoint);
         }
     }
 

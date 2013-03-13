@@ -26,8 +26,7 @@ public class AutonomousHopperCommand extends CommandBase {
 
         //Dont wait if we dont want to stop
         if (dontStop || Timer.getFPGATimestamp() - startTime > Constants.AUTONOMOUS_HOPPER_TIME_AFTER_START.get()) {
-            requestShot = shooterSubsystem.onTargetAndAboveThreshold()
-                    && hopperSubsystem.hasFrisbee() && pickupSubsystem.pickupDown();
+            requestShot = shooterSubsystem.onTarget() && shooterSubsystem.aboveThreshold() && hopperSubsystem.hasFrisbee() && pickupSubsystem.pickupDown();
         }
 
         hopperSubsystem.update(requestShot);
