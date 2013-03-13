@@ -37,12 +37,13 @@ public class OI {
         public static ParsableInt SHOOT_BUTTON = new ParsableInt("operator_shoot_button", 1);
         public static ParsableInt SHOOT_OVERRIDE_BUTTON = new ParsableInt("operator_shoot_override_button", 2);
         public static ParsableInt LOAD_STATE_BUTTON = new ParsableInt("operator_load_state_button", 7);
-        public static ParsableInt LOW_STATE_BUTTON = new ParsableInt("operator_low_state_button", 8);
-        public static ParsableInt MEDIUM_STATE_BUTTON = new ParsableInt("operator_medium_state_button", 9);
-        public static ParsableInt HIGH_STATE_BUTTON = new ParsableInt("operator_high_state_button", 10);
+        public static ParsableInt LOW_STATE_BUTTON = new ParsableInt("operator_low_state_button", 11);
+        public static ParsableInt HIGH_STATE_BUTTON = new ParsableInt("operator_high_state_button", 9);
         public static ParsableInt RAISE_HANGER_BUTTON_ONE = new ParsableInt("operator_raise_hanger_button_one", 5);
         public static ParsableInt RAISE_HANGER_BUTTON_TWO = new ParsableInt("operator_raise_hanger_button_two", 6);
-        public static ParsableInt REVERSE_PICKUP = new ParsableInt("operator_reverse_pickup_button", 11);
+        public static ParsableInt REVERSE_PICKUP = new ParsableInt("operator_reverse_pickup_button", 8);
+        public static ParsableInt PYRAMID_SETPOINT_BUTTON = new ParsableInt("operator_pyramid_setpoint_button", 10);
+        public static ParsableInt FEEDER_SETPOINT_BUTTON = new ParsableInt("operator_feeder_setpoint_button", 12);
     }
     public static final ParsableDouble SHOOTER_MINIMUM_SPEED = new ParsableDouble("shooter_minimum_speed", 0.75);
     Joystick stickDriver = new Joystick(Driver.PORT);
@@ -115,7 +116,7 @@ public class OI {
     public double getManualShooterSpeed() {
         final double complement = (1 - SHOOTER_MINIMUM_SPEED.get()) / 2;
         final double complementsComplement = 1 - complement;
-        double axis = -stickOperator.getAxis(Joystick.AxisType.kZ);
+        double axis = -stickOperator.getAxis(Joystick.AxisType.kThrottle);
         double ret = -(axis * complement + complementsComplement);
         //It is now between SHOOTER_MINIMUM_SPEED and 1.0
         return axis >= THROTTLE_DEAD_ZONE ? ret : 0.0;
@@ -124,13 +125,9 @@ public class OI {
     public boolean getShooterLoad() {
         return stickOperator.getRawButton(Operator.LOAD_STATE_BUTTON.get());
     }
-
+    
     public boolean getShooterLow() {
         return stickOperator.getRawButton(Operator.LOW_STATE_BUTTON.get());
-    }
-
-    public boolean getShooterMedium() {
-        return stickOperator.getRawButton(Operator.MEDIUM_STATE_BUTTON.get());
     }
 
     public boolean getShooterHigh() {
@@ -143,5 +140,13 @@ public class OI {
 
     public boolean getReversePickup() {
         return stickOperator.getRawButton(Operator.REVERSE_PICKUP.get());
+    }
+    
+    public boolean getPyramidSetpoint() {
+        return stickOperator.getRawButton(Operator.PYRAMID_SETPOINT_BUTTON.get());
+    }
+    
+    public boolean getFeederSetpoint() {
+        return stickOperator.getRawButton(Operator.FEEDER_SETPOINT_BUTTON.get());
     }
 }

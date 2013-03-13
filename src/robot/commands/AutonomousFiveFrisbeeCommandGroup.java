@@ -8,8 +8,9 @@ public class AutonomousFiveFrisbeeCommandGroup extends CommandGroup {
 
     public AutonomousFiveFrisbeeCommandGroup() {
         addParallel(new AutonomousPickupCommand(true)); //Lower the pickup
-        addParallel(new AutonomousShooterCommand(ShooterSubsystem.ShooterState.MEDIUM, 1.0)); //Raise shooter to medium level
+        addParallel(new AutonomousShooterCommand(ShooterSubsystem.ShooterState.HIGH, 1.0)); //Raise shooter
         addSequential(new AutonomousHopperCommand(false)); //Shoot all frisbees
+        addParallel(new AutonomousShooterCommand(ShooterSubsystem.ShooterState.LOAD, 1.0)); //Raise shooter
 
         addSequential(new AutonomousDriveCommand(Constants.FIVE_FRISBEE_DRIVE_FORWARD_INCHES.get())); //Drive forward
         addSequential(new AutonomousShooterCommand(ShooterSubsystem.ShooterState.HIGH, 0.5)); //This will be for setting the setpoint after we've reached our destination

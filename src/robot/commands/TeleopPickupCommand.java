@@ -13,8 +13,8 @@ public class TeleopPickupCommand extends CommandBase {
 
     protected void execute() {
         boolean lowerButton = oi.getPickupLower();
-
         boolean lowerOverride = oi.getPickupLowerOverride();
+        boolean reversePickup = oi.getReversePickup();
 
         //True is down, false is up
         if (lowerOverride) {
@@ -27,9 +27,11 @@ public class TeleopPickupCommand extends CommandBase {
 
         //Reverse the motor when the driver doesn't want to drive the roller,
         //forces the pickup down, and when the operator wants to reverse
-        boolean reverse = !lowerButton && lowerOverride && oi.getReversePickup();
-
-        pickupSubsystem.runRoller(lowerButton, reverse);
+        boolean reverse = !lowerButton && lowerOverride && reversePickup;
+        //If we want to reverse, runRoller must be true
+        boolean runRoller = lowerButton || reverse;
+        
+        pickupSubsystem.runRoller(runRoller, reverse);
     }
 
     protected boolean isFinished() {

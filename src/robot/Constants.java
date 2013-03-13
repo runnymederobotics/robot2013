@@ -34,8 +34,10 @@ public class Constants {
     public static ParsableDouble PICKUP_DELAY_AFTER_FRISBEE = new ParsableDouble("pickup_delay_after_frisbee", 1.0);
     //Shooter subsystem
     public static ParsableDouble SHOOTER_MIN_SHOOT_THRESHOLD = new ParsableDouble("shooter_min_shoot_threshold", 0.3);
+    public static ParsableDouble SHOOTER_PYRAMID_SETPOINT = new ParsableDouble("shooter_pyramid_setpoint", 0.78);
+    public static ParsableDouble SHOOTER_FEEDER_SETPOINT = new ParsableDouble("shooter_feeder_setpoint", 1.0);
     //Seven frisbee autonomous
-    public static ParsableDouble SEVEN_FRISBEE_DRIVE_FORWARD_INCHES = new ParsableDouble("seven_frisbee_drive_forward_inches", 90);
+    public static ParsableDouble SEVEN_FRISBEE_DRIVE_FORWARD_INCHES = new ParsableDouble("seven_frisbee_drive_forward_inches", 100);
     //Five frisbee autonomous
     public static ParsableDouble FIVE_FRISBEE_DRIVE_FORWARD_INCHES = new ParsableDouble("five_frisbee_drive_forward_inches", 90);
     //Autonomous hopper command

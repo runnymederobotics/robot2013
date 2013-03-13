@@ -54,14 +54,9 @@ public class RobotTemplate extends IterativeRobot {
             CommandBase.pickupSubsystem.pickupPneumatic = new Pneumatic(Constants.SECONDARY_MODULE, ++secondaryChannel, ++secondaryChannel);
         }
         if (Constants.SHOOTER_LOW_SINGLE_SOLENOID) {
-            CommandBase.shooterSubsystem.shooterPneumaticLow = new Pneumatic(Constants.SECONDARY_MODULE, ++secondaryChannel);
+            CommandBase.shooterSubsystem.shooterLifterPneumatic = new Pneumatic(Constants.SECONDARY_MODULE, ++secondaryChannel);
         } else {
-            CommandBase.shooterSubsystem.shooterPneumaticLow = new Pneumatic(Constants.SECONDARY_MODULE, ++secondaryChannel, ++secondaryChannel);
-        }
-        if (Constants.SHOOTER_HIGH_SINGLE_SOLENOID) {
-            CommandBase.shooterSubsystem.shooterPneumaticHigh = new Pneumatic(Constants.SECONDARY_MODULE, ++secondaryChannel);
-        } else {
-            CommandBase.shooterSubsystem.shooterPneumaticHigh = new Pneumatic(Constants.SECONDARY_MODULE, ++secondaryChannel, ++secondaryChannel);
+            CommandBase.shooterSubsystem.shooterLifterPneumatic = new Pneumatic(Constants.SECONDARY_MODULE, ++secondaryChannel, ++secondaryChannel);
         }
     }
 
