@@ -282,7 +282,7 @@ public class WebServer extends Thread {
                             throw new IOException("Bad Request");
                         }
                         String url = line.substring(4, urlEnd);
-                        System.out.println("WebServer: got request for: " + url);
+                        //System.out.println("WebServer: got request for: " + url);
 
                         String path = url;
                         Hashtable paramTable = new Hashtable();
