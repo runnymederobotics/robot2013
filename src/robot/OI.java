@@ -44,6 +44,7 @@ public class OI {
         public static ParsableInt REVERSE_PICKUP = new ParsableInt("operator_reverse_pickup_button", 8);
         public static ParsableInt PYRAMID_SETPOINT_BUTTON = new ParsableInt("operator_pyramid_setpoint_button", 10);
         public static ParsableInt FEEDER_SETPOINT_BUTTON = new ParsableInt("operator_feeder_setpoint_button", 12);
+        public static ParsableInt DISABLE_SHOOTER_PID_BUTTON = new ParsableInt("operator_disable_shooter_pid_button", 4);
     }
     public static final ParsableDouble SHOOTER_MINIMUM_SPEED = new ParsableDouble("shooter_minimum_speed", 0.75);
     Joystick stickDriver = new Joystick(Driver.PORT);
@@ -148,5 +149,9 @@ public class OI {
     
     public boolean getFeederSetpoint() {
         return stickOperator.getRawButton(Operator.FEEDER_SETPOINT_BUTTON.get());
+    }
+    
+    public boolean getDisablePIDShooter() {
+        return stickOperator.getRawButton(Operator.DISABLE_SHOOTER_PID_BUTTON.get());
     }
 }

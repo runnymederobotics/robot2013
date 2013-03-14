@@ -22,6 +22,12 @@ public class TeleopShooterCommand extends CommandBase {
             } else {
                 shooterSubsystem.setSetpoint(Math.abs(oi.getManualShooterSpeed()) * ShooterSubsystem.MAX_SHOOTER_ENCODER_RATE);
             }
+        } else {
+            shooterSubsystem.setSetpoint(0.0);
+        }
+        
+        if(oi.getDisablePIDShooter()) {
+            shooterSubsystem.disable();
         }
         
         if (chassisSubsystem.isMoving() || oi.getShooterLoad()) {

@@ -10,6 +10,8 @@ public class CustomEncoder extends Counter implements PIDSource {
     }
 
     public double pidGet() {
-        return 1.0 / super.getPeriod();
+        double period = super.getPeriod();
+        
+        return 1.0 / ((period == 0) ? 1.0 : super.getPeriod());
     }
 }

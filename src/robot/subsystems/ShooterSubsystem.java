@@ -10,11 +10,11 @@ import robot.parsable.ParsablePIDController;
 
 public class ShooterSubsystem extends Subsystem {
 
-    public static final double PID_SHOOTER_PERCENT_TOLERANCE = 5;
+    public static final double PID_SHOOTER_PERCENT_TOLERANCE = 2;
     public static final double MAX_SHOOTER_ENCODER_RATE = 175; //RPS
     Victor vicShooter = new Victor(Constants.SHOOTER_MOTOR_CHANNEL);
     CustomEncoder encShooter = new CustomEncoder(Constants.ENC_SHOOTER);
-    ParsablePIDController pidShooter = new ParsablePIDController("pidshooter", 0.01, 0.0005, 0.0, encShooter, vicShooter);
+    ParsablePIDController pidShooter = new ParsablePIDController("pidshooter", 0.03, 0.0005, 0.0, encShooter, vicShooter);
     //Pneumatics are initialized in CommandBase.java
     public Pneumatic shooterLifterPneumatic;
     int shooterState = ShooterState.LOAD;
@@ -28,7 +28,8 @@ public class ShooterSubsystem extends Subsystem {
 
     public ShooterSubsystem() {
         encShooter.setSemiPeriodMode(false);
-        encShooter.setMaxPeriod(0.1); //Timeout after this time. Will give 1 / x RPS where x is the max period
+        encShooter.setUpdateWhenEmpty(true);
+        encShooter.setMaxPeriod(1.0); //Timeout after this time. Will give 1 / x RPS where x is the max period
         encShooter.start();
 
         pidShooter.setInputRange(0, MAX_SHOOTER_ENCODER_RATE);
@@ -83,7 +84,7 @@ public class ShooterSubsystem extends Subsystem {
     }
 
     public boolean aboveThreshold() {
-        return encShooter.get() > MAX_SHOOTER_ENCODER_RATE * Constants.SHOOTER_MIN_SHOOT_THRESHOLD.get();
+        return encShooter.pidGet() > MAX_SHOOTER_ENCODER_RATE * Constants.SHOOTER_MIN_SHOOT_THRESHOLD.get();
     }
 
     public void print() {
