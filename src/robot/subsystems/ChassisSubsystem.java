@@ -17,7 +17,7 @@ public class ChassisSubsystem extends Subsystem {
     public static final double INCHES_PER_ENCODER_COUNT = 92.5 / 1242.5385;
     public static final double PID_DRIVE_PERCENT_TOLERANCE = 10.0;
     public static final double PID_GYRO_ABSOLUTE_TOLERANCE = 2.0;
-    public static final double PID_COUNT_ABSOLUTE_TOLERANCE = 20.0;
+    public static final double PID_COUNT_ABSOLUTE_TOLERANCE = 10.0;
     Victor vicLeft = new Victor(Constants.LEFT_MOTOR_CHANNEL);
     Victor vicRight = new Victor(Constants.RIGHT_MOTOR_CHANNEL);
     Encoder encLeft = new Encoder(Constants.ENC_LEFT_ONE, Constants.ENC_LEFT_TWO, true);
@@ -29,7 +29,7 @@ public class ChassisSubsystem extends Subsystem {
     RobotDrive robotDrive = new RobotDrive(leftOutputStorage, rightOutputStorage);
     ParsablePIDController pidLeft = new ParsablePIDController("pidleft", 0.001, 0.0005, 0.0, encLeft, vicLeft);
     ParsablePIDController pidRight = new ParsablePIDController("pidright", 0.001, 0.0005, 0.0, encRight, vicRight);
-    public ParsablePIDController pidGyro = new ParsablePIDController("pidgyro", 0.05, 0.0, 0.0, CommandBase.positioningSubsystem.positionGyro, new OutputStorage());
+    public ParsablePIDController pidGyro = new ParsablePIDController("pidgyro", 0.125, 0.0005, 0.0, CommandBase.positioningSubsystem.positionGyro, new OutputStorage());
     public ParsablePIDController pidCount = new ParsablePIDController("pidcount", 0.02, 0.0, 0.0, encAverager, new OutputStorage());
 
     public ChassisSubsystem() {
@@ -47,7 +47,7 @@ public class ChassisSubsystem extends Subsystem {
         pidLeft.setOutputRange(-1.0, 1.0);
         pidRight.setOutputRange(-1.0, 1.0);
         pidGyro.setOutputRange(-1.0, 1.0);
-        pidCount.setOutputRange(-0.75, 0.75);
+        pidCount.setOutputRange(-0.85, 0.85);
 
         pidLeft.setPercentTolerance(PID_DRIVE_PERCENT_TOLERANCE);
         pidRight.setPercentTolerance(PID_DRIVE_PERCENT_TOLERANCE);
@@ -118,7 +118,7 @@ public class ChassisSubsystem extends Subsystem {
     public void drive(double speed, double rotation) {
         robotDrive.arcadeDrive(speed, -rotation);
         if (isEnabledPID()) {
-            if (getShiftState()) {
+            if (getHighGear()) {
                 //High gear
                 pidLeft.setSetpoint(leftOutputStorage.get() * Constants.CHASSIS_MAX_HIGH_ENCODER_RATE.get());
                 pidRight.setSetpoint(rightOutputStorage.get() * Constants.CHASSIS_MAX_HIGH_ENCODER_RATE.get());
@@ -153,7 +153,7 @@ public class ChassisSubsystem extends Subsystem {
         shifterPneumatic.set(value);
     }
 
-    public boolean getShiftState() {
+    public boolean getHighGear() {
         return shifterPneumatic.get();
     }
 

@@ -1,6 +1,7 @@
 package robot.subsystems;
 
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.Victor;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import robot.Constants;
@@ -30,25 +31,31 @@ public class PickupSubsystem extends Subsystem {
     public void enable() {
     }
 
-    //Down is false, up is true
     public void setPneumatic(boolean value) {
-        pickupPneumatic.set(value);
-        /*double now = Timer.getFPGATimestamp();
-         if(value) {
-         //If we're trying to lower the pickup
-         if(now - lastFrisbeeSensorTime > Constants.PICKUP_DELAY_AFTER_FRISBEE.get()) {
-         //If we've waited enough time since the last time we saw a frisbee
-         pickupPneumatic.set(value);
-         }
-         } else {
-         pickupPneumatic.set(value);
-         }
-         lastFrisbeeSensorTime = frisbeeSensor.get() ? now : lastFrisbeeSensorTime;*/
+        double now = Timer.getFPGATimestamp();
+        if (!value) {
+            //If we're trying to raise the pickup
+            if (now - lastFrisbeeSensorTime > Constants.PICKUP_DELAY_AFTER_FRISBEE.get()) {
+                //If we've waited enough time since the last time we saw a frisbee
+                pickupPneumatic.set(false); //Raise the pickup
+            }
+        } else {
+            pickupPneumatic.set(true); //Lower the pickup
+        }
+
+        //There is a frisbee in the pickup when frisbeeSensor.get() is false
+        lastFrisbeeSensorTime = !frisbeeSensor.get() ? now : lastFrisbeeSensorTime;
     }
 
     public void runRoller(boolean value, boolean reverse) {
-        double pickupSpeed = value ? Constants.PICKUP_SPEED.get() : 0.0;
-        double elevatorSpeed = value ? Constants.ELEVATOR_SPEED.get() : 0.0;
+        double pickupSpeed = 0.0;
+        double elevatorSpeed = 0.0;
+        if (value || Timer.getFPGATimestamp() - lastFrisbeeSensorTime < Constants.PICKUP_DELAY_AFTER_FRISBEE.get()) {
+            //Keep running the roller if we havent waited long enough since the last frisbee
+            pickupSpeed = Constants.PICKUP_SPEED.get();
+            elevatorSpeed = Constants.ELEVATOR_SPEED.get();
+        }
+
         pickupRoller.set(reverse ? -pickupSpeed : pickupSpeed);
         elevatorRoller.set(reverse ? -elevatorSpeed : elevatorSpeed);
     }

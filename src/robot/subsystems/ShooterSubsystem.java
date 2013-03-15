@@ -10,11 +10,10 @@ import robot.parsable.ParsablePIDController;
 
 public class ShooterSubsystem extends Subsystem {
 
-    public static final double PID_SHOOTER_PERCENT_TOLERANCE = 2;
-    public static final double MAX_SHOOTER_ENCODER_RATE = 175; //RPS
+    public static final double MAX_SHOOTER_ENCODER_RATE = 190; //RPS
     Victor vicShooter = new Victor(Constants.SHOOTER_MOTOR_CHANNEL);
     CustomEncoder encShooter = new CustomEncoder(Constants.ENC_SHOOTER);
-    ParsablePIDController pidShooter = new ParsablePIDController("pidshooter", 0.03, 0.0005, 0.0, encShooter, vicShooter);
+    ParsablePIDController pidShooter = new ParsablePIDController("pidshooter", 0.1, 0.0005, 0.0005, encShooter, vicShooter);
     //Pneumatics are initialized in CommandBase.java
     public Pneumatic shooterLifterPneumatic;
     int shooterState = ShooterState.LOAD;
@@ -34,7 +33,7 @@ public class ShooterSubsystem extends Subsystem {
 
         pidShooter.setInputRange(0, MAX_SHOOTER_ENCODER_RATE);
         pidShooter.setOutputRange(0.0, 1.0);
-        pidShooter.setPercentTolerance(PID_SHOOTER_PERCENT_TOLERANCE);
+        pidShooter.setPercentTolerance(Constants.SHOOTER_PYRAMID_TOLERANCE.get());
     }
 
     public void disable() {
@@ -47,6 +46,10 @@ public class ShooterSubsystem extends Subsystem {
 
     protected void initDefaultCommand() {
         setDefaultCommand(new TeleopShooterCommand());
+    }
+    
+    public void setTolerance(double value) {
+        pidShooter.setPercentTolerance(value);
     }
     
     public void setSetpoint(double setpoint) {

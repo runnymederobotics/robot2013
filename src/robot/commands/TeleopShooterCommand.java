@@ -16,10 +16,13 @@ public class TeleopShooterCommand extends CommandBase {
         //Only run the shooter if the pickup is down
         if (pickupSubsystem.pickupDown()) {
             if (oi.getPyramidSetpoint()) {
+                shooterSubsystem.setTolerance(Constants.SHOOTER_PYRAMID_TOLERANCE.get());
                 shooterSubsystem.setSetpoint(Constants.SHOOTER_PYRAMID_SETPOINT.get());
             } else if (oi.getFeederSetpoint()) {
+                shooterSubsystem.setTolerance(Constants.SHOOTER_FEEDER_TOLERANCE.get());
                 shooterSubsystem.setSetpoint(Constants.SHOOTER_FEEDER_SETPOINT.get());
             } else {
+                shooterSubsystem.setTolerance(Constants.SHOOTER_PYRAMID_TOLERANCE.get());
                 shooterSubsystem.setSetpoint(Math.abs(oi.getManualShooterSpeed()) * ShooterSubsystem.MAX_SHOOTER_ENCODER_RATE);
             }
         } else {
@@ -28,9 +31,11 @@ public class TeleopShooterCommand extends CommandBase {
         
         if(oi.getDisablePIDShooter()) {
             shooterSubsystem.disable();
+        } else {
+            shooterSubsystem.enable();
         }
         
-        if (chassisSubsystem.isMoving() || oi.getShooterLoad()) {
+        if (chassisSubsystem.getHighGear() || oi.getShooterLoad()) {
             shooterSubsystem.setShooterState(ShooterSubsystem.ShooterState.LOAD);
         } else if (oi.getShooterLow()) {
             shooterSubsystem.setShooterState(ShooterSubsystem.ShooterState.LOW);

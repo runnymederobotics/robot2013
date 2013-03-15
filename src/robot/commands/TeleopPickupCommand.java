@@ -25,9 +25,8 @@ public class TeleopPickupCommand extends CommandBase {
             pickupSubsystem.setPneumatic(true);
         }
 
-        //Reverse the motor when the driver doesn't want to drive the roller,
-        //forces the pickup down, and when the operator wants to reverse
-        boolean reverse = !lowerButton && lowerOverride && reversePickup;
+        //Reverse the motor when the pickup is lowered and the operator wants to reverse
+        boolean reverse = pickupSubsystem.pickupDown() && reversePickup;
         //If we want to reverse, runRoller must be true
         boolean runRoller = lowerButton || reverse;
         
