@@ -116,16 +116,23 @@ var startCamera = function(divId, url, callback) {
             callback(data);
         }
         lastImageTime = now;
+        processing = false;
+        setTimeout(kickOffProcessing, 10);
     }
     
     var width = 0;
     var height = 0;
     var imageTag = null;
+    var processing = false;
     
     var kickOffProcessing = function() {
       if (!imageTag) {
           return
       }
+      if (processing) {
+        return;
+      }
+      processing = true;
       
       try {
             offScreenContext.drawImage(imageTag, 0, 0);
@@ -146,8 +153,6 @@ var startCamera = function(divId, url, callback) {
         }
     }
     
-    setInterval(kickOffProcessing, 33);
-    
     var image = imageDiv.append("<img src='#' crossOrigin='Anonymous'/>").children("img");
     image.load(function() {
         if (!context) {
@@ -159,6 +164,7 @@ var startCamera = function(divId, url, callback) {
         }
     
         imageTag = this;
+        kickOffProcessing();
     });
   
     var connectionCounter = $(divId).append("<p></p>").children("p");
