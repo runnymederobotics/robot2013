@@ -7,7 +7,7 @@ import robot.subsystems.ShooterSubsystem;
 public class AutonomousFiveFrisbeeCommandGroup extends CommandGroup {
 
     public AutonomousFiveFrisbeeCommandGroup() {
-        addParallel(new AutonomousPickupCommand(true)); //Lower the pickup
+        addParallel(new AutonomousPickupCommand(true, true)); //Lower the pickup
         addParallel(new AutonomousShooterCommand(ShooterSubsystem.ShooterState.HIGH, Constants.SHOOTER_PYRAMID_SETPOINT.get())); //Raise shooter
         addSequential(new AutonomousHopperCommand(false)); //Shoot all frisbees
         addParallel(new AutonomousShooterCommand(ShooterSubsystem.ShooterState.LOAD)); //Lower shooter

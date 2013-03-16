@@ -24,7 +24,7 @@ public class HangerSubsystem extends Subsystem {
         hangerPneumatic.set(false);
     }
 
-    public void raiseHanger(boolean value) {
+    public void setHanger(boolean value) {
         hangerPneumatic.set(value);
     }
 

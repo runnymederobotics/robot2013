@@ -50,14 +50,14 @@ public class PickupSubsystem extends Subsystem {
     public void runRoller(boolean value, boolean reverse) {
         double pickupSpeed = 0.0;
         double elevatorSpeed = 0.0;
-        if (value || Timer.getFPGATimestamp() - lastFrisbeeSensorTime < Constants.PICKUP_DELAY_AFTER_FRISBEE.get()) {
+        if (pickupDown() && (value || Timer.getFPGATimestamp() - lastFrisbeeSensorTime < Constants.PICKUP_DELAY_AFTER_FRISBEE.get())) {
             //Keep running the roller if we havent waited long enough since the last frisbee
             pickupSpeed = Constants.PICKUP_SPEED.get();
             elevatorSpeed = Constants.ELEVATOR_SPEED.get();
         }
 
         pickupRoller.set(reverse ? -pickupSpeed : pickupSpeed);
-        elevatorRoller.set(reverse ? -elevatorSpeed : elevatorSpeed);
+        elevatorRoller.set(elevatorSpeed);//reverse ? -elevatorSpeed : elevatorSpeed);
     }
 
     public boolean pickupDown() {

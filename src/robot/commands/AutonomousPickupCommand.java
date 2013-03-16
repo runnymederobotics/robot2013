@@ -5,11 +5,13 @@ import robot.Constants;
 
 public class AutonomousPickupCommand extends CommandBase {
 
-    boolean value;
+    boolean lowerPickup;
+    boolean runRoller;
     double startTime = 0;
 
-    public AutonomousPickupCommand(boolean value) {
-        this.value = value;
+    public AutonomousPickupCommand(boolean lowerPickup, boolean runRoller) {
+        this.lowerPickup = lowerPickup;
+        this.runRoller = runRoller;
 
         requires(pickupSubsystem);
     }
@@ -18,8 +20,8 @@ public class AutonomousPickupCommand extends CommandBase {
     }
 
     protected void execute() {
-        pickupSubsystem.runRoller(value, false); //Don't run roller in reverse
-        pickupSubsystem.setPneumatic(value);
+        pickupSubsystem.runRoller(runRoller, false); //Don't run roller in reverse
+        pickupSubsystem.setPneumatic(lowerPickup);
 
         double now = Timer.getFPGATimestamp();
         //If it's the first run through, record releaseTime, otherwise leave it alone

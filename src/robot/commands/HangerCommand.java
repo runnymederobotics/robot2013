@@ -10,7 +10,8 @@ public class HangerCommand extends CommandBase {
     }
 
     protected void execute() {
-        hangerSubsystem.raiseHanger(oi.getRaiseHanger());
+        //Interlock so that hanger can only be raised when in low gear
+        hangerSubsystem.setHanger(!chassisSubsystem.getHighGear() && oi.getRaiseHanger());
     }
 
     protected boolean isFinished() {
