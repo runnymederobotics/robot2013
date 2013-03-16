@@ -97,10 +97,9 @@ var startCamera = function(divId, url, callback) {
         drawContours(data.outerPolygons, "#0000ff", 2);
         drawDots(data.centroids, "#ff0000");
 
-        if (data.selected) {
-            var selected = data.selected;
-            drawLine(selected.leftSide, "#ff007f", 4);
-            drawLine(selected.rightSide, "#ff7f00", 4);
+        if (data.selected.leftSide && data.selected.rightSide) {
+            drawLine(data.selected.leftSide, "#ff007f", 4);
+            drawLine(data.selected.rightSide, "#ff7f00", 4);
         }
         var now = new Date().getTime();
         frameTime.append(now, data.processing_time);
