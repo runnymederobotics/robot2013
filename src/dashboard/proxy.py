@@ -13,29 +13,33 @@ server.listen(5)
 parsed_url = urlparse.urlparse(sys.argv[1])
 
 def HandleClient(client):
-  remote = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-  global parsed_url
-  remote.connect((parsed_url.hostname, int(parsed_url.port)))
-  remote = remote.makefile()
+  try:
+    remote = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    global parsed_url
+    remote.connect((parsed_url.hostname, int(parsed_url.port)))
+    remote = remote.makefile()
 
-  lines = []
-  while True:
-    line = client.readline()
-    lines.append(line)
-    if line == "\r\n":
-      break
-  for line in lines:
-    print line,
-    remote.write(line)
-  remote.flush()
+    lines = []
+    while True:
+      line = client.readline()
+      lines.append(line)
+      if line == "\r\n":
+        break
+    for line in lines:
+      print line,
+      remote.write(line)
+    remote.flush()
 
-  start = remote.readline()
-  client.write(start)
-  client.write("Access-Control-Allow-Origin: *\r\n")
-  while True:
-    data = remote.read(2048)
-    client.write(data)
-    client.flush()
+    start = remote.readline()
+    client.write(start)
+    client.write("Access-Control-Allow-Origin: *\r\n")
+    while True:
+      data = remote.read(2048)
+      client.write(data)
+      client.flush()
+  except:
+    client.close()
+    remote.close()
 
 
 while True:

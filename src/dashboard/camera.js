@@ -42,9 +42,11 @@ var startCamera = function(divId, url, callback) {
     var dataTable = dataDiv.find("table");
     var targetAngleDisplay = addTableRow(dataTable, "Target Angle");
     var targetDistanceDisplay = addTableRow(dataTable, "Target Distance");
+    var connectionTimeDisplay = addTableRow(dataTable, "Connection Time");
     var frames = 0;
     var lastImageTime = 0;
     var lastFpsTime = 0;
+    var lastConnectionTime = 0;
   
     var frameWorker = new Worker("image_processor.js");
     frameWorker.onmessage = function() {};
@@ -111,6 +113,7 @@ var startCamera = function(divId, url, callback) {
         frames += 1;
         targetAngleDisplay.text(data.selected.targetAngle.toFixed(5));
         targetDistanceDisplay.text(data.selected.targetDistance.toFixed(5));
+        connectionTimeDisplay.text(Math.floor((now - lastConnectionTime) / 1000));
         if (callback) {
             data.image = "[Binary Blob]";
             callback(data);
@@ -173,6 +176,7 @@ var startCamera = function(divId, url, callback) {
     var connect = function() {
         var now = new Date().getTime();
         if (now - lastImageTime > 2000) {
+            lastConnectionTime = now;
             connectionCount += 1;
             connectionCounter.text("Connection Attempts: " + connectionCount);
             image.attr("src", "#");
