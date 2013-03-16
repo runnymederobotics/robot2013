@@ -120,6 +120,33 @@ var startCamera = function(divId, url, callback) {
     
     var width = 0;
     var height = 0;
+    var imageTag = null;
+    
+    var kickOffProcessing = function() {
+      if (!imageTag) {
+          return
+      }
+      
+      try {
+            offScreenContext.drawImage(imageTag, 0, 0);
+            
+            var imageData = offScreenContext.getImageData(0, 0, imageTag.width, imageTag.height);
+            frameWorker.postMessage({
+                pixels: imageData,
+                width: imageTag.width,
+                height: imageTag.height
+                });
+        } catch (e) {
+            container.empty();
+            container.append("<p>Error reading the image data. This is most likely caused by a cross origin security issue. "
+                + "Ensure the video feed has a valid Access-Control-Allow-Origin header. The ForceCORS Firefox "
+                + "extension can be used to add the header to all responses. ONLY USE THE EXTENSION IF YOU KNOW "
+                + "WHAT YOU'RE DOING. DISABLE IT WHEN YOU'RE DONE. https://addons.mozilla.org/en-US/firefox/addon/forcecors/</p>");
+            throw e;
+        }
+    }
+    
+    setInterval(kickOffProcessing, 33);
     
     var image = imageDiv.append("<img src='#' crossOrigin='Anonymous'/>").children("img");
     image.load(function() {
@@ -131,23 +158,7 @@ var startCamera = function(divId, url, callback) {
             offScreenContext = getCanvasContext(this.width, this.height, null);
         }
     
-        try {
-            offScreenContext.drawImage(this, 0, 0);
-            
-            var imageData = offScreenContext.getImageData(0, 0, this.width, this.height);
-            frameWorker.postMessage({
-                pixels: imageData,
-                width: this.width,
-                height: this.height
-                });
-        } catch (e) {
-            container.empty();
-            container.append("<p>Error reading the image data. This is most likely caused by a cross origin security issue. "
-                + "Ensure the video feed has a valid Access-Control-Allow-Origin header. The ForceCORS Firefox "
-                + "extension can be used to add the header to all responses. ONLY USE THE EXTENSION IF YOU KNOW "
-                + "WHAT YOU'RE DOING. DISABLE IT WHEN YOU'RE DONE. https://addons.mozilla.org/en-US/firefox/addon/forcecors/</p>");
-            throw e;
-        }
+        imageTag = this;
     });
   
     var connectionCounter = $(divId).append("<p></p>").children("p");
