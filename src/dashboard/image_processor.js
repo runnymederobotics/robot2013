@@ -41,10 +41,12 @@ Filters.toHSV = function(pixels) {
   var i = 0;
   var min, max, delta;
   var r, g, b, h;
+  var sum = 0;
   for (var i = 0; i < d.length; i += 4) {
     r = d[i];
     g = d[i+1];
     b = d[i+2];
+    sum += r + g + b;
     min = Math.min(r, g, b);
     max = Math.max(r, g, b);
     d[i] = max;
@@ -68,7 +70,7 @@ Filters.toHSV = function(pixels) {
       d[i+2] = h;
     }
   }
-  return pixels;
+  return {pixels: pixels, sum: sum};
 }
 
 
@@ -256,7 +258,8 @@ var detector = new AR.Detector();
 onmessage = function(event) {
   var start = new Date().getTime();
   var pixels = event.data.pixels;
-  var hsv = Filters.toHSV(pixels);
+  var hsvData = Filters.toHSV(pixels);
+  var hsv = hsvData.pixels;
   var inRange = Filters.inRange(hsv, event.data.width, event.data.height,
       // TODO: make the colours selectable
       [30, 110, 110], [200, 255, 255]);
@@ -270,6 +273,7 @@ onmessage = function(event) {
   cvImageToPixels(inRange, pixels);
   var end = new Date().getTime();
   self.postMessage({image: pixels,
+      image_sum: hsvData.sum,
       processing_time: end - start,
       contours: contours,
       candidates: candidates,

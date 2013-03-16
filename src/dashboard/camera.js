@@ -43,6 +43,10 @@ var startCamera = function(divId, url, callback) {
     var targetAngleDisplay = addTableRow(dataTable, "Target Angle");
     var targetDistanceDisplay = addTableRow(dataTable, "Target Distance");
     var connectionTimeDisplay = addTableRow(dataTable, "Connection Time");
+    var lastSumDisplay = addTableRow(dataTable, "Last Sum");
+    var ignoredDisplay = addTableRow(dataTable, "Frames Ignored");
+    var usedDisplay = addTableRow(dataTable, "Frames Used");
+    
     var frames = 0;
     var lastImageTime = 0;
     var lastFpsTime = 0;
@@ -91,6 +95,9 @@ var startCamera = function(divId, url, callback) {
         context.lineWidth = oldWidth;
     }
 
+    var lastSum = 0;
+    var ignoreCount = 0;
+    var usedCount = 0;
     frameWorker.onmessage = function(event) {
         var data = event.data;
         context.putImageData(data.image, 0, 0);
@@ -111,30 +118,43 @@ var startCamera = function(divId, url, callback) {
             lastFpsTime = now;
         }
         frames += 1;
+        
+        
+        if (data.image_sum != lastSum) {
+            usedCount += 1;
+            lastImageTime = now;
+            data.image = "[Binary Blob]";
+            callback(data);
+        } else {
+            ignoreCount += 1;
+        }
+        lastSum = data.image_sum;
+        
         targetAngleDisplay.text(data.selected.targetAngle.toFixed(5));
         targetDistanceDisplay.text(data.selected.targetDistance.toFixed(5));
         connectionTimeDisplay.text(Math.floor((now - lastConnectionTime) / 1000));
-        if (callback) {
-            data.image = "[Binary Blob]";
-            callback(data);
-        }
-        lastImageTime = now;
+        lastSumDisplay.text(lastSum);
+        ignoredDisplay.text(ignoreCount);
+        usedDisplay.text(usedCount);        
+        
         processing = false;
-        setTimeout(kickOffProcessing, 10);
+        if (wantProcess) {
+            kickOffProcessing();
+        }
     }
     
     var width = 0;
     var height = 0;
     var imageTag = null;
     var processing = false;
+    var wantProcess = false;
     
     var kickOffProcessing = function() {
-      if (!imageTag) {
-          return
-      }
       if (processing) {
-        return;
+        wantProcess = true;
+        return false;
       }
+      wantProcess = false;
       processing = true;
       
       try {
@@ -154,6 +174,7 @@ var startCamera = function(divId, url, callback) {
                 + "WHAT YOU'RE DOING. DISABLE IT WHEN YOU'RE DONE. https://addons.mozilla.org/en-US/firefox/addon/forcecors/</p>");
             throw e;
         }
+        return true;
     }
     
     var image = imageDiv.append("<img src='#' crossOrigin='Anonymous'/>").children("img");
@@ -173,6 +194,7 @@ var startCamera = function(divId, url, callback) {
     var connectionCounter = $(divId).append("<p></p>").children("p");
   
     var connectionCount = 0;
+    image.attr("src", url);
     var connect = function() {
         var now = new Date().getTime();
         if (now - lastImageTime > 2000) {
@@ -181,12 +203,12 @@ var startCamera = function(divId, url, callback) {
             connectionCounter.text("Connection Attempts: " + connectionCount);
             image.attr("src", "#");
             image.attr("src", url);
+            console.log("reconnecting " + new Date().getTime());
+            startCamera(divId, url, callback);
         } else {
             connectionCounter.text("");
+            setTimeout(connect, 200);
         }
     }
-    setInterval(connect, 1000)
-    connect();
-    
-    //topLevel.find(".hideable").hide();
+    setTimeout(connect, 1000);
 }

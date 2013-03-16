@@ -244,17 +244,20 @@
                 var connected = false;
                 var sentInit = false;
                 
-                var lastAutonomous = 0;
+                var onCameraData = function (data) {
+                    if (data.selected.found) {
+                        var selected = data.selected;
+                        sendVariablesToRobot({auto_aim_target_angle: selected.targetAngle,
+                            auto_aim_target_distance: selected.targetDistance});
+                    }
+                }
+                
                 //"http://10.13.10.11:80/mjpg/video.mjpg?resolution=320x240"
                 //"http://192.168.1.144:8080/videofeed"
-                startCamera("#camera_area", "http://192.168.1.125:8081/mjpg/video.mjpg?resolution=320x240",
-                    function (data) {
-                        if (data.selected.found) {
-                            var selected = data.selected;
-                            sendVariablesToRobot({auto_aim_target_angle: selected.targetAngle,
-                                auto_aim_target_distance: selected.targetDistance});
-                        }
-                    });
+                startCamera("#camera_area", "http://192.168.1.144:8080/videofeed",
+                    onCameraData);
+      
+                var lastAutonomous = 0;
       
                 setInterval(function() {             
                     var now = new Date().getTime();
@@ -371,26 +374,26 @@
                 display: inline-block;
             }
             
-            #camera_area {
+            .camera_area {
                 display: inline-block;
             }
-            #camera_area table {
+            .camera_area table {
                 border-collapse:collapse;
                 width: 320;
             }
-            #camera_area table, #camera_area th, #camera_area td {
+            .camera_area table, .camera_area th, .camera_area td {
                 border: 1px solid black;
             }
-            #camera_area td {
+            .camera_area td {
                 width: 50%;
             }
-            #camera_area .data {
+            .camera_area .data {
                 text-align: right;
             }
         </style>
     </head>
     <body id="body">
-        <div id="camera_area"></div>
+        <div id="camera_area" class="camera_area"></div>
         <div id="auto_selector">
             <div id="auto_modes">
                 <h1>Autonomous Mode</h1>
