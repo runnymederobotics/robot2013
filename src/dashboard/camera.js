@@ -48,7 +48,6 @@ var startCamera = function(divId, url, callback) {
     var usedDisplay = addTableRow(dataTable, "Frames Used");
     
     var frames = 0;
-    var lastImageTime = 0;
     var lastFpsTime = 0;
     var lastConnectionTime = 0;
   
@@ -99,6 +98,8 @@ var startCamera = function(divId, url, callback) {
     var ignoreCount = 0;
     var usedCount = 0;
     frameWorker.onmessage = function(event) {
+        getImage();
+      
         var data = event.data;
         context.putImageData(data.image, 0, 0);
         drawContours(data.contours, "#00ff00", 1);
@@ -110,6 +111,7 @@ var startCamera = function(divId, url, callback) {
             drawLine(data.selected.leftSide, "#ff007f", 4);
             drawLine(data.selected.rightSide, "#ff7f00", 4);
         }
+        
         var now = new Date().getTime();
         frameTime.append(now, data.processing_time);
         if (now - lastFpsTime >= 1000) {
@@ -119,47 +121,23 @@ var startCamera = function(divId, url, callback) {
         }
         frames += 1;
         
-        
-        if (data.image_sum != lastSum) {
-            usedCount += 1;
-            lastImageTime = now;
-            data.image = "[Binary Blob]";
-            callback(data);
-        } else {
-            ignoreCount += 1;
-        }
-        lastSum = data.image_sum;
+        data.image = "[Binary Blob]";
+        callback(data);
         
         targetAngleDisplay.text(data.selected.targetAngle.toFixed(5));
         targetDistanceDisplay.text(data.selected.targetDistance.toFixed(5));
         connectionTimeDisplay.text(Math.floor((now - lastConnectionTime) / 1000));
         lastSumDisplay.text(lastSum);
         ignoredDisplay.text(ignoreCount);
-        usedDisplay.text(usedCount);        
-        
-        processing = false;
-        if (wantProcess) {
-            kickOffProcessing();
-        }
+        usedDisplay.text(usedCount);
     }
     
     var width = 0;
     var height = 0;
-    var imageTag = null;
-    var processing = false;
-    var wantProcess = false;
-    
-    var kickOffProcessing = function() {
-      if (processing) {
-        wantProcess = true;
-        return false;
-      }
-      wantProcess = false;
-      processing = true;
-      
+        
+    var kickOffProcessing = function(imageTag) {
       try {
             offScreenContext.drawImage(imageTag, 0, 0);
-            
             var imageData = offScreenContext.getImageData(0, 0, imageTag.width, imageTag.height);
             frameWorker.postMessage({
                 pixels: imageData,
@@ -187,28 +165,12 @@ var startCamera = function(divId, url, callback) {
             offScreenContext = getCanvasContext(this.width, this.height, null);
         }
     
-        imageTag = this;
-        kickOffProcessing();
+        kickOffProcessing(this);
     });
   
-    var connectionCounter = $(divId).append("<p></p>").children("p");
-  
-    var connectionCount = 0;
-    image.attr("src", url);
-    var connect = function() {
-        var now = new Date().getTime();
-        if (now - lastImageTime > 2000) {
-            lastConnectionTime = now;
-            connectionCount += 1;
-            connectionCounter.text("Connection Attempts: " + connectionCount);
-            image.attr("src", "#");
-            image.attr("src", url);
-            console.log("reconnecting " + new Date().getTime());
-            startCamera(divId, url, callback);
-        } else {
-            connectionCounter.text("");
-            setTimeout(connect, 200);
-        }
+    var getImage = function() {
+        image.attr("src", "#");
+        image.attr("src", url + "?cache=" + new Date().getTime());
     }
-    setTimeout(connect, 1000);
+    getImage();
 }
