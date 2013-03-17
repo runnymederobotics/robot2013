@@ -42,14 +42,9 @@ var startCamera = function(divId, url, callback) {
     var dataTable = dataDiv.find("table");
     var targetAngleDisplay = addTableRow(dataTable, "Target Angle");
     var targetDistanceDisplay = addTableRow(dataTable, "Target Distance");
-    var connectionTimeDisplay = addTableRow(dataTable, "Connection Time");
-    var lastSumDisplay = addTableRow(dataTable, "Last Sum");
-    var ignoredDisplay = addTableRow(dataTable, "Frames Ignored");
-    var usedDisplay = addTableRow(dataTable, "Frames Used");
     
     var frames = 0;
     var lastFpsTime = 0;
-    var lastConnectionTime = 0;
   
     var frameWorker = new Worker("image_processor.js");
     frameWorker.onmessage = function() {};
@@ -94,10 +89,9 @@ var startCamera = function(divId, url, callback) {
         context.lineWidth = oldWidth;
     }
 
-    var lastSum = 0;
-    var ignoreCount = 0;
-    var usedCount = 0;
+    var lastImageTime = 0;
     frameWorker.onmessage = function(event) {
+        lastImageTime = new Date().getTime();
         getImage();
       
         var data = event.data;
@@ -126,15 +120,8 @@ var startCamera = function(divId, url, callback) {
         
         targetAngleDisplay.text(data.selected.targetAngle.toFixed(5));
         targetDistanceDisplay.text(data.selected.targetDistance.toFixed(5));
-        connectionTimeDisplay.text(Math.floor((now - lastConnectionTime) / 1000));
-        lastSumDisplay.text(lastSum);
-        ignoredDisplay.text(ignoreCount);
-        usedDisplay.text(usedCount);
     }
     
-    var width = 0;
-    var height = 0;
-        
     var kickOffProcessing = function(imageTag) {
       try {
             offScreenContext.drawImage(imageTag, 0, 0);
@@ -158,9 +145,6 @@ var startCamera = function(divId, url, callback) {
     var image = imageDiv.append("<img src='#' crossOrigin='Anonymous'/>").children("img");
     image.load(function() {
         if (!context) {
-            width = this.width;
-            height = this.height;
-            
             context = getCanvasContext(this.width, this.height, processedDiv);
             offScreenContext = getCanvasContext(this.width, this.height, null);
         }
@@ -170,7 +154,13 @@ var startCamera = function(divId, url, callback) {
   
     var getImage = function() {
         image.attr("src", "#");
-        image.attr("src", url + "?cache=" + new Date().getTime());
+        image.attr("src", url + "&cache=" + new Date().getTime());
     }
     getImage();
+    
+    setInterval(function() {
+      if (new Date().getTime() - lastImageTime > 1000) {
+        getImage();
+      }
+    }, 1000);
 }
