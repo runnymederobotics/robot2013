@@ -20,6 +20,7 @@ public class Constants {
     public static ParsableDouble AUTO_SHIFT_UP_THRESHOLD = new ParsableDouble("auto_shift_up_threshold", 0.9);
     public static ParsableDouble AUTO_SHIFT_DOWN_THRESHOLD = new ParsableDouble("auto_shift_down_threshold", 0.5);
     //Aim command
+    public static ParsableDouble CAMERA_ERROR = new ParsableDouble("camera_error", 2.0);
     public static ParsableDouble AUTO_AIM_TARGET_ANGLE = new ParsableDouble("auto_aim_target_angle", 0.0);
     public static ParsableDouble AUTO_AIM_ON_TARGET_TIME = new ParsableDouble("auto_aim_on_target_time", 1.0);
     //Chassis subsystem

@@ -24,7 +24,9 @@ public class AimCommand extends CommandBase {
     }
 
     protected void execute() {
-        double targetAngle = Constants.AUTO_AIM_TARGET_ANGLE.get();
+        //This will make the camera shift over to the right by CAMERA_ERROR, or it will make the camera run away
+        //from the target. It all depends on the sign of CAMERA_ERROR, must tweak
+        double targetAngle = Constants.AUTO_AIM_TARGET_ANGLE.get() - Constants.CAMERA_ERROR.get();
 
         //Only set the setpoint if it's changed from the last setpoint we saw
         if (lastTargetAngle != targetAngle) {

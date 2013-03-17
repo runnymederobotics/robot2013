@@ -21,6 +21,9 @@ public class PositioningSubsystem extends Subsystem {
     double lastDistance = 0;
 
     public PositioningSubsystem() {
+        //Found in http://pdf1.alldatasheet.com/datasheet-pdf/view/347604/AD/ADXRS652BBGZ-RL.html
+        //This is the same gyro that is found in 2012 and 2013 KoP
+        positionGyro.setSensitivity(0.007);
     }
 
     protected void initDefaultCommand() {

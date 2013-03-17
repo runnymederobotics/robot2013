@@ -21,7 +21,6 @@ public class OI {
         //Driver Buttons
         public static ParsableInt SHIFT_LOW_GEAR_BUTTON = new ParsableInt("driver_shift_low_gear_button", 7);
         public static ParsableInt SHIFT_HIGH_GEAR_BUTTON = new ParsableInt("driver_shift_high_gear_button", 8);
-        public static ParsableInt TOGGLE_AUTO_SHIFT_BUTTON = new ParsableInt("driver_toggle_auto_shift_button", 1);
         public static ParsableInt TOGGLE_ENABLE_CHASSIS_PID_BUTTON = new ParsableInt("driver_toggle_enable_chassis_pid_button", 2);
         public static ParsableInt PICKUP_LOWER_BUTTON = new ParsableInt("driver_pickup_lower_button", 6);
         public static ParsableInt PICKUP_LOWER_OVERRIDE_BUTTON = new ParsableInt("driver_pickup_lower_override_button", 5);
@@ -49,14 +48,9 @@ public class OI {
     public static final ParsableDouble SHOOTER_MINIMUM_SPEED = new ParsableDouble("shooter_minimum_speed", 0.75);
     Joystick stickDriver = new Joystick(Driver.PORT);
     Joystick stickOperator = new Joystick(Operator.PORT);
-    Toggle autoShift = new Toggle(false);
     Toggle enableChassisPID = new Toggle(true);
 
     //DRIVER
-    public boolean getAutoShift() {
-        return autoShift.update(stickDriver.getRawButton(Driver.TOGGLE_AUTO_SHIFT_BUTTON.get()));
-    }
-
     public boolean getEnableChassisPID() {
         return enableChassisPID.update(stickDriver.getRawButton(Driver.TOGGLE_ENABLE_CHASSIS_PID_BUTTON.get()));
     }
