@@ -197,11 +197,12 @@ var toRadians = function(degrees) {
 }
 
 // TODO: confirm the angle of view variables
-var xAngleOfView = 55.0; //Found in a pdf on axis.com
-var yAngleOfView = 43; //xAngleOfView / aspectRatio;
+var xAngleOfView = 47; //Found in a pdf on axis.com
+var yAngleOfView = 35.25; //xAngleOfView / aspectRatio;
 // TODO: select real values for the variables below
-var rlTargetHeight = 18; //inches
-var cameraHeight = 48; //inches
+var rlTargetHeight = 12; //inches
+//TODO: find the actual value here
+var cameraHeight = 20; //inches
 
 var selectTarget = function(outerPolygons, centroids, imageWidth, imageHeight) {
   // Select the highest target
