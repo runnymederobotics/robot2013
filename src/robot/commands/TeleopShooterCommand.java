@@ -15,15 +15,20 @@ public class TeleopShooterCommand extends CommandBase {
     protected void execute() {
         //Only run the shooter if the pickup is down
         if (pickupSubsystem.pickupDown()) {
-            if (oi.getPyramidSetpoint()) {
-                shooterSubsystem.setTolerance(Constants.SHOOTER_PYRAMID_TOLERANCE.get());
-                shooterSubsystem.setSetpoint(Constants.SHOOTER_PYRAMID_SETPOINT.get());
-            } else if (oi.getFeederSetpoint()) {
-                shooterSubsystem.setTolerance(Constants.SHOOTER_FEEDER_TOLERANCE.get());
-                shooterSubsystem.setSetpoint(Constants.SHOOTER_FEEDER_SETPOINT.get());
-            } else {
-                shooterSubsystem.setTolerance(Constants.SHOOTER_PYRAMID_TOLERANCE.get());
-                shooterSubsystem.setSetpoint(Math.abs(oi.getManualShooterSpeed()) * ShooterSubsystem.MAX_SHOOTER_ENCODER_RATE);
+            switch(shooterSubsystem.getShooterState()) {
+                case ShooterSubsystem.ShooterState.LOW:
+                    shooterSubsystem.setTolerance(Constants.SHOOTER_FEEDER_TOLERANCE.get());
+                    shooterSubsystem.setSetpoint(Constants.SHOOTER_FEEDER_SETPOINT.get());
+                    break;
+                case ShooterSubsystem.ShooterState.HIGH:
+                    shooterSubsystem.setTolerance(Constants.SHOOTER_PYRAMID_TOLERANCE.get());
+                    shooterSubsystem.setSetpoint(Constants.SHOOTER_PYRAMID_SETPOINT.get());
+                    break;
+                case ShooterSubsystem.ShooterState.LOAD:
+                default:
+                    shooterSubsystem.setTolerance(Constants.SHOOTER_PYRAMID_TOLERANCE.get());
+                    shooterSubsystem.setSetpoint(Math.abs(oi.getManualShooterSpeed()) * ShooterSubsystem.MAX_SHOOTER_ENCODER_RATE);
+                    break;
             }
         } else {
             shooterSubsystem.setSetpoint(0.0);

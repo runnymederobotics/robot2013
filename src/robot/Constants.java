@@ -32,7 +32,7 @@ public class Constants {
     public static ParsableDouble HOPPER_RELEASE_DELAY = new ParsableDouble("hopper_shoot_delay", 0.5);
     //Pickup subsystem
     public static ParsableDouble PICKUP_SPEED = new ParsableDouble("pickup_roller_speed", -1.0);
-    public static ParsableDouble ELEVATOR_SPEED = new ParsableDouble("elevator_roller_speed", -0.5);
+    public static ParsableDouble ELEVATOR_SPEED = new ParsableDouble("elevator_roller_speed", -0.6);
     public static ParsableDouble PICKUP_DELAY_AFTER_FRISBEE = new ParsableDouble("pickup_delay_after_frisbee", 1.0);
     //Shooter subsystem
     public static ParsableDouble SHOOTER_MIN_SHOOT_THRESHOLD = new ParsableDouble("shooter_min_shoot_threshold", 0.3);
