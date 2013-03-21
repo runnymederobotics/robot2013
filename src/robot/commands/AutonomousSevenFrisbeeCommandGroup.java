@@ -10,7 +10,7 @@ public class AutonomousSevenFrisbeeCommandGroup extends CommandGroup {
         addParallel(new AutonomousPickupCommand(true, true)); //Lower the pickup and run the roller
         addSequential(new AutonomousShooterCommand(ShooterSubsystem.ShooterState.HIGH, Constants.SHOOTER_PYRAMID_SETPOINT.get())); //Raise shooter to medium level
         addSequential(new AutonomousHopperCommand(false)); //Shoot all frisbees
-        //addSequential(new AutonomousShooterCommand(ShooterSubsystem.ShooterState.LOAD));
+        addSequential(new AutonomousShooterCommand(ShooterSubsystem.ShooterState.LOAD));
 
         addSequential(new AutonomousDriveCommand(Constants.SEVEN_FRISBEE_DRIVE_FORWARD_INCHES.get()));
         addSequential(new AutonomousDriveCommand(-Constants.SEVEN_FRISBEE_DRIVE_FORWARD_INCHES.get()));
