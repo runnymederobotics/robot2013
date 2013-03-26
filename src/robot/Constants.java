@@ -34,6 +34,7 @@ public class Constants {
     public static ParsableDouble PICKUP_SPEED = new ParsableDouble("pickup_roller_speed", -1.0);
     public static ParsableDouble ELEVATOR_SPEED = new ParsableDouble("elevator_roller_speed", -0.8);
     public static ParsableDouble PICKUP_DELAY_AFTER_FRISBEE = new ParsableDouble("pickup_delay_after_frisbee", 1.0);
+    public static ParsableDouble PICKUP_FRISBEE_JAM_TIME = new ParsableDouble("pickup_frisbee_jam_time", 5.0);
     //Shooter subsystem
     public static ParsableDouble SHOOTER_MIN_SHOOT_THRESHOLD = new ParsableDouble("shooter_min_shoot_threshold", 0.3);
     public static ParsableDouble SHOOTER_PYRAMID_SETPOINT = new ParsableDouble("shooter_pyramid_setpoint", 150); //.78 * 175 (old value)
@@ -41,7 +42,7 @@ public class Constants {
     public static ParsableDouble SHOOTER_PYRAMID_TOLERANCE = new ParsableDouble("shooter_pyramid_tolerance", 3.5);
     public static ParsableDouble SHOOTER_FEEDER_TOLERANCE = new ParsableDouble("shooter_feeder_tolerance", 2);
     //Seven frisbee autonomous
-    public static ParsableDouble SEVEN_FRISBEE_DRIVE_FORWARD_INCHES = new ParsableDouble("seven_frisbee_drive_forward_inches", 116);
+    public static ParsableDouble SEVEN_FRISBEE_DRIVE_FORWARD_INCHES = new ParsableDouble("seven_frisbee_drive_forward_inches", 128);
     //Five frisbee autonomous
     public static ParsableDouble FIVE_FRISBEE_DRIVE_FORWARD_INCHES = new ParsableDouble("five_frisbee_drive_forward_inches", 50);
     //Autonomous hopper command

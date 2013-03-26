@@ -27,6 +27,10 @@ public class HangerSubsystem extends Subsystem {
     public void setHanger(boolean value) {
         hangerPneumatic.set(value);
     }
+    
+    public boolean getHanger() {
+        return hangerPneumatic.get();
+    }
 
     public void print() {
         System.out.println("[" + this.getName() + "]");

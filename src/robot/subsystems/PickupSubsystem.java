@@ -17,6 +17,8 @@ public class PickupSubsystem extends Subsystem {
     public Pneumatic pickupPneumatic;
     boolean lastFrisbeeSensor = false;
     double lastFrisbeeSensorTime = 0.0;
+    double lastNoFrisbeeSensorTime = 0.0;
+    boolean disablePickupRoller = false;
 
     public PickupSubsystem() {
     }
@@ -45,19 +47,39 @@ public class PickupSubsystem extends Subsystem {
 
         //There is a frisbee in the pickup when frisbeeSensor.get() is false
         lastFrisbeeSensorTime = !frisbeeSensor.get() ? now : lastFrisbeeSensorTime;
+        //The amount of time since our pickup was clear
+        lastNoFrisbeeSensorTime = frisbeeSensor.get() ? now : lastNoFrisbeeSensorTime;
     }
 
     public void runRoller(boolean value, boolean reverse) {
         double pickupSpeed = 0.0;
         double elevatorSpeed = 0.0;
-        if (pickupDown() && (value || Timer.getFPGATimestamp() - lastFrisbeeSensorTime < Constants.PICKUP_DELAY_AFTER_FRISBEE.get())) {
+        double now = Timer.getFPGATimestamp();
+        if (pickupDown() && (value || now - lastFrisbeeSensorTime < Constants.PICKUP_DELAY_AFTER_FRISBEE.get())) {
             //Keep running the roller if we havent waited long enough since the last frisbee
             pickupSpeed = Constants.PICKUP_SPEED.get();
             elevatorSpeed = Constants.ELEVATOR_SPEED.get();
         }
+        
+        //THIS CODE WAS JUST ADDED, MUST TEST
+        //DONT DOWNLOAD UNLESS SUFFICIENT TIME TO TEST
+        //If we've seen a frisbee for more than this amount of time, reverse the roller
+        /*if(pickupDown() && now - lastNoFrisbeeSensorTime > Constants.PICKUP_FRISBEE_JAM_TIME.get()) {
+            //Run the roller in reverse
+            pickupSpeed = Constants.PICKUP_SPEED.get();
+            reverse = true;
+        }*/
 
-        pickupRoller.set(reverse ? -pickupSpeed : pickupSpeed);
+        if (!disablePickupRoller) {
+            pickupRoller.set(reverse ? -pickupSpeed : pickupSpeed);
+        } else {
+            pickupRoller.set(0);
+        }
         elevatorRoller.set(elevatorSpeed);//reverse ? -elevatorSpeed : elevatorSpeed);
+    }
+    
+    public void setDisablePickupRoller(boolean value) {
+        disablePickupRoller = value;
     }
 
     public boolean pickupDown() {

@@ -30,6 +30,7 @@ public class TeleopPickupCommand extends CommandBase {
         //If we want to reverse, runRoller must be true
         boolean runRoller = lowerButton || reverse;
         
+        pickupSubsystem.setDisablePickupRoller(oi.getDisablePickupRoller());
         pickupSubsystem.runRoller(runRoller, reverse);
     }
 

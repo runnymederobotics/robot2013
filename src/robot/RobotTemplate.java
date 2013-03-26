@@ -100,13 +100,13 @@ public class RobotTemplate extends IterativeRobot {
 
     //This function is called at the start of autonomous
     public void autonomousInit() {
-        CommandGroup autonomousCommand = null;
+        CommandGroup autonomousCommand = new AutonomousSevenFrisbeeCommandGroup();;
         switch (Constants.AUTONOMOUS_MODE.get()) {
             case 0:
-                autonomousCommand = new AutonomousThreeFrisbeeCommandGroup();
+                autonomousCommand = new AutonomousSevenFrisbeeCommandGroup();
                 break;
             case 1:
-                autonomousCommand = new AutonomousSevenFrisbeeCommandGroup();
+                autonomousCommand = new AutonomousThreeFrisbeeCommandGroup();
                 break;
             case 2:
                 autonomousCommand = new AutonomousFiveFrisbeeCommandGroup();
