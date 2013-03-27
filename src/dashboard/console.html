@@ -128,86 +128,63 @@
                 }
                 
                 
-                var drawFrisbee = function(x, y, filled) {
-                    var radius = 30;
-                    var width = 200;
+                var drawFrisbeeDisplay = function(pickupFrisbee, hopperFrisbee) {
                     
-                    var context = $("#frisbeeCounter")[0].getContext('2d');
-                    
-                    y += 1;
-                    x += 1;
-                    
-                    context.beginPath();
-                    context.moveTo(x + width / 2,y);
-                    context.arcTo(x+width,y,x+width,y+radius,radius);
-                    context.lineTo(x, y+radius);
-                    context.arcTo(x, y, x+radius, y, radius);
-                    context.closePath();
-
-                    if(filled) {
-                        context.fillStyle = "rgb(214, 255, 142)";
-                    } else {
-                        context.fillStyle = "white";
-                    }
-                    context.fill();
-
-                    context.stroke();
-                };
-                
-                var drawFrisbeeCounter = function(frisbeeInfo){
-                    //frisbeeInfo will be a 4 digit integer, 1111 being all 4 full, 0000 being all empty
-                    
-                    var canvas = $("#frisbeeCounter")[0];
-                    var context = canvas.getContext('2d');
+                    var canvas = $("#frisbeeDisplay")[0];
+                    var context = canvas.getContext("2d");
                     
                     context.save();
-                    context.clearRect(0, 0, canvas.width, canvas.radius);
+                    context.clearRect(0, 0, canvas.width, canvas.height);
                     context.restore();
                     
-                    var stringValue = frisbeeInfo.toString();
+                    context.fillStyle = "#66FF00";
+                    context.lineWidth = 2;
+                    context.strokeStyle = "black";
                     
-                    var length = stringValue.length;
-                    var y = 40 * (4 - stringValue.length);
+                    var width = canvas.width;
+                    var height = canvas.height;
                     
-                    for(var i = 0; i < (4 - length); ++i) {
-                        drawFrisbee(0, 40 * i, false);
+                    context.beginPath();
+                    context.rect(1, 1, width / 2 - 1, height - 2);
+                    context.closePath();
+                    
+                    if(pickupFrisbee) {
+                        context.fillStyle = "#66FF00";
+                        context.fill();
+                    } else {
+                        context.fillStyle = "red";
+                        context.fill();
                     }
+                    context.stroke();
                     
-                    for (var i = length; i > 0; --i) {
-                        drawFrisbee(0, y + 40 * (i - 1), stringValue[i - 1] == '1');
+                    context.beginPath();
+                    context.rect(width / 2, 1, width / 2 - 1, height - 2);
+                    context.closePath();
+                    
+                    if(hopperFrisbee) {
+                        context.fillStyle = "#66FF00";
+                        context.fill();
+                    } else {
+                        context.fillStyle = "red";
+                        context.fill();
                     }
-                };
-                setInterval(function() {
-                    var str = Math.round(Math.random()) + "" + Math.round(Math.random()) + "" + Math.round(Math.random()) + "" + Math.round(Math.random());
+                    context.stroke();
                     
-                    drawFrisbeeCounter(str);
-                }, 500);
+                    context.fillStyle = "black";
+                    context.lineWidth = 2;
+                    context.strokeStyle = "black";
+                    
+                    context.font="20px Courier";
+                    context.fillText("Pickup",28,65);
+                    context.fillText("Hopper",150,65);
+                    context.stroke();
+                }
+                
+                drawFrisbeeDisplay(false, false);
+                
+                var cameraCharts = [];
 
-                var cameraCharts = [
-                    /*makeSmoothieChart("#camera_charts", {
-                        title: "Camera Processing Time (seconds/sec)",
-                        dataFields: ["total_time"],
-                        width: 200, height: 50
-                    }),
-                    makeSmoothieChart("#camera_charts", {
-                        title: "Camera FPS",
-                        dataFields: ["fps"],
-                        width: 200, height: 50
-                    }),
-                    makeSmoothieChart("#camera_charts", {
-                        title: "Camera Bandwidth (KB/sec)",
-                        dataFields: ["bandwidth"],
-                        width: 200, height: 50
-                    }),*/
-                ];
-
-                var dataCharts = [
-                    /*makeSmoothieChart("#data_charts", {
-                        title: "Data Charts Example Two",
-                        dataFields: ["two", "three"],
-                        width: 200, height: 50
-                    }),*/
-                ];
+                var dataCharts = [];
                 
                 var pidControllers = ["pidleft", "pidright", "pidgyro", "pidcount", "pidshooter"];
       
@@ -297,6 +274,12 @@
                                 drawRobot(x, y, angle);
                             }
                             
+                            if(data.hasOwnProperty("pickupFrisbee") && data.hasOwnProperty("hopperFrisbee")) {
+                                drawFrisbeeDisplay(data.pickupFrisbee, data.hopperFrisbee);
+                            } else {
+                                drawFrisbeeDisplay(false, false);
+                            }
+                            
                             for(var i = 0; i < pidControllers.length; ++i) {
                                 var name = pidControllers[i];
 
@@ -311,7 +294,7 @@
                     if(connected && !sentInit) {
                         updateVariableList();
                         
-                        var streamingVariables = ["xPosition", "yPosition", "anglePosition", "shooterEncoder"];
+                        var streamingVariables = ["xPosition", "yPosition", "anglePosition", "shooterEncoder", "pickupFrisbee", "hopperFrisbee"];
           
                         addStreamingVariables(streamingVariables);
 
@@ -409,7 +392,7 @@
                     </label>
                 </form>
             </div>
-            <canvas id="frisbeeCounter" width="250" height="200"></canvas>
+            <canvas id="frisbeeDisplay" width="250" height="125"></canvas>
             <div>
                 <button onclick="$('#graphs').toggle()">Toggle Graphs</button>
                 <div id="graphs" style="display: none;">

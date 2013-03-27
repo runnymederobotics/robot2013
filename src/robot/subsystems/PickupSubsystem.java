@@ -7,12 +7,14 @@ import edu.wpi.first.wpilibj.command.Subsystem;
 import robot.Constants;
 import robot.Pneumatic;
 import robot.commands.TeleopPickupCommand;
+import robot.parsable.SendableInt;
 
 public class PickupSubsystem extends Subsystem {
 
     Victor pickupRoller = new Victor(Constants.PICKUP_ROLLER_MOTOR_CHANNEL);
     Victor elevatorRoller = new Victor(Constants.ELEVATOR_ROLLER_MOTOR_CHANNEL);
     DigitalInput frisbeeSensor = new DigitalInput(Constants.PICKUP_FRISBEE_SENSOR);
+    SendableInt pickupFrisbee = new SendableInt("pickupFrisbee", 0);
     //Pneumatics are initialized in CommandBase.java
     public Pneumatic pickupPneumatic;
     boolean lastFrisbeeSensor = false;
@@ -32,8 +34,12 @@ public class PickupSubsystem extends Subsystem {
 
     public void enable() {
     }
+    
+    public void updateSensors() {
+        pickupFrisbee.set(frisbeeSensor.get() ? 0 : 1);
+    }
 
-    public void setPneumatic(boolean value) {
+    public void setPneumatic(boolean value) {        
         double now = Timer.getFPGATimestamp();
         if (!value) {
             //If we're trying to raise the pickup

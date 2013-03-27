@@ -19,12 +19,12 @@ public class OI {
         public static ParsableInt DRIVE_AXIS = new ParsableInt("driver_drive_axis", 2);
         public static ParsableInt ROTATION_AXIS = new ParsableInt("driver_rotation_axis", 3);
         //Driver Buttons
-        public static ParsableInt SHIFT_LOW_GEAR_BUTTON = new ParsableInt("driver_shift_low_gear_button", 7);
         public static ParsableInt SHIFT_HIGH_GEAR_BUTTON = new ParsableInt("driver_shift_high_gear_button", 8);
         public static ParsableInt TOGGLE_ENABLE_CHASSIS_PID_BUTTON = new ParsableInt("driver_toggle_enable_chassis_pid_button", 2);
         public static ParsableInt PICKUP_LOWER_BUTTON = new ParsableInt("driver_pickup_lower_button", 6);
         public static ParsableInt PICKUP_LOWER_OVERRIDE_BUTTON = new ParsableInt("driver_pickup_lower_override_button", 5);
         public static ParsableInt AUTO_AIM_BUTTON = new ParsableInt("driver_auto_aim_button", 3);
+        public static ParsableInt RAISE_HANGER_BUTTON = new ParsableInt("driver_raise_hanger_button", 7);
     }
 
     public static class Operator {
@@ -38,13 +38,10 @@ public class OI {
         public static ParsableInt LOAD_STATE_BUTTON = new ParsableInt("operator_load_state_button", 7);
         public static ParsableInt LOW_STATE_BUTTON = new ParsableInt("operator_low_state_button", 11);
         public static ParsableInt HIGH_STATE_BUTTON = new ParsableInt("operator_high_state_button", 9);
-        public static ParsableInt RAISE_HANGER_BUTTON_ONE = new ParsableInt("operator_raise_hanger_button_one", 5);
-        public static ParsableInt RAISE_HANGER_BUTTON_TWO = new ParsableInt("operator_raise_hanger_button_two", 6);
         public static ParsableInt REVERSE_PICKUP = new ParsableInt("operator_reverse_pickup_button", 8);
-        public static ParsableInt PYRAMID_SETPOINT_BUTTON = new ParsableInt("operator_pyramid_setpoint_button", 10);
-        public static ParsableInt FEEDER_SETPOINT_BUTTON = new ParsableInt("operator_feeder_setpoint_button", 12);
         public static ParsableInt DISABLE_SHOOTER_PID_BUTTON = new ParsableInt("operator_disable_shooter_pid_button", 4);
         public static ParsableInt DISABLE_PICKUP_ROLLER_BUTTON = new ParsableInt("operator_disable_pickup_roller", 10);
+        public static ParsableInt ENABLE_FEEDER_ADJUSTMENT = new ParsableInt("operator_enable_feeder_adjustment", 12);
     }
     public static final ParsableDouble SHOOTER_MINIMUM_SPEED = new ParsableDouble("shooter_minimum_speed", 0.75);
     Joystick stickDriver = new Joystick(Driver.PORT);
@@ -77,10 +74,6 @@ public class OI {
         return MathUtils.pow(axis, 2) * sign;
     }
 
-    public boolean getShiftLowGear() {
-        return stickDriver.getRawButton(Driver.SHIFT_LOW_GEAR_BUTTON.get());
-    }
-
     public boolean getShiftHighGear() {
         return stickDriver.getRawButton(Driver.SHIFT_HIGH_GEAR_BUTTON.get());
     }
@@ -95,6 +88,10 @@ public class OI {
 
     public boolean getAutoAim() {
         return stickDriver.getRawButton(Driver.AUTO_AIM_BUTTON.get());
+    }
+
+    public boolean getRaiseHanger() {
+        return stickDriver.getRawButton(Driver.RAISE_HANGER_BUTTON.get());
     }
 
     //OPERATOR
@@ -118,10 +115,15 @@ public class OI {
         return axis >= THROTTLE_DEAD_ZONE ? ret : 0.0;
     }
 
+    public double getOperatorThrottle() {
+        //Negative makes it between -1.0 (bottom) and 1.0 (top)
+        return -stickOperator.getAxis(Joystick.AxisType.kThrottle);
+    }
+
     public boolean getShooterLoad() {
         return stickOperator.getRawButton(Operator.LOAD_STATE_BUTTON.get());
     }
-    
+
     public boolean getShooterLow() {
         return stickOperator.getRawButton(Operator.LOW_STATE_BUTTON.get());
     }
@@ -130,27 +132,19 @@ public class OI {
         return stickOperator.getRawButton(Operator.HIGH_STATE_BUTTON.get());
     }
 
-    public boolean getRaiseHanger() {
-        return (stickOperator.getRawButton(Operator.RAISE_HANGER_BUTTON_ONE.get()) && stickOperator.getRawButton(Operator.RAISE_HANGER_BUTTON_TWO.get()));
-    }
-
     public boolean getReversePickup() {
         return stickOperator.getRawButton(Operator.REVERSE_PICKUP.get());
     }
-    
-    public boolean getPyramidSetpoint() {
-        return stickOperator.getRawButton(Operator.PYRAMID_SETPOINT_BUTTON.get());
-    }
-    
-    public boolean getFeederSetpoint() {
-        return stickOperator.getRawButton(Operator.FEEDER_SETPOINT_BUTTON.get());
-    }
-    
+
     public boolean getDisablePIDShooter() {
         return stickOperator.getRawButton(Operator.DISABLE_SHOOTER_PID_BUTTON.get());
     }
-    
+
     public boolean getDisablePickupRoller() {
         return stickOperator.getRawButton(Operator.DISABLE_PICKUP_ROLLER_BUTTON.get());
+    }
+
+    public boolean getEnableFeederAdjustment() {
+        return stickOperator.getRawButton(Operator.ENABLE_FEEDER_ADJUSTMENT.get());
     }
 }

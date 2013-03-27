@@ -6,12 +6,14 @@ import edu.wpi.first.wpilibj.command.Subsystem;
 import robot.Constants;
 import robot.Pneumatic;
 import robot.commands.TeleopHopperCommand;
+import robot.parsable.SendableInt;
 
 public class HopperSubsystem extends Subsystem {
 
     //Pneumatics are initialized in RobotTemplate.java
     public Pneumatic shooterLoader;
     DigitalInput frisbeeSensor = new DigitalInput(Constants.HOPPER_FRISBEE_SENSOR);
+    SendableInt hopperFrisbee = new SendableInt("hopperFrisbee", 0);
     double lastReleaseTime = 0.0;
     double startTime = 0.0;
     int curState = HopperState.RESTING;
@@ -37,6 +39,10 @@ public class HopperSubsystem extends Subsystem {
     public void enable() {
         reset();
     }
+    
+    public void updateSensors() {
+        hopperFrisbee.set(frisbeeSensor.get() ? 0 : 1);
+    }
 
     public void reset() {
         shooterLoader.set(false);
@@ -46,7 +52,7 @@ public class HopperSubsystem extends Subsystem {
         return !frisbeeSensor.get();
     }
 
-    public void update(boolean requestShot) {
+    public void update(boolean requestShot) {        
         double now = Timer.getFPGATimestamp();
 
         switch (curState) {

@@ -59,6 +59,11 @@ public class RobotTemplate extends IterativeRobot {
             CommandBase.shooterSubsystem.shooterLifterPneumatic = new Pneumatic(Constants.SECONDARY_MODULE, ++secondaryChannel, ++secondaryChannel);
         }
     }
+    
+    public void updateFrisbeeSensors() {
+        CommandBase.pickupSubsystem.updateSensors();
+        CommandBase.hopperSubsystem.updateSensors();
+    }
 
     public void robotInit() {
         // Initialize all subsystems
@@ -96,6 +101,8 @@ public class RobotTemplate extends IterativeRobot {
     //This function is called periodically during disabled
     public void disabledPeriodic() {
         periodicPrint("Disabled");
+        
+        updateFrisbeeSensors();
     }
 
     //This function is called at the start of autonomous
@@ -122,6 +129,8 @@ public class RobotTemplate extends IterativeRobot {
     public void autonomousPeriodic() {
         periodicPrint("Autonomous");
 
+        updateFrisbeeSensors();
+        
         Scheduler.getInstance().run();
     }
 
@@ -139,6 +148,8 @@ public class RobotTemplate extends IterativeRobot {
     //This function is called periodically during teleop
     public void teleopPeriodic() {
         periodicPrint("Teleop");
+        
+        updateFrisbeeSensors();
 
         Scheduler.getInstance().run();
     }
