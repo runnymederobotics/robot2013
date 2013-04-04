@@ -38,10 +38,11 @@ public class OI {
         public static ParsableInt LOAD_STATE_BUTTON = new ParsableInt("operator_load_state_button", 7);
         public static ParsableInt LOW_STATE_BUTTON = new ParsableInt("operator_low_state_button", 11);
         public static ParsableInt HIGH_STATE_BUTTON = new ParsableInt("operator_high_state_button", 9);
-        public static ParsableInt REVERSE_PICKUP = new ParsableInt("operator_reverse_pickup_button", 8);
+        public static ParsableInt REVERSE_PICKUP_BUTTON = new ParsableInt("operator_reverse_pickup_button", 8);
         public static ParsableInt DISABLE_SHOOTER_PID_BUTTON = new ParsableInt("operator_disable_shooter_pid_button", 4);
         public static ParsableInt DISABLE_PICKUP_ROLLER_BUTTON = new ParsableInt("operator_disable_pickup_roller", 10);
-        public static ParsableInt ENABLE_FEEDER_ADJUSTMENT = new ParsableInt("operator_enable_feeder_adjustment", 12);
+        public static ParsableInt ENABLE_FEEDER_ADJUSTMENT_BUTTON = new ParsableInt("operator_enable_feeder_adjustment_button", 12);
+        public static ParsableInt REVERSE_SHOOTER_BUTTON = new ParsableInt("operator_reverse_shooter_button", 5);
     }
     public static final ParsableDouble SHOOTER_MINIMUM_SPEED = new ParsableDouble("shooter_minimum_speed", 0.75);
     Joystick stickDriver = new Joystick(Driver.PORT);
@@ -133,7 +134,7 @@ public class OI {
     }
 
     public boolean getReversePickup() {
-        return stickOperator.getRawButton(Operator.REVERSE_PICKUP.get());
+        return stickOperator.getRawButton(Operator.REVERSE_PICKUP_BUTTON.get());
     }
 
     public boolean getDisablePIDShooter() {
@@ -145,6 +146,10 @@ public class OI {
     }
 
     public boolean getEnableFeederAdjustment() {
-        return stickOperator.getRawButton(Operator.ENABLE_FEEDER_ADJUSTMENT.get());
+        return stickOperator.getRawButton(Operator.ENABLE_FEEDER_ADJUSTMENT_BUTTON.get());
+    }
+    
+    public boolean getReverseShooter() {
+        return stickOperator.getRawButton(Operator.REVERSE_SHOOTER_BUTTON.get());
     }
 }

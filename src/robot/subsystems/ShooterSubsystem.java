@@ -35,13 +35,25 @@ public class ShooterSubsystem extends Subsystem {
         pidShooter.setOutputRange(0.0, 1.0);
         pidShooter.setPercentTolerance(Constants.SHOOTER_PYRAMID_TOLERANCE.get());
     }
-
+    
     public void disable() {
+        disablePID();
+    }
+    
+    public void enable() {
+        enablePID();
+    }
+
+    public void disablePID() {
         pidShooter.disable();
     }
 
-    public void enable() {
+    public void enablePID() {
         pidShooter.enable();
+    }
+    
+    public boolean pidStatus() {
+        return pidShooter.isEnable();
     }
 
     protected void initDefaultCommand() {
@@ -86,8 +98,12 @@ public class ShooterSubsystem extends Subsystem {
         return pidShooter.onTarget();
     }
 
-    public boolean aboveThreshold() {
+    public boolean aboveShootThreshold() {
         return encShooter.pidGet() > MAX_SHOOTER_ENCODER_RATE * Constants.SHOOTER_MIN_SHOOT_THRESHOLD.get();
+    }
+    
+    public boolean belowReverseThreshold() {
+        return encShooter.pidGet() < MAX_SHOOTER_ENCODER_RATE * Constants.SHOOTER_MAX_REVERSE_THRESHOLD.get();
     }
 
     public void print() {

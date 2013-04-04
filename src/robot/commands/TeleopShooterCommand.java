@@ -42,10 +42,19 @@ public class TeleopShooterCommand extends CommandBase {
         }
 
         if (oi.getDisablePIDShooter()) {
-            shooterSubsystem.disable();
+            shooterSubsystem.disablePID();
         } else {
-            shooterSubsystem.enable();
+            shooterSubsystem.enablePID();
         }
+
+        //THIS CODE DOES NOT COMPENSATE FOR GOING FULL NEGATIVE TO FULL FORWARD WHEN THE BUTTON
+        //IS RELEASED
+        /*if(!oi.getDisablePIDShooter() && (!shooterSubsystem.pidStatus() || shooterSubsystem.belowReverseThreshold()) && oi.getReverseShooter()) {
+            shooterSubsystem.disablePID();
+            shooterSubsystem.setSetpoint(-ShooterSubsystem.MAX_SHOOTER_ENCODER_RATE);
+        } else {
+            shooterSubsystem.enablePID();
+        }*/
 
         if (chassisSubsystem.getHighGear() || oi.getShooterLoad()) {
             shooterSubsystem.setShooterState(ShooterSubsystem.ShooterState.LOAD);

@@ -29,7 +29,7 @@ public class ChassisSubsystem extends Subsystem {
     RobotDrive robotDrive = new RobotDrive(leftOutputStorage, rightOutputStorage);
     ParsablePIDController pidLeft = new ParsablePIDController("pidleft", 0.001, 0.0005, 0.0, encLeft, vicLeft);
     ParsablePIDController pidRight = new ParsablePIDController("pidright", 0.001, 0.0005, 0.0, encRight, vicRight);
-    public ParsablePIDController pidGyro = new ParsablePIDController("pidgyro", 0.125, 0.0005, 0.0, CommandBase.positioningSubsystem.positionGyro, new OutputStorage());
+    public ParsablePIDController pidGyro = new ParsablePIDController("pidgyro", 0.08, 0.0, 0.0, CommandBase.positioningSubsystem.positionGyro, new OutputStorage());
     public ParsablePIDController pidCount = new ParsablePIDController("pidcount", 0.02, 0.0, 0.0, encAverager, new OutputStorage());
 
     public ChassisSubsystem() {
@@ -47,7 +47,7 @@ public class ChassisSubsystem extends Subsystem {
         pidLeft.setOutputRange(-1.0, 1.0);
         pidRight.setOutputRange(-1.0, 1.0);
         pidGyro.setOutputRange(-1.0, 1.0);
-        pidCount.setOutputRange(-0.85, 0.85);
+        pidCount.setOutputRange(-0.95, 0.95);
 
         pidLeft.setPercentTolerance(PID_DRIVE_PERCENT_TOLERANCE);
         pidRight.setPercentTolerance(PID_DRIVE_PERCENT_TOLERANCE);
