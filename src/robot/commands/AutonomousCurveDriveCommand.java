@@ -2,33 +2,35 @@ package robot.commands;
 
 import robot.subsystems.ChassisSubsystem;
 
-public class AutonomousDriveCommand extends CommandBase {
+public class AutonomousCurveDriveCommand extends CommandBase {
 
     int relativeCounts;
+    double curveValue;
 
-    public AutonomousDriveCommand(int relativeCounts) {
+    public AutonomousCurveDriveCommand(int relativeCounts, double curveValue) {
         requires(chassisSubsystem);
 
         this.relativeCounts = relativeCounts;
+        this.curveValue = curveValue;
     }
 
-    public AutonomousDriveCommand(double relativeInches) {
-        this((int) (relativeInches / ChassisSubsystem.INCHES_PER_ENCODER_COUNT));
+    public AutonomousCurveDriveCommand(double relativeInches, double curveValue) {
+        this((int) (relativeInches / ChassisSubsystem.INCHES_PER_ENCODER_COUNT), curveValue);
     }
 
     protected void initialize() {
         chassisSubsystem.shift(false); //Stay in low gear
         
         chassisSubsystem.enablePID();
-        chassisSubsystem.enablePIDGyro();
+        //chassisSubsystem.enablePIDGyro();
         chassisSubsystem.enablePIDCount();
 
-        chassisSubsystem.pidGyroRelativeSetpoint(0.0);
+        //chassisSubsystem.pidGyroRelativeSetpoint(0.0);
         chassisSubsystem.pidCountRelativeSetpoint(relativeCounts);
     }
 
     protected void execute() {
-        chassisSubsystem.drive(-chassisSubsystem.pidCount.get(), -chassisSubsystem.pidGyro.get());
+        chassisSubsystem.drive(-chassisSubsystem.pidCount.get(), curveValue);//-chassisSubsystem.pidGyro.get());
     }
 
     protected boolean isFinished() {
@@ -43,7 +45,7 @@ public class AutonomousDriveCommand extends CommandBase {
     }
 
     protected void end() {
-        chassisSubsystem.disablePIDGyro();
+        //chassisSubsystem.disablePIDGyro();
         chassisSubsystem.disablePIDCount();
     }
 

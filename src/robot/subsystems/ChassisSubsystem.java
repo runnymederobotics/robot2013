@@ -136,6 +136,10 @@ public class ChassisSubsystem extends Subsystem {
     public void pidGyroRelativeSetpoint(double relativeAngle) {
         pidGyro.setSetpoint(CommandBase.positioningSubsystem.positionGyro.getAngle() + relativeAngle);
     }
+    
+    public void pidGyroAbsoluteSetpoint(double absAngle) {
+        pidGyro.setSetpoint(absAngle);
+    }
 
     public void pidCountRelativeSetpoint(double relativeCounts) {
         pidCount.setSetpoint(encAverager.get() + relativeCounts);

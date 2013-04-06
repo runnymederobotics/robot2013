@@ -1,14 +1,17 @@
 package robot.commands;
 
 public class AutonomousRotateCommand extends CommandBase {
-
-    double relativeAngle;
-
-    public AutonomousRotateCommand(double relativeAngle) {
+    
+    boolean relativeAngle;
+    double angle;
+    
+    public AutonomousRotateCommand(boolean relativeAngle, double angle) {
         // Use requires() here to declare subsystem dependencies
         requires(chassisSubsystem);
-
+        
         this.relativeAngle = relativeAngle;
+        this.angle = angle;
+        
     }
 
     // Called just before this Command runs the first time
@@ -17,8 +20,12 @@ public class AutonomousRotateCommand extends CommandBase {
 
         chassisSubsystem.enablePID();
         chassisSubsystem.enablePIDGyro();
-
-        chassisSubsystem.pidGyroRelativeSetpoint(relativeAngle);
+        
+        if (relativeAngle) {
+            chassisSubsystem.pidGyroRelativeSetpoint(angle);
+        } else {
+            chassisSubsystem.pidGyroAbsoluteSetpoint(angle);
+        }
     }
 
     // Called repeatedly when this Command is scheduled to run

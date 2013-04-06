@@ -12,7 +12,8 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.command.CommandGroup;
 import edu.wpi.first.wpilibj.command.Scheduler;
 import edu.wpi.first.wpilibj.livewindow.LiveWindow;
-import robot.commands.AutonomousFiveFrisbeeCommandGroup;
+import robot.commands.AutonomousLeftPyramidCommandGroup;
+import robot.commands.AutonomousRightPyramidCommandGroup;
 import robot.commands.AutonomousSevenFrisbeeCommandGroup;
 import robot.commands.AutonomousThreeFrisbeeCommandGroup;
 import robot.commands.CommandBase;
@@ -53,7 +54,7 @@ public class RobotTemplate extends IterativeRobot {
         } else {
             CommandBase.pickupSubsystem.pickupPneumatic = new Pneumatic(Constants.SECONDARY_MODULE, ++secondaryChannel, ++secondaryChannel);
         }
-        if (Constants.SHOOTER_LOW_SINGLE_SOLENOID) {
+        if (Constants.SHOOTER_LIFTER_SINGLE_SOLENOID) {
             CommandBase.shooterSubsystem.shooterLifterPneumatic = new Pneumatic(Constants.SECONDARY_MODULE, ++secondaryChannel);
         } else {
             CommandBase.shooterSubsystem.shooterLifterPneumatic = new Pneumatic(Constants.SECONDARY_MODULE, ++secondaryChannel, ++secondaryChannel);
@@ -116,7 +117,10 @@ public class RobotTemplate extends IterativeRobot {
                 autonomousCommand = new AutonomousThreeFrisbeeCommandGroup();
                 break;
             case 2:
-                autonomousCommand = new AutonomousFiveFrisbeeCommandGroup();
+                autonomousCommand = new AutonomousRightPyramidCommandGroup();
+                break;
+            case 3:
+                autonomousCommand = new AutonomousLeftPyramidCommandGroup();
                 break;
         }
 

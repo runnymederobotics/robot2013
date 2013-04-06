@@ -48,6 +48,18 @@ public class Constants {
     public static ParsableDouble SEVEN_FRISBEE_DRIVE_FORWARD_INCHES = new ParsableDouble("seven_frisbee_drive_forward_inches", 128);
     //Five frisbee autonomous
     public static ParsableDouble FIVE_FRISBEE_DRIVE_FORWARD_INCHES = new ParsableDouble("five_frisbee_drive_forward_inches", 50);
+    //Left pyramid autonomous
+    public static ParsableDouble LEFT_PYRAMID_INITIAL_REVERSE_INCHES = new ParsableDouble("left_pyramid_initial_reverse_inches", 20);
+    public static ParsableDouble LEFT_PYRAMID_CURVE_INCHES = new ParsableDouble("left_pyramid_curve_inches", 70);
+    public static ParsableDouble LEFT_PYRAMID_CURVE_CONSTANT = new ParsableDouble("left_pyramid_curve_constant", 0.5);
+    public static ParsableDouble LEFT_PYRAMID_DRIVE_FORWARD_AFTER_CURVE_INCHES = new ParsableDouble("left_pyramid_drive_forward_after_curve_inches", 70);
+    public static ParsableDouble LEFT_PYRAMID_REVERSE_AFTER_PICKUP_INCHES = new ParsableDouble("left_pyramid_reverse_after_pickup_inches", 20);
+    //Right pyramid autonomous
+    public static ParsableDouble RIGHT_PYRAMID_INITIAL_REVERSE_INCHES = new ParsableDouble("right_pyramid_initial_reverse_inches", 20);
+    public static ParsableDouble RIGHT_PYRAMID_CURVE_INCHES = new ParsableDouble("right_pyramid_curve_inches", 70);
+    public static ParsableDouble RIGHT_PYRAMID_CURVE_CONSTANT = new ParsableDouble("right_pyramid_curve_constant", 0.5);
+    public static ParsableDouble RIGHT_PYRAMID_DRIVE_FORWARD_AFTER_CURVE_INCHES = new ParsableDouble("right_pyramid_drive_forward_after_curve_inches", 70);
+    public static ParsableDouble RIGHT_PYRAMID_REVERSE_AFTER_PICKUP_INCHES = new ParsableDouble("right_pyramid_reverse_after_pickup_inches", 20);
     //Autonomous hopper command
     public static ParsableDouble AUTONOMOUS_HOPPER_TIME_AFTER_START = new ParsableDouble("autonomous_hopper_time_after_start", 1.0);
     public static ParsableDouble AUTONOMOUS_HOPPER_FRISBEE_TIMEOUT = new ParsableDouble("autonomous_frisbee_timeout", 1.0);
@@ -68,8 +80,7 @@ public class Constants {
     public static final boolean SHOOTER_LOADER_SINGLE_SOLENOID = false;
     public static final boolean HANGER_PNEUMATIC_SINGLE_SOLENOID = false;
     public static final boolean PICKUP_SINGLE_SOLENOID = false;
-    public static final boolean SHOOTER_LOW_SINGLE_SOLENOID = false;
-    public static final boolean SHOOTER_HIGH_SINGLE_SOLENOID = false;
+    public static final boolean SHOOTER_LIFTER_SINGLE_SOLENOID = false;
     //Digital inputs
     public static final int ENC_LEFT_ONE = 1;
     public static final int ENC_LEFT_TWO = 2;
