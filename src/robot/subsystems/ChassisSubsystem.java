@@ -41,8 +41,8 @@ public class ChassisSubsystem extends Subsystem {
 
         pidLeft.setInputRange(-Constants.CHASSIS_MAX_HIGH_ENCODER_RATE.get(), Constants.CHASSIS_MAX_HIGH_ENCODER_RATE.get());
         pidRight.setInputRange(-Constants.CHASSIS_MAX_HIGH_ENCODER_RATE.get(), Constants.CHASSIS_MAX_HIGH_ENCODER_RATE.get());
-        pidGyro.setInputRange(Double.MIN_VALUE, Double.MAX_VALUE);
-        pidCount.setInputRange(Double.MIN_VALUE, Double.MAX_VALUE);
+        pidGyro.setInputRange(-Double.MAX_VALUE, Double.MAX_VALUE);
+        pidCount.setInputRange(-Double.MAX_VALUE, Double.MAX_VALUE);
 
         pidLeft.setOutputRange(-1.0, 1.0);
         pidRight.setOutputRange(-1.0, 1.0);
