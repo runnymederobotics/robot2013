@@ -17,7 +17,7 @@ public class CustomEncoder extends Counter implements PIDSource {
         //Using this creates a ring buffer that is averaged to get a more
         //accurate reading
         //Don't put more than 127
-        this.m_counter.writeTimerConfig_AverageSize(50);
+        this.m_counter.writeTimerConfig_AverageSize(2);
     }
 
     public double pidGet() {

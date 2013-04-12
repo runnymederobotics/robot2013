@@ -13,7 +13,7 @@ public class ShooterSubsystem extends Subsystem {
     public static final double MAX_SHOOTER_ENCODER_RATE = 178; //RPS
     Victor vicShooter = new Victor(Constants.SHOOTER_MOTOR_CHANNEL);
     CustomEncoder encShooter = new CustomEncoder(Constants.ENC_SHOOTER);
-    ParsablePIDController pidShooter = new ParsablePIDController("pidshooter", 0.05, 0.0005, 0.0005, encShooter, vicShooter);
+    ParsablePIDController pidShooter = new ParsablePIDController("pidshooter", 0.1, 0.00006, 0.05, encShooter, vicShooter);
     //Pneumatics are initialized in CommandBase.java
     public Pneumatic shooterLifterPneumatic;
     int shooterState = ShooterState.LOAD;

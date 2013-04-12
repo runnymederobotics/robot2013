@@ -36,8 +36,8 @@ public class ChassisSubsystem extends Subsystem {
         encLeft.setPIDSourceParameter(Encoder.PIDSourceParameter.kRate);
         encRight.setPIDSourceParameter(Encoder.PIDSourceParameter.kRate);
         
-        encLeft.m_encoder.writeTimerConfig_AverageSize(50);
-        encRight.m_encoder.writeTimerConfig_AverageSize(50);
+        encLeft.m_encoder.writeTimerConfig_AverageSize(10);
+        encRight.m_encoder.writeTimerConfig_AverageSize(10);
         
         encLeft.start();
         encRight.start();
