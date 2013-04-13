@@ -18,6 +18,7 @@ public class OI {
         //Driver Axes
         public static ParsableInt DRIVE_AXIS = new ParsableInt("driver_drive_axis", 2);
         public static ParsableInt ROTATION_AXIS = new ParsableInt("driver_rotation_axis", 3);
+        public static ParsableInt PRECISION_ROTATION_AXIS = new ParsableInt("driver_precision_rotation_axis", 6);
         //Driver Buttons
         public static ParsableInt SHIFT_HIGH_GEAR_BUTTON = new ParsableInt("driver_shift_high_gear_button", 8);
         public static ParsableInt TOGGLE_ENABLE_CHASSIS_PID_BUTTON = new ParsableInt("driver_toggle_enable_chassis_pid_button", 2);
@@ -73,6 +74,10 @@ public class OI {
 
         //Square the axis for less sensitive output
         return MathUtils.pow(axis, 2) * sign;
+    }
+    
+    public double getPrecisionRotation() {
+        return stickDriver.getRawAxis(Driver.PRECISION_ROTATION_AXIS.get());
     }
 
     public boolean getShiftHighGear() {

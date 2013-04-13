@@ -5,6 +5,8 @@ import robot.Constants;
 
 public class TeleopDriveCommand extends CommandBase {
 
+    int precisionRotationIterations = 0;
+    
     public TeleopDriveCommand() {
         // Use requires() here to declare subsystem dependencies
         requires(chassisSubsystem);
@@ -29,7 +31,18 @@ public class TeleopDriveCommand extends CommandBase {
                 chassisSubsystem.disablePID();
             }
 
-            chassisSubsystem.drive(oi.getDrive(), oi.getRotation());
+            double rotation = oi.getRotation();
+            
+            double precisionRotation = oi.getPrecisionRotation();
+            
+            if(precisionRotationIterations < Constants.CHASSIS_PRECISION_ROTATION_ITERATIONS.get() && precisionRotation != 0) {
+                rotation = precisionRotation * Constants.CHASSIS_PRECISION_ROTATION_BURST.get();
+                precisionRotationIterations++;
+            } else if(precisionRotation == 0) {
+                precisionRotationIterations = 0;
+            }
+            
+            chassisSubsystem.drive(oi.getDrive(), rotation);
         }
     }
 

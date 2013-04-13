@@ -27,6 +27,8 @@ public class Constants {
     public static ParsableDouble CHASSIS_MAX_LOW_ENCODER_RATE = new ParsableDouble("chassis_max_low_encoder_rate", 800);
     public static ParsableDouble CHASSIS_MAX_HIGH_ENCODER_RATE = new ParsableDouble("chassis_max_high_encoder_rate", 2800);
     public static ParsableDouble CHASSIS_ENCODER_MOVEMENT_THRESHOLD = new ParsableDouble("chassis_encoder_movement_threshold", 550);
+    public static ParsableDouble CHASSIS_PRECISION_ROTATION_BURST = new ParsableDouble("chassis_precision_rotation_burst", 0.7);
+    public static ParsableDouble CHASSIS_PRECISION_ROTATION_ITERATIONS = new ParsableDouble("chassis_precision_rotation_iterations", 3);
     //Hopper subsystem
     public static ParsableDouble HOPPER_PNEUMATIC_DELAY = new ParsableDouble("hopper_pneumatic_delay", 0.2);
     public static ParsableDouble HOPPER_RELEASE_DELAY = new ParsableDouble("hopper_shoot_delay", 0.5);
