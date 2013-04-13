@@ -13,10 +13,11 @@ public class ShooterSubsystem extends Subsystem {
     public static final double MAX_SHOOTER_ENCODER_RATE = 178; //RPS
     Victor vicShooter = new Victor(Constants.SHOOTER_MOTOR_CHANNEL);
     CustomEncoder encShooter = new CustomEncoder(Constants.ENC_SHOOTER);
-    ParsablePIDController pidShooter = new ParsablePIDController("pidshooter", 0.1, 0.00006, 0.05, encShooter, vicShooter);
+    ParsablePIDController pidShooter = new ParsablePIDController("pidshooter", 0.15, 0.0, 0.0, 0.005, encShooter, vicShooter);
     //Pneumatics are initialized in CommandBase.java
     public Pneumatic shooterLifterPneumatic;
     int shooterState = ShooterState.LOAD;
+    double setpoint = 0.0;
 
     public class ShooterState {
 
@@ -34,6 +35,24 @@ public class ShooterSubsystem extends Subsystem {
         pidShooter.setInputRange(0, MAX_SHOOTER_ENCODER_RATE);
         pidShooter.setOutputRange(0.0, 1.0);
         pidShooter.setPercentTolerance(Constants.SHOOTER_PYRAMID_TOLERANCE.get());
+        
+        //(new BangBangThread()).start();
+    }
+    
+    /*public class BangBangThread extends Thread {        
+        public void run() {
+            while(true) {
+                if(encShooter.pidGet() < setpoint) {
+                    vicShooter.set(1.0);
+                } else {
+                    vicShooter.set(0.5);
+                }
+            }
+        }
+    }*/
+    
+    public void setBangBangSetpoint(double setpoint) {
+        this.setpoint = setpoint;
     }
     
     public void disable() {
@@ -95,6 +114,7 @@ public class ShooterSubsystem extends Subsystem {
     }
     
     public boolean onTarget() {
+        //return encShooter.pidGet() >= setpoint - Constants.SHOOTER_OVERSHOOT_VALUE.get();
         return pidShooter.onTarget();
     }
 

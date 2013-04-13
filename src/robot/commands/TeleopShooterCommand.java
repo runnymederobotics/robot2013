@@ -20,7 +20,6 @@ public class TeleopShooterCommand extends CommandBase {
                     shooterSubsystem.setTolerance(Constants.SHOOTER_FEEDER_TOLERANCE.get());
 
                     double setpoint = Constants.SHOOTER_FEEDER_SETPOINT.get();
-
                     if (oi.getEnableFeederAdjustment()) {
                         setpoint += oi.getOperatorThrottle() * Constants.SHOOTER_FEEDER_ADJUSTMENT_MULTIPLIER.get();
                     }
@@ -37,10 +36,11 @@ public class TeleopShooterCommand extends CommandBase {
                     shooterSubsystem.setSetpoint(Math.abs(oi.getManualShooterSpeed()) * ShooterSubsystem.MAX_SHOOTER_ENCODER_RATE);
                     break;
             }
+
         } else {
             shooterSubsystem.setSetpoint(0.0);
         }
-
+        
         if (oi.getDisablePIDShooter()) {
             shooterSubsystem.disablePID();
         } else {

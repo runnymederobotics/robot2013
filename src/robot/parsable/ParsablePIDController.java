@@ -13,7 +13,7 @@ public class ParsablePIDController implements JSONPrintable {
     String name;
     PIDController pidController;
     PIDSource pidSource;
-    ParsableDouble p, i, d;
+    ParsableDouble p, i, d, f;
 
     public void jsonPrint(String name, JSONStringBuilder response) {
         JSONStringBuilder stringBuilder = response.startObject(name);
@@ -26,22 +26,22 @@ public class ParsablePIDController implements JSONPrintable {
     }
 
     public ParsablePIDController(String name, double Kp, double Ki, double Kd, double Kf, PIDSource source, PIDOutput output, double period) {
-        makeParsable(name, Kp, Ki, Kd, source);
+        makeParsable(name, Kp, Ki, Kd, Kf, source);
         pidController = new PIDController(Kp, Ki, Kd, Kf, source, output, period);
     }
 
     public ParsablePIDController(String name, double Kp, double Ki, double Kd, PIDSource source, PIDOutput output, double period) {
-        makeParsable(name, Kp, Ki, Kd, source);
-        pidController = new PIDController(Kp, Ki, Kd, source, output, period);
+        makeParsable(name, Kp, Ki, Kd, 0.0, source);
+        pidController = new PIDController(Kp, Ki, Kd, 0.0, source, output, period);
     }
 
     public ParsablePIDController(String name, double Kp, double Ki, double Kd, PIDSource source, PIDOutput output) {
-        makeParsable(name, Kp, Ki, Kd, source);
-        pidController = new PIDController(Kp, Ki, Kd, source, output);
+        makeParsable(name, Kp, Ki, Kd, 0.0, source);
+        pidController = new PIDController(Kp, Ki, Kd, 0.0, source, output);
     }
 
     public ParsablePIDController(String name, double Kp, double Ki, double Kd, double Kf, PIDSource source, PIDOutput output) {
-        makeParsable(name, Kp, Ki, Kd, source);
+        makeParsable(name, Kp, Ki, Kd, Kf, source);
         pidController = new PIDController(Kp, Ki, Kd, Kf, source, output);
     }
 
@@ -97,7 +97,7 @@ public class ParsablePIDController implements JSONPrintable {
         pidController.reset();
     }
 
-    private void makeParsable(String name, double Kp, double Ki, double Kd, PIDSource pidSource) {
+    private void makeParsable(String name, double Kp, double Ki, double Kd, double Kf, PIDSource pidSource) {
         if (!name.startsWith("pid")) {
             name = "pid" + name;
         }
@@ -105,13 +105,14 @@ public class ParsablePIDController implements JSONPrintable {
         p = new ParsableDouble(this.name + "_p", Kp);
         i = new ParsableDouble(this.name + "_i", Ki);
         d = new ParsableDouble(this.name + "_d", Kd);
+        f = new ParsableDouble(this.name + "_f", Kf);
 
         this.pidSource = pidSource;
         parsablePIDControllers.put(this.name, this);
     }
 
     public void updatePID() {
-        pidController.setPID(p.get(), i.get(), d.get());
+        pidController.setPID(p.get(), i.get(), d.get(), f.get());
     }
     //Do i need these?
     /*public void updateP() {

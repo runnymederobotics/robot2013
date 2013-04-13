@@ -45,6 +45,7 @@ public class Constants {
     public static ParsableDouble SHOOTER_FEEDER_TOLERANCE = new ParsableDouble("shooter_feeder_tolerance", 1);
     public static ParsableDouble SHOOTER_FEEDER_ADJUSTMENT_MULTIPLIER = new ParsableDouble("shooter_feeder_adjustment_multiplier", 10);
     public static ParsableDouble SHOOTER_ON_TARGET_TIME = new ParsableDouble("shooter_on_target_time", 0.2);
+    //public static ParsableDouble SHOOTER_OVERSHOOT_VALUE = new ParsableDouble("shooter_overshoot_value", 10);
     //Seven frisbee autonomous
     public static ParsableDouble SEVEN_FRISBEE_DRIVE_FORWARD_INCHES = new ParsableDouble("seven_frisbee_drive_forward_inches", 128);
     public static ParsableDouble SEVEN_FRISBEE_REVERSE_INCHES = new ParsableDouble("seven_frisbee_reverse_inches", 110);
