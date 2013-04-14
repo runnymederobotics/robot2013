@@ -36,7 +36,7 @@ public class TeleopDriveCommand extends CommandBase {
             double precisionRotation = oi.getPrecisionRotation();
             
             if(precisionRotationIterations < Constants.CHASSIS_PRECISION_ROTATION_ITERATIONS.get() && precisionRotation != 0) {
-                rotation = precisionRotation * Constants.CHASSIS_PRECISION_ROTATION_BURST.get();
+                rotation = -precisionRotation * Constants.CHASSIS_PRECISION_ROTATION_BURST.get();
                 precisionRotationIterations++;
             } else if(precisionRotation == 0) {
                 precisionRotationIterations = 0;

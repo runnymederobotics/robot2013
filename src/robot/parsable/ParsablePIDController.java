@@ -114,23 +114,40 @@ public class ParsablePIDController implements JSONPrintable {
     public void updatePID() {
         pidController.setPID(p.get(), i.get(), d.get(), f.get());
     }
-    //Do i need these?
-    /*public void updateP() {
-     pidController.setPID(p.get(), pidController.getI(), pidController.getD());
-     }
-    
-     public void updateI() {
-     pidController.setPID(pidController.getP(), i.get(), pidController.getD());
-     }
-    
-     public void updateD() {
-     pidController.setPID(pidController.getP(), pidController.getI(), d.get());
-     }*/
-    /*public static class PIDHandler implements WebServer.Handler {
-     public String handle(Hashtable params) {
-     String ret = "";
-            
-     return ret;
-     }
-     }*/
+
+    public double getP() {
+        return p.get();
+    }
+
+    public double getI() {
+        return i.get();
+    }
+
+    public double getD() {
+        return d.get();
+    }
+
+    public double getF() {
+        return f.get();
+    }
+
+    public void setP(double value) {
+        p.set(value);
+        updatePID();
+    }
+
+    public void setI(double value) {
+        i.set(value);
+        updatePID();
+    }
+
+    public void setD(double value) {
+        d.set(value);
+        updatePID();
+    }
+
+    public void setF(double value) {
+        f.set(value);
+        updatePID();
+    }
 }

@@ -32,17 +32,12 @@ public class AutonomousDriveCommand extends CommandBase {
     }
 
     protected boolean isFinished() {
-        boolean finished = chassisSubsystem.pidCountOnTarget();
-
-        if (finished) {
-            //Give the drive a setpoint of 0.0, so that the PID actually stops rather than going forever
-            chassisSubsystem.drive(0.0, 0.0);
-        }
-
-        return finished;
+        return chassisSubsystem.pidCountOnTarget();
     }
 
     protected void end() {
+        //Give the drive a setpoint of 0.0, so that the PID actually stops rather than going forever
+        chassisSubsystem.drive(0.0, 0.0);
         chassisSubsystem.disablePIDGyro();
         chassisSubsystem.disablePIDCount();
     }

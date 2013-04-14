@@ -29,6 +29,7 @@ public class Constants {
     public static ParsableDouble CHASSIS_ENCODER_MOVEMENT_THRESHOLD = new ParsableDouble("chassis_encoder_movement_threshold", 550);
     public static ParsableDouble CHASSIS_PRECISION_ROTATION_BURST = new ParsableDouble("chassis_precision_rotation_burst", 0.7);
     public static ParsableDouble CHASSIS_PRECISION_ROTATION_ITERATIONS = new ParsableDouble("chassis_precision_rotation_iterations", 3);
+    public static ParsableDouble CHASSIS_GYRO_ROTATE_P = new ParsableDouble("chassis_gyro_rotate_p", 0.055);
     //Hopper subsystem
     public static ParsableDouble HOPPER_PNEUMATIC_DELAY = new ParsableDouble("hopper_pneumatic_delay", 0.2);
     public static ParsableDouble HOPPER_RELEASE_DELAY = new ParsableDouble("hopper_shoot_delay", 0.5);
@@ -41,39 +42,33 @@ public class Constants {
     public static ParsableDouble SHOOTER_MIN_SHOOT_THRESHOLD = new ParsableDouble("shooter_min_shoot_threshold", 0.3);
     public static ParsableDouble SHOOTER_MAX_REVERSE_THRESHOLD = new ParsableDouble("shooter_max_reverse_threshold", 0.01);
     public static ParsableDouble SHOOTER_PYRAMID_SETPOINT = new ParsableDouble("shooter_pyramid_setpoint", 150); //.78 * 175 (old value)
-    public static ParsableDouble SHOOTER_FEEDER_SETPOINT = new ParsableDouble("shooter_feeder_setpoint", 150);
-    public static ParsableDouble SHOOTER_AUTONOMOUS_START_SETPOINT = new ParsableDouble("shooter_autonomous_start_setpoint", 135);
+    public static ParsableDouble SHOOTER_FEEDER_SETPOINT = new ParsableDouble("shooter_feeder_setpoint", 160);
+    public static ParsableDouble SHOOTER_AUTONOMOUS_START_SETPOINT = new ParsableDouble("shooter_autonomous_start_setpoint", 145);
     public static ParsableDouble SHOOTER_PYRAMID_TOLERANCE = new ParsableDouble("shooter_pyramid_tolerance", 3.5);
     public static ParsableDouble SHOOTER_FEEDER_TOLERANCE = new ParsableDouble("shooter_feeder_tolerance", 1);
     public static ParsableDouble SHOOTER_FEEDER_ADJUSTMENT_MULTIPLIER = new ParsableDouble("shooter_feeder_adjustment_multiplier", 10);
     public static ParsableDouble SHOOTER_ON_TARGET_TIME = new ParsableDouble("shooter_on_target_time", 0.2);
-    //public static ParsableDouble SHOOTER_OVERSHOOT_VALUE = new ParsableDouble("shooter_overshoot_value", 10);
+    public static ParsableDouble SHOOTER_BEHIND_PYRAMID_SETPOINT = new ParsableDouble("shooter_behind_pyramid_setpoint", 125);
     //Seven frisbee autonomous
     public static ParsableDouble SEVEN_FRISBEE_DRIVE_FORWARD_INCHES = new ParsableDouble("seven_frisbee_drive_forward_inches", 128);
-    public static ParsableDouble SEVEN_FRISBEE_REVERSE_INCHES = new ParsableDouble("seven_frisbee_reverse_inches", 110);
+    public static ParsableDouble SEVEN_FRISBEE_REVERSE_INCHES = new ParsableDouble("seven_frisbee_reverse_inches", 130);
     //Five frisbee autonomous
     public static ParsableDouble FIVE_FRISBEE_DRIVE_FORWARD_INCHES = new ParsableDouble("five_frisbee_drive_forward_inches", 50);
     //Left pyramid autonomous
-    public static ParsableDouble LEFT_PYRAMID_INITIAL_REVERSE_INCHES = new ParsableDouble("left_pyramid_initial_reverse_inches", 100);
-    //public static ParsableDouble LEFT_PYRAMID_CURVE_INCHES = new ParsableDouble("left_pyramid_curve_inches", 85);
-    public static ParsableDouble LEFT_PYRAMID_INITIAL_ROTATE_ANGLE = new ParsableDouble("left_pyramid_initial_rotate_angle", 80);
-    //public static ParsableDouble LEFT_PYRAMID_CURVE_CONSTANT = new ParsableDouble("left_pyramid_curve_constant", 0.65);
-    public static ParsableDouble LEFT_PYRAMID_DRIVE_FORWARD_AFTER_CURVE_INCHES = new ParsableDouble("left_pyramid_drive_forward_after_curve_inches", 85);
-    public static ParsableDouble LEFT_PYRAMID_REVERSE_AFTER_PICKUP_INCHES = new ParsableDouble("left_pyramid_reverse_after_pickup_inches", 0);
-    public static ParsableDouble LEFT_PYRAMID_ROTATE_AFTER_PICKUP_ANGLE = new ParsableDouble("left_pyramid_rotate_after_pickup_angle", 90);
+    public static ParsableDouble LEFT_PYRAMID_INITIAL_REVERSE_INCHES = new ParsableDouble("left_pyramid_initial_reverse_inches", 113);
+    public static ParsableDouble LEFT_PYRAMID_INITIAL_ROTATE_ANGLE = new ParsableDouble("left_pyramid_initial_rotate_angle", 70);
+    public static ParsableDouble LEFT_PYRAMID_DRIVE_FORWARD_AFTER_ROTATE_INCHES = new ParsableDouble("left_pyramid_drive_forward_after_rotate_inches", 95);
+    public static ParsableDouble LEFT_PYRAMID_ROTATE_AFTER_PICKUP_ANGLE = new ParsableDouble("left_pyramid_rotate_after_pickup_angle", 97);
     public static ParsableDouble LEFT_PYRAMID_FINAL_DRIVE_FORWARD_INCHES = new ParsableDouble("left_pyramid_final_drive_forward_inches", 60);
-    public static ParsableDouble AUTONOMOUS_SIDE_PYRAMID_FINAL_SHOOT_SETPOINT = new ParsableDouble("left_pyramid_final_shoot_setpoint", 120);
     //Right pyramid autonomous
-    public static ParsableDouble RIGHT_PYRAMID_INITIAL_REVERSE_INCHES = new ParsableDouble("right_pyramid_initial_reverse_inches", 20);
-    public static ParsableDouble RIGHT_PYRAMID_CURVE_INCHES = new ParsableDouble("right_pyramid_curve_inches", 70);
-    public static ParsableDouble RIGHT_PYRAMID_CURVE_CONSTANT = new ParsableDouble("right_pyramid_curve_constant", 0.5);
-    public static ParsableDouble RIGHT_PYRAMID_DRIVE_FORWARD_AFTER_CURVE_INCHES = new ParsableDouble("right_pyramid_drive_forward_after_curve_inches", 70);
-    public static ParsableDouble RIGHT_PYRAMID_REVERSE_AFTER_PICKUP_INCHES = new ParsableDouble("right_pyramid_reverse_after_pickup_inches", 20);
-    public static ParsableDouble RIGHT_PYRAMID_ROTATE_AFTER_PICKUP_ANGLE = new ParsableDouble("right_pyramid_rotate_after_pickup_angle", 90);
-    public static ParsableDouble RIGHT_PYRAMID_FINAL_DRIVE_FORWARD_INCHES = new ParsableDouble("right_pyramid_final_drive_forward_inches", 80);
+    public static ParsableDouble RIGHT_PYRAMID_INITIAL_REVERSE_INCHES = new ParsableDouble("right_pyramid_initial_reverse_inches", 113);
+    public static ParsableDouble RIGHT_PYRAMID_INITIAL_ROTATE_ANGLE = new ParsableDouble("right_pyramid_initial_rotate_angle", 75);
+    public static ParsableDouble RIGHT_PYRAMID_DRIVE_FORWARD_AFTER_ROTATE_INCHES = new ParsableDouble("right_pyramid_drive_forward_after_rotate_inches", 105);
+    public static ParsableDouble RIGHT_PYRAMID_ROTATE_AFTER_PICKUP_ANGLE = new ParsableDouble("right_pyramid_rotate_after_pickup_angle", 85);
+    public static ParsableDouble RIGHT_PYRAMID_FINAL_DRIVE_FORWARD_INCHES = new ParsableDouble("right_pyramid_final_drive_forward_inches", 60);
     //Autonomous hopper command
     public static ParsableDouble AUTONOMOUS_HOPPER_TIME_AFTER_START = new ParsableDouble("autonomous_hopper_time_after_start", 1.0);
-    public static ParsableDouble AUTONOMOUS_HOPPER_FRISBEE_TIMEOUT = new ParsableDouble("autonomous_frisbee_timeout", 1.0);
+    public static ParsableDouble AUTONOMOUS_HOPPER_FRISBEE_TIMEOUT = new ParsableDouble("autonomous_frisbee_timeout", 0.2);
     //Autonomous pickup command
     public static ParsableDouble AUTONOMOUS_PICKUP_DELAY = new ParsableDouble("autonomous_pickup_delay", 1.0);
     //PWM outputs

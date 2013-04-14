@@ -18,6 +18,10 @@ public class ParsableDouble extends Parsable implements JSONPrintable {
     public double get() {
         return value;
     }
+    
+    public void set(double value) {
+        this.value = value;
+    }
 
     public void parse(String str) {
         try {

@@ -28,7 +28,11 @@ public class TeleopShooterCommand extends CommandBase {
                     break;
                 case ShooterSubsystem.ShooterState.HIGH:
                     shooterSubsystem.setTolerance(Constants.SHOOTER_PYRAMID_TOLERANCE.get());
-                    shooterSubsystem.setSetpoint(Constants.SHOOTER_PYRAMID_SETPOINT.get());
+                    if (oi.getEnableFeederAdjustment()) {
+                        shooterSubsystem.setSetpoint(Constants.SHOOTER_BEHIND_PYRAMID_SETPOINT.get());
+                    } else {
+                        shooterSubsystem.setSetpoint(Constants.SHOOTER_PYRAMID_SETPOINT.get());
+                    }
                     break;
                 case ShooterSubsystem.ShooterState.LOAD:
                 default:
@@ -40,7 +44,7 @@ public class TeleopShooterCommand extends CommandBase {
         } else {
             shooterSubsystem.setSetpoint(0.0);
         }
-        
+
         if (oi.getDisablePIDShooter()) {
             shooterSubsystem.disablePID();
         } else {
@@ -50,11 +54,11 @@ public class TeleopShooterCommand extends CommandBase {
         //THIS CODE DOES NOT COMPENSATE FOR GOING FULL NEGATIVE TO FULL FORWARD WHEN THE BUTTON
         //IS RELEASED
         /*if(!oi.getDisablePIDShooter() && (!shooterSubsystem.pidStatus() || shooterSubsystem.belowReverseThreshold()) && oi.getReverseShooter()) {
-            shooterSubsystem.disablePID();
-            shooterSubsystem.setSetpoint(-ShooterSubsystem.MAX_SHOOTER_ENCODER_RATE);
-        } else {
-            shooterSubsystem.enablePID();
-        }*/
+         shooterSubsystem.disablePID();
+         shooterSubsystem.setSetpoint(-ShooterSubsystem.MAX_SHOOTER_ENCODER_RATE);
+         } else {
+         shooterSubsystem.enablePID();
+         }*/
 
         if (chassisSubsystem.getHighGear() || oi.getShooterLoad()) {
             shooterSubsystem.setShooterState(ShooterSubsystem.ShooterState.LOAD);

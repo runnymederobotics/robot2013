@@ -8,6 +8,7 @@ import robot.Constants;
 public class AimCommand extends CommandBase {
 
     public static double lastTargetAngle = 0.0;
+    double oldP, oldI, oldD, oldF;
     double pidGyroNotOnTargetTime = 0.0;
 
     public AimCommand() {
@@ -17,6 +18,12 @@ public class AimCommand extends CommandBase {
     protected void initialize() {
         chassisSubsystem.shift(false); //Stay in low gear
 
+        this.oldP = chassisSubsystem.pidGyro.getP();
+        this.oldI = chassisSubsystem.pidGyro.getI();
+        this.oldD = chassisSubsystem.pidGyro.getD();
+        this.oldF = chassisSubsystem.pidGyro.getF();
+        chassisSubsystem.pidGyro.setP(Constants.CHASSIS_GYRO_ROTATE_P.get());
+        
         chassisSubsystem.enablePID();
         chassisSubsystem.enablePIDGyro();
 
@@ -52,6 +59,10 @@ public class AimCommand extends CommandBase {
     }
 
     protected void end() {
+        chassisSubsystem.pidGyro.setP(oldP);
+        chassisSubsystem.pidGyro.setI(oldI);
+        chassisSubsystem.pidGyro.setD(oldD);
+        chassisSubsystem.pidGyro.setF(oldF);
         chassisSubsystem.disablePID();
         chassisSubsystem.disablePIDGyro();
         if (DriverStation.getInstance().isOperatorControl()) {
