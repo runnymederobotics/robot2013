@@ -31,6 +31,8 @@ public class Constants {
     public static ParsableDouble CHASSIS_PRECISION_ROTATION_ITERATIONS = new ParsableDouble("chassis_precision_rotation_iterations", 3);
     public static ParsableDouble CHASSIS_GYRO_ROTATE_P = new ParsableDouble("chassis_gyro_rotate_p", 0.05);
     public static ParsableDouble CHASSIS_GYRO_ROTATE_I = new ParsableDouble("chassis_gyro_rotate_i", 0.0005);
+    public static ParsableDouble CHASSIS_GYRO_SEVEN_FRISBEE_P = new ParsableDouble("chassis_gyro_seven_frisbee_p", 0.11);
+    public static ParsableDouble CHASSIS_GYRO_SEVEN_FRISBEE_I = new ParsableDouble("chassis_gyro_seven_frisbee_i", 0.0);
     //Hopper subsystem
     public static ParsableDouble HOPPER_PNEUMATIC_DELAY = new ParsableDouble("hopper_pneumatic_delay", 0.1);
     public static ParsableDouble HOPPER_RELEASE_DELAY = new ParsableDouble("hopper_shoot_delay", 0.2);
@@ -42,14 +44,14 @@ public class Constants {
     //Shooter subsystem
     public static ParsableDouble SHOOTER_MIN_SHOOT_THRESHOLD = new ParsableDouble("shooter_min_shoot_threshold", 0.3);
     public static ParsableDouble SHOOTER_MAX_REVERSE_THRESHOLD = new ParsableDouble("shooter_max_reverse_threshold", 0.01);
-    public static ParsableDouble SHOOTER_PYRAMID_SETPOINT = new ParsableDouble("shooter_pyramid_setpoint", 150); //.78 * 175 (old value)
-    public static ParsableDouble SHOOTER_FEEDER_SETPOINT = new ParsableDouble("shooter_feeder_setpoint", 150);
-    public static ParsableDouble SHOOTER_AUTONOMOUS_START_SETPOINT = new ParsableDouble("shooter_autonomous_start_setpoint", 145);
+    public static ParsableDouble SHOOTER_PYRAMID_SETPOINT = new ParsableDouble("shooter_pyramid_setpoint", 135);
+    public static ParsableDouble SHOOTER_FEEDER_SETPOINT = new ParsableDouble("shooter_feeder_setpoint", 135);
+    public static ParsableDouble SHOOTER_AUTONOMOUS_START_SETPOINT = new ParsableDouble("shooter_autonomous_start_setpoint", 130);
     public static ParsableDouble SHOOTER_PYRAMID_TOLERANCE = new ParsableDouble("shooter_pyramid_tolerance", 3.5);
     public static ParsableDouble SHOOTER_FEEDER_TOLERANCE = new ParsableDouble("shooter_feeder_tolerance", 1);
     public static ParsableDouble SHOOTER_FEEDER_ADJUSTMENT_MULTIPLIER = new ParsableDouble("shooter_feeder_adjustment_multiplier", 10);
     public static ParsableDouble SHOOTER_ON_TARGET_TIME = new ParsableDouble("shooter_on_target_time", 0.2);
-    public static ParsableDouble SHOOTER_BEHIND_PYRAMID_SETPOINT = new ParsableDouble("shooter_behind_pyramid_setpoint", 125);
+    public static ParsableDouble SHOOTER_BEHIND_PYRAMID_SETPOINT = new ParsableDouble("shooter_behind_pyramid_setpoint", 115);
     //Seven frisbee autonomous
     public static ParsableDouble SEVEN_FRISBEE_DRIVE_FORWARD_INCHES = new ParsableDouble("seven_frisbee_drive_forward_inches", 128);
     public static ParsableDouble SEVEN_FRISBEE_REVERSE_INCHES = new ParsableDouble("seven_frisbee_reverse_inches", 130);
