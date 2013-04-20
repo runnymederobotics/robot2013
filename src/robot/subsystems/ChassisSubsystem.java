@@ -16,7 +16,7 @@ public class ChassisSubsystem extends Subsystem {
 
     public static final double INCHES_PER_ENCODER_COUNT = 92.5 / 1242.5385;
     public static final double PID_DRIVE_PERCENT_TOLERANCE = 10.0;
-    public static final double PID_GYRO_ABSOLUTE_TOLERANCE = 2.0;
+    public static final double PID_GYRO_ABSOLUTE_TOLERANCE = 1.0;
     public static final double PID_COUNT_ABSOLUTE_TOLERANCE = 10.0;
     Victor vicLeft = new Victor(Constants.LEFT_MOTOR_CHANNEL);
     Victor vicRight = new Victor(Constants.RIGHT_MOTOR_CHANNEL);
@@ -27,9 +27,9 @@ public class ChassisSubsystem extends Subsystem {
     OutputStorage leftOutputStorage = new OutputStorage();
     OutputStorage rightOutputStorage = new OutputStorage();
     RobotDrive robotDrive = new RobotDrive(leftOutputStorage, rightOutputStorage);
-    ParsablePIDController pidLeft = new ParsablePIDController("pidleft", 0.001, 0.0, 0.0, 0.0013, encLeft, vicLeft);
-    ParsablePIDController pidRight = new ParsablePIDController("pidright", 0.001, 0.0, 0.0, 0.0013, encRight, vicRight);
-    public ParsablePIDController pidGyro = new ParsablePIDController("pidgyro", 0.11, 0.0, 0.0, CommandBase.positioningSubsystem.positionGyro, new OutputStorage());
+    ParsablePIDController pidLeft = new ParsablePIDController("pidleft", 0.001, 0.0005, 0.0, 0.0013, encLeft, vicLeft);
+    ParsablePIDController pidRight = new ParsablePIDController("pidright", 0.001, 0.0005, 0.0, 0.0013, encRight, vicRight);
+    public ParsablePIDController pidGyro = new ParsablePIDController("pidgyro", 0.08, 0.0, 0.0, CommandBase.positioningSubsystem.positionGyro, new OutputStorage());
     public ParsablePIDController pidCount = new ParsablePIDController("pidcount", 0.012, 0.0, 0.0, encAverager, new OutputStorage());
 
     public ChassisSubsystem() {

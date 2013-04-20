@@ -23,6 +23,7 @@ public class AimCommand extends CommandBase {
         this.oldD = chassisSubsystem.pidGyro.getD();
         this.oldF = chassisSubsystem.pidGyro.getF();
         chassisSubsystem.pidGyro.setP(Constants.CHASSIS_GYRO_ROTATE_P.get());
+        chassisSubsystem.pidGyro.setI(Constants.CHASSIS_GYRO_ROTATE_I.get());
         
         chassisSubsystem.enablePID();
         chassisSubsystem.enablePIDGyro();
