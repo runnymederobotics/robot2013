@@ -49,7 +49,7 @@ public class Constants {
     public static ParsableDouble SHOOTER_AUTONOMOUS_START_SETPOINT = new ParsableDouble("shooter_autonomous_start_setpoint", 130);
     public static ParsableDouble SHOOTER_PYRAMID_TOLERANCE = new ParsableDouble("shooter_pyramid_tolerance", 3.5);
     public static ParsableDouble SHOOTER_FEEDER_TOLERANCE = new ParsableDouble("shooter_feeder_tolerance", 1);
-    public static ParsableDouble SHOOTER_FEEDER_ADJUSTMENT_MULTIPLIER = new ParsableDouble("shooter_feeder_adjustment_multiplier", 10);
+    public static ParsableDouble SHOOTER_FEEDER_ADJUSTMENT_MULTIPLIER = new ParsableDouble("shooter_feeder_adjustment_multiplier", 20);
     public static ParsableDouble SHOOTER_ON_TARGET_TIME = new ParsableDouble("shooter_on_target_time", 0.2);
     public static ParsableDouble SHOOTER_BEHIND_PYRAMID_SETPOINT = new ParsableDouble("shooter_behind_pyramid_setpoint", 110);
     //Seven frisbee autonomous
