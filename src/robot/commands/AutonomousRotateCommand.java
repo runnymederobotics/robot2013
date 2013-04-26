@@ -39,7 +39,13 @@ public class AutonomousRotateCommand extends CommandBase {
 
     // Called repeatedly when this Command is scheduled to run
     protected void execute() {
-        chassisSubsystem.drive(0.0, -chassisSubsystem.pidGyro.get());
+        double output = -chassisSubsystem.pidGyro.get();
+        int sign = output < 0 ? -1 : 1;
+        if(Math.abs(output) < Constants.CHASSIS_MIN_ROTATE_SPEED.get()) {
+            output = sign * Constants.CHASSIS_MIN_ROTATE_SPEED.get();
+        }
+        
+        chassisSubsystem.drive(0.0, output);
     }
 
     // Make this return true when this Command no longer needs to run execute()

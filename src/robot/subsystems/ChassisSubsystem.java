@@ -16,7 +16,7 @@ public class ChassisSubsystem extends Subsystem {
 
     public static final double INCHES_PER_ENCODER_COUNT = 92.5 / 1242.5385;
     public static final double PID_DRIVE_PERCENT_TOLERANCE = 10.0;
-    public static final double PID_GYRO_ABSOLUTE_TOLERANCE = 1.0;
+    public static final double PID_GYRO_ABSOLUTE_TOLERANCE = 2.0;
     public static final double PID_COUNT_ABSOLUTE_TOLERANCE = 10.0;
     Victor vicLeft = new Victor(Constants.LEFT_MOTOR_CHANNEL);
     Victor vicRight = new Victor(Constants.RIGHT_MOTOR_CHANNEL);

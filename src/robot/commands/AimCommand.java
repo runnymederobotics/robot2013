@@ -42,7 +42,13 @@ public class AimCommand extends CommandBase {
         }
         lastTargetAngle = targetAngle;
 
-        chassisSubsystem.drive(0.0, -chassisSubsystem.pidGyro.get()); //pidGyro output is opposite
+        double output = -chassisSubsystem.pidGyro.get();
+        int sign = output < 0 ? -1 : 1;
+        if(Math.abs(output) < Constants.CHASSIS_MIN_ROTATE_SPEED.get()) {
+            output = sign * Constants.CHASSIS_MIN_ROTATE_SPEED.get();
+        }
+        
+        chassisSubsystem.drive(0.0, output); //pidGyro output is opposite
 
         if (!chassisSubsystem.pidGyroOnTarget()) {
             pidGyroNotOnTargetTime = Timer.getFPGATimestamp();
