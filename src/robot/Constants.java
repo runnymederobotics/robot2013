@@ -46,7 +46,7 @@ public class Constants {
     public static ParsableDouble SHOOTER_MIN_SHOOT_THRESHOLD = new ParsableDouble("shooter_min_shoot_threshold", 0.3);
     public static ParsableDouble SHOOTER_MAX_REVERSE_THRESHOLD = new ParsableDouble("shooter_max_reverse_threshold", 0.01);
     public static ParsableDouble SHOOTER_PYRAMID_SETPOINT = new ParsableDouble("shooter_pyramid_setpoint", 135);
-    public static ParsableDouble SHOOTER_FEEDER_SETPOINT = new ParsableDouble("shooter_feeder_setpoint", 150);
+    public static ParsableDouble SHOOTER_FEEDER_SETPOINT = new ParsableDouble("shooter_feeder_setpoint", 147);
     public static ParsableDouble SHOOTER_AUTONOMOUS_START_SETPOINT = new ParsableDouble("shooter_autonomous_start_setpoint", 130);
     public static ParsableDouble SHOOTER_PYRAMID_TOLERANCE = new ParsableDouble("shooter_pyramid_tolerance", 3.5);
     public static ParsableDouble SHOOTER_FEEDER_TOLERANCE = new ParsableDouble("shooter_feeder_tolerance", 1);
@@ -54,8 +54,8 @@ public class Constants {
     public static ParsableDouble SHOOTER_ON_TARGET_TIME = new ParsableDouble("shooter_on_target_time", 0.2);
     public static ParsableDouble SHOOTER_BEHIND_PYRAMID_SETPOINT = new ParsableDouble("shooter_behind_pyramid_setpoint", 112);
     //Seven frisbee autonomous
-    public static ParsableDouble SEVEN_FRISBEE_DRIVE_FORWARD_INCHES = new ParsableDouble("seven_frisbee_drive_forward_inches", 128);
-    public static ParsableDouble SEVEN_FRISBEE_REVERSE_INCHES = new ParsableDouble("seven_frisbee_reverse_inches", 130);
+    public static ParsableDouble SEVEN_FRISBEE_DRIVE_FORWARD_INCHES = new ParsableDouble("seven_frisbee_drive_forward_inches", 135);
+    public static ParsableDouble SEVEN_FRISBEE_REVERSE_INCHES = new ParsableDouble("seven_frisbee_reverse_inches", 133);
     //Left pyramid autonomous
     public static ParsableDouble LEFT_PYRAMID_INITIAL_REVERSE_INCHES = new ParsableDouble("left_pyramid_initial_reverse_inches", 113);
     public static ParsableDouble LEFT_PYRAMID_INITIAL_ROTATE_ANGLE = new ParsableDouble("left_pyramid_initial_rotate_angle", 75);
